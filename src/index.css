@@ -6,6 +6,9 @@
     /* Color */
     --purple: rgba(152, 126, 255, 100);
     --primary-blue: rgb(204, 229, 226);
+
+    /* Font */
+    --ff-addtitional: "Montserrat", serif;
 }
 
 body {

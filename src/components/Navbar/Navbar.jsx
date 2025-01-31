@@ -14,7 +14,7 @@ export const Navbar = ({ isActiveSidebar, setActive }) => {
 
     return (
         <header
-            className={`fixed w-full top-0 h-[60px] backdrop-blur-sm px-4 flex items-center justify-between text-black  transition-all ${
+            className={`fixed w-full top-0 h-[60px] backdrop-blur-sm px-4 flex items-center justify-between text-black  transition-all z-50 ${
                 isActiveSidebar ? "md:left-[200px] left-[64px]" : "left-0"
             }`}
         >
@@ -22,7 +22,7 @@ export const Navbar = ({ isActiveSidebar, setActive }) => {
                 <button
                     onClick={handleActiveSidebar}
                     aria-label="Toggle Sidebar"
-                    className="p-2 rounded-lg bg-(--primary-blue) transition hover:bg-blue-200 active:bg-blue-300"
+                    className="p-2 rounded-lg bg-(--primary-blue) transition hover:bg-blue-200 active:bg-blue-300 cursor-pointer"
                 >
                     {isActiveSidebar ? <MenuOpenIcon /> : <MenuIcon />}
                 </button>
