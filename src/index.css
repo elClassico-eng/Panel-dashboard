@@ -2,12 +2,17 @@
 
 @import "tailwindcss";
 
+@theme {
+    /* Color */
+    --purple: rgba(152, 126, 255, 100);
+    --primary-blue: rgb(204, 229, 226);
+}
+
 body {
     font-family: "Poppins", serif;
     min-width: 100vw;
     min-height: 100vh;
     width: 100%;
-    height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
     position: relative;
@@ -34,7 +39,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     background-color: #fff;
 }
