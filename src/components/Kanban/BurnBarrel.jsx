@@ -28,7 +28,7 @@ export const BurnBarrel = ({ setCards }) => {
             onDrop={handleDragEnd}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
-            className={`grid place-content-center rounded border text-3xl mt-10 h-56 w-56 ${
+            className={`grid place-content-center rounded border text-3xl mt-10 h-10 w-10 ${
                 active
                     ? "border-red-800 bg-red-800/20 text-red-500"
                     : "border-neutral-500 bg-neutral-200 text-neutral-800"

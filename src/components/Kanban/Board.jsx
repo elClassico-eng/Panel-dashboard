@@ -9,7 +9,7 @@ export const Board = () => {
     const [cards, setCards] = useState(DEFAULT_CARDS);
 
     return (
-        <div className="flex justify-between h-full w-full gap-10 overflow-scroll p-12">
+        <div className="relative flex justify-between h-full w-full gap-10 overflow-scroll p-12">
             <Column
                 title="Backlog"
                 column="backlog"
@@ -38,7 +38,9 @@ export const Board = () => {
                 cards={cards}
                 setCards={setCards}
             />
-            <BurnBarrel setCards={setCards} />
+            <div className="fixed bottom-5 ">
+                <BurnBarrel setCards={setCards} />
+            </div>
         </div>
     );
 };
