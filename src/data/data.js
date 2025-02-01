@@ -7,6 +7,7 @@ import {
     SpaceDashboardOutlined as DashboardIcon,
     CalendarMonthOutlined as CalendarIcon,
     ContactsOutlined as ContactIcon,
+    SettingsOutlined as SettingIcon,
 } from "@mui/icons-material";
 
 export const menuItems = [
@@ -57,6 +58,17 @@ export const menuItems = [
                 active: false,
                 path: "/author",
                 icon: ContactIcon,
+            },
+        ],
+    },
+    {
+        title: "Setting",
+        links: [
+            {
+                name: "Setting",
+                active: false,
+                path: "/setting",
+                icon: SettingIcon,
             },
         ],
     },

@@ -7,6 +7,7 @@ import { Order } from "./pages/Order/Order";
 import { Kanban } from "./pages/Kanban/Kanban";
 import { NotFound } from "./pages/NotFound/NotFound";
 import { Author } from "./pages/Author/Author";
+import { Settings } from "./pages/Setting/Settings";
 
 // Components
 import { Navbar } from "./components/Navbar/Navbar";
@@ -37,6 +38,7 @@ export const App = () => {
                         <Route path="/calendar" element={<Order />} />
                         <Route path="/notes" element={<Order />} />
                         <Route path="/author" element={<Author />} />
+                        <Route path="/setting" element={<Settings />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </div>
