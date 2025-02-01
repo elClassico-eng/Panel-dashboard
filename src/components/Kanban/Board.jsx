@@ -9,32 +9,32 @@ export const Board = () => {
     const [cards, setCards] = useState(DEFAULT_CARDS);
 
     return (
-        <div className="flex h-full w-full gap-10 overflow-scroll p-12">
+        <div className="flex justify-between h-full w-full gap-10 overflow-scroll p-12">
             <Column
                 title="Backlog"
                 column="backlog"
-                headingColor="text-neutral-500"
+                headingColor="text-neutral-800"
                 cards={cards}
                 setCards={setCards}
             />
             <Column
                 title="TODO"
                 column="todo"
-                headingColor="text-yellow-200"
+                headingColor="text-yellow-800"
                 cards={cards}
                 setCards={setCards}
             />
             <Column
                 title="In progress"
                 column="doing"
-                headingColor="text-blue-200"
+                headingColor="text-blue-600"
                 cards={cards}
                 setCards={setCards}
             />
             <Column
                 title="Complete"
                 column="done"
-                headingColor="text-emerald- 200"
+                headingColor="text-emerald-800"
                 cards={cards}
                 setCards={setCards}
             />

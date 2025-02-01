@@ -11,9 +11,9 @@ export const Card = ({ title, id, column, handleDragStart }) => {
                 layoutId={id}
                 draggable="true"
                 onDragStart={(e) => handleDragStart(e, { title, id, column })}
-                className="cursor-grab rounded border border-neutral-700 bg-neutral-800 p-3 active:cursor-grabbing"
+                className="cursor-grab rounded border border-neutral-300 bg-blue-50 p-3 active:cursor-grabbing"
             >
-                <p className="text-sm text-neutral-100">{title}</p>
+                <p className="text-sm text-black">{title}</p>
             </motion.div>
         </>
     );

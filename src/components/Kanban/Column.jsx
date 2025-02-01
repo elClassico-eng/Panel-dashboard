@@ -105,9 +105,9 @@ export const Column = ({ title, headingColor, column, cards, setCards }) => {
 
     return (
         <div className="w-56 shrink-0">
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center  p-4 rounded-2xl justify-between mb-3">
                 <h3 className={`font-medium ${headingColor}`}>{title}</h3>
-                <span className="rounded text-sm text-neutral-400">
+                <span className="rounded text-sm text-neutral-500">
                     {filteredCards.length}
                 </span>
             </div>

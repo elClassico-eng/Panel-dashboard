@@ -42,7 +42,7 @@ export const AddCard = ({ column, setCards }) => {
                         name="text"
                         id="text"
                         placeholder="Add new task..."
-                        className="w-full rounded border border-violet-500 bg-violet-400/20 p-3 text-xm text-neutral-50 placeholder-violet-300 focus:outline-0"
+                        className="w-full rounded border border-violet-500 bg-violet-400/20 p-3 text-xm text-black placeholder-violet-300 focus:outline-0"
                     ></textarea>
                     <div className="flex items-center justify-end mt-2 gap-2">
                         <button
@@ -53,7 +53,7 @@ export const AddCard = ({ column, setCards }) => {
                         <button
                             onClick={handleSubmit}
                             type="submit"
-                            className="flex items-center gap-2 rounded bg-neutral-50 px-3 py-2 text-xs text-neutral-950 transition-colors hover:bg-neutral-300"
+                            className="flex items-center gap-2 rounded bg-neutral-50 px-3 py-2 text-xs text-neutral-950 transition-colors hover:bg-blue-50"
                         >
                             {" "}
                             <span>
@@ -67,7 +67,7 @@ export const AddCard = ({ column, setCards }) => {
                     layout
                     onClick={handleAdding}
                     type="button"
-                    className="flex items-center gap-2 px-3 py-2 text-xs text-neutral-400 transition-colors hover:text-neutral-50 w-full"
+                    className="flex items-center gap-2 px-3 py-2 text-xs text-neutral-400 transition-colors hover:text-neutral-600 w-full"
                 >
                     <span>Add card</span>
                     <AddOutlinedIcon />
