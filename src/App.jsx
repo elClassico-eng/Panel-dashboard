@@ -6,6 +6,7 @@ import { Home } from "./pages/Home/Home";
 import { Order } from "./pages/Order/Order";
 import { Kanban } from "./pages/Kanban/Kanban";
 import { NotFound } from "./pages/NotFound/NotFound";
+import { Author } from "./pages/Author/Author";
 
 // Components
 import { Navbar } from "./components/Navbar/Navbar";
@@ -35,6 +36,7 @@ export const App = () => {
                         <Route path="/kanban-dashboard" element={<Kanban />} />
                         <Route path="/calendar" element={<Order />} />
                         <Route path="/notes" element={<Order />} />
+                        <Route path="/author" element={<Author />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </div>

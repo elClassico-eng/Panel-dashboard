@@ -1,3 +1,4 @@
+// import ContactsOutlinedIcon as ContactIcon from '@material-ui/icons/ContactsOutlined';
 import {
     HomeOutlined as HomeIcon,
     ShoppingBasketOutlined as BasketIcon,
@@ -5,6 +6,7 @@ import {
     ManageAccountsOutlined as AccountsIcon,
     SpaceDashboardOutlined as DashboardIcon,
     CalendarMonthOutlined as CalendarIcon,
+    ContactsOutlined as ContactIcon,
 } from "@mui/icons-material";
 
 export const menuItems = [
@@ -44,6 +46,17 @@ export const menuItems = [
                 active: false,
                 path: "/calendar",
                 icon: CalendarIcon,
+            },
+        ],
+    },
+    {
+        title: "Author",
+        links: [
+            {
+                name: "Author",
+                active: false,
+                path: "/author",
+                icon: ContactIcon,
             },
         ],
     },
