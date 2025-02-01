@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { Routes, Route } from "react-router";
+
+// Pages
 import { Home } from "./pages/Home/Home";
 import { Order } from "./pages/Order/Order";
+import { Kanban } from "./pages/Kanban/Kanban";
 import { NotFound } from "./pages/NotFound/NotFound";
 
+// Components
 import { Navbar } from "./components/Navbar/Navbar";
 import { Sidebar } from "./components/Sidebar/Sidebar";
 
@@ -28,7 +32,7 @@ export const App = () => {
                         <Route path="/customers" element={<Order />} />
                         <Route path="/employees" element={<Order />} />
 
-                        <Route path="/kanban-dashboard" element={<Order />} />
+                        <Route path="/kanban-dashboard" element={<Kanban />} />
                         <Route path="/calendar" element={<Order />} />
                         <Route path="/notes" element={<Order />} />
                         <Route path="*" element={<NotFound />} />
