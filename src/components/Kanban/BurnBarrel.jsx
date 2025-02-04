@@ -1,40 +1,36 @@
 import { useState } from "react";
+import { useDroppable } from "@dnd-kit/core";
+import { useTask } from "../../store/store";
 
 import WhatshotOutlinedIcon from "@material-ui/icons/WhatshotOutlined";
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 
-export const BurnBarrel = ({ setCards }) => {
+export const BurnBarrel = () => {
     const [active, setActive] = useState(false);
+    const removeTask = useTask((state) => state.removeTask);
+    const { setNodeRef, isOver } = useDroppable({
+        id: "burn-barrel",
+        data: { accepts: "task" },
+    });
 
-    const handleDragOver = (e) => {
-        e.preventDefault();
-        setActive(true);
-    };
+    const handleDrop = (event) => {
+        const { active } = event;
+        if (!active) return;
 
-    const handleDragEnd = (e) => {
-        e.preventDefault();
-        const cardId = e.dataTransfer.getData("cardID");
-
-        setCards((item) => item.filter((c) => c.id !== cardId));
-        setActive(false);
-    };
-
-    const handleDragLeave = () => {
+        removeTask(active.id);
         setActive(false);
     };
 
     return (
         <div
-            onDrop={handleDragEnd}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            className={`grid place-content-center rounded border text-3xl mt-10 h-10 w-10 ${
-                active
+            ref={setNodeRef}
+            className={`grid place-content-center rounded border text-3xl mt-10 h-10 w-10 transition-colors ${
+                isOver || active
                     ? "border-red-800 bg-red-800/20 text-red-500"
                     : "border-neutral-500 bg-neutral-200 text-neutral-800"
             }`}
         >
-            {active ? (
+            {isOver ? (
                 <WhatshotOutlinedIcon className="animate-bounce" />
             ) : (
                 <DeleteOutlineOutlinedIcon />

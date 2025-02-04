@@ -74,6 +74,13 @@ export const menuItems = [
     },
 ];
 
+export const columnName = [
+    { column: "backlog", headingColor: "text-neutral-800" },
+    { column: "todo", headingColor: "text-yellow-800" },
+    { column: "doing", headingColor: "text-blue-800" },
+    { column: "done", headingColor: "text-green-800" },
+];
+
 export const DEFAULT_CARDS = [
     //BACKLOG
     { title: "Use Suspens in project", id: "1", column: "backlog" },
