@@ -25,7 +25,11 @@ export const App = () => {
             <div className="flex h-full">
                 {activeSidebar && <Sidebar />}
 
-                <div className="flex-1 md:pl-[200px] pl-[64px] pt-[70px] overflow-y-auto overflow-x-hidden">
+                <div
+                    className={`flex-1 ${
+                        activeSidebar ? "md:pl-[200px] pl-[64px]" : "pl-0"
+                    } pt-[70px] overflow-y-auto overflow-x-hidden`}
+                >
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/home" element={<Home />} />
