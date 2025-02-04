@@ -12,6 +12,12 @@ export const SortableCard = ({ task }) => {
         isDragging,
     } = useSortable({ id: task.id, data: { column: task.column } });
 
+    const tagColors = {
+        dev: "bg-red-200 text-red-800",
+        backend: "bg-blue-200 text-blue-800",
+        frontend: "bg-green-200 text-green-800",
+    };
+
     const style = {
         transform: CSS.Translate.toString(transform),
         transition,
@@ -25,14 +31,16 @@ export const SortableCard = ({ task }) => {
             style={style}
             {...attributes}
             {...listeners}
-            className="cursor-grab rounded border border-neutral-300 bg-blue-50 p-3 active:cursor-grabbing"
+            className="flex flex-col gap-3 cursor-grab rounded border border-neutral-300 shadow-xl bg-blue-50 p-3 active:cursor-grabbing"
         >
             {task.tags?.length > 0 && (
                 <div className="flex items-center flex-wrap gap-1 mb-2">
                     {task.tags.map((tag) => (
                         <span
                             key={tag}
-                            className="py-1 text-sm bg-blue-100 rounded-full"
+                            className={`px-3 py-1 text-sm ${
+                                tagColors[tag] || "bg-blue-300"
+                            } rounded-full`}
                         >
                             {tag}
                         </span>
