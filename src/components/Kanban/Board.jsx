@@ -47,7 +47,6 @@ export const Board = () => {
                         title={column}
                         column={column}
                         headingColor={headingColor}
-                        task={tasks}
                     />
                 ))}
                 <div className="fixed bottom-5 ">

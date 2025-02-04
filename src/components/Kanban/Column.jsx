@@ -18,9 +18,14 @@ export const Column = ({ title, headingColor, column }) => {
     return (
         <div className="w-56 shrink-0">
             <div className="flex items-center  p-4 rounded-2xl justify-between mb-3">
-                <h3 className={`font-medium ${headingColor} uppercase`}>
-                    {title}
-                </h3>
+                <div className="flex gap-3 items-center">
+                    <div
+                        className={`${headingColor} w-4 h-4 rounded-full`}
+                    ></div>
+                    <h3 className="font-medium text-neutral-500 uppercase">
+                        {title}
+                    </h3>
+                </div>
                 <span className="rounded text-sm text-neutral-500">
                     {filterTask.length}
                 </span>

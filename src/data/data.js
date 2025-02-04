@@ -75,10 +75,10 @@ export const menuItems = [
 ];
 
 export const columnName = [
-    { column: "backlog", headingColor: "text-neutral-800" },
-    { column: "todo", headingColor: "text-yellow-800" },
-    { column: "doing", headingColor: "text-blue-800" },
-    { column: "done", headingColor: "text-green-800" },
+    { column: "backlog", headingColor: "bg-neutral-600" },
+    { column: "todo", headingColor: "bg-yellow-500" },
+    { column: "doing", headingColor: "bg-blue-500" },
+    { column: "done", headingColor: "bg-green-500" },
 ];
 
 export const DEFAULT_CARDS = [

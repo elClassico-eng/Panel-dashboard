@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useTask } from "../../store/store";
+import DatePicker from "react-date-picker";
 
 import AddOutlinedIcon from "@material-ui/icons/AddOutlined";
 
 export const AddCard = ({ column }) => {
     const [text, setText] = useState("");
+    const [tags, setTags] = useState([]);
+
     const [isAdding, setIsAdding] = useState(false);
     const addTask = useTask((state) => state.addTask);
 
@@ -15,9 +18,17 @@ export const AddCard = ({ column }) => {
         const trimmedText = text.trim();
         if (!trimmedText) return;
 
-        addTask(trimmedText, column);
+        addTask(trimmedText, column, tags);
+        setTags([]);
         setText("");
         setIsAdding(false);
+    };
+
+    const handleTagChange = (e) => {
+        const inputTags = e.target.value.split(",");
+        setTags(
+            inputTags.map((tag) => tag.trim()).filter((tag) => tag === tag)
+        );
     };
 
     const handleCancel = () => {
@@ -41,12 +52,23 @@ export const AddCard = ({ column }) => {
                         onChange={(e) => setText(e.target.value)}
                         autoFocus
                         placeholder="Add new task..."
-                        className="w-full rounded border border-violet-500 bg-violet-400/20 p-3 text-sm text-black placeholder-violet-300 focus:outline-0 resize-none"
+                        className="w-full rounded border border-blue-300 bg-blue-300/30 p-3 text-sm text-black placeholder-violet-300 focus:outline-0 resize-none"
                         rows={3}
                         onKeyDown={(e) => {
                             if (e.key === "Escape") handleCancel();
                         }}
                     />
+
+                    <div className="space-y-2">
+                        <label className="block text-sm">Tags:</label>
+                        <input
+                            type="text"
+                            value={tags.join(", ")}
+                            onChange={handleTagChange}
+                            className="w-full rounded border border-yellow-300 bg-yellow-300/30 p-3 text-sm text-black placeholder-neutral-500 focus:outline-0 resize-none"
+                            placeholder="e.g. urgent, backend"
+                        />
+                    </div>
 
                     <div className="flex items-center justify-end mt-2 gap-2">
                         <button
