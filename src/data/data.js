@@ -75,7 +75,9 @@ export const menuItems = [
 ];
 
 export const DEFAULT_CARDS = [
-    // BACKLOG
+    //BACKLOG
+    { title: "Use Suspens in project", id: "1", column: "backlog" },
+    { title: "Learn and use Zustand", id: "2", column: "backlog" },
     { title: "Look into render bug in dashboard", id: "1", column: "backlog" },
     { title: "SOX compliance checklist", id: "2", column: "backlog" },
     { title: "[SPIKE] Migrate to Azure", id: "3", column: "backlog" },
@@ -88,7 +90,6 @@ export const DEFAULT_CARDS = [
     },
     { title: "Postmortem for outage", id: "6", column: "todo" },
     { title: "Sync with product on Q3 roadmap", id: "7", column: "todo" },
-
     // DOING
     {
         title: "Refactor context providers to use Zustand",
