@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 export const useTask = create(
     persist((set) => ({
         tasks: [],
+        filteredTasks: [],
         loading: false,
         error: null,
         addTask: (title, column = "backlog", tags = []) => {
@@ -40,6 +41,13 @@ export const useTask = create(
                 tasks: state.tasks.filter((task) => task.id !== id),
             }));
         },
+        setFilteredTasks: (filteredTasks) => set({ filteredTasks }),
+        filterTasks: (searchTerm) =>
+            set((state) => ({
+                filteredTasks: state.tasks.filter((task) =>
+                    task.title.toLowerCase().includes(searchTerm.toLowerCase())
+                ),
+            })),
     })),
     {
         name: "task-storage",

@@ -1,6 +1,7 @@
 // Card.jsx
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useTask } from "../../store/store";
 
 export const SortableCard = ({ task }) => {
     const {
@@ -11,6 +12,13 @@ export const SortableCard = ({ task }) => {
         transition,
         isDragging,
     } = useSortable({ id: task.id, data: { column: task.column } });
+
+    // Get filtered tasks from the store using the useTask hook.
+    const filteredTasks = useTask((state) => state.filteredTasks);
+
+    if (!filteredTasks.some((t) => t.id === task.id)) {
+        return null;
+    }
 
     const tagColors = {
         dev: "bg-red-200 text-red-800",
@@ -38,7 +46,7 @@ export const SortableCard = ({ task }) => {
                     {task.tags.map((tag) => (
                         <span
                             key={tag}
-                            className={`px-3 py-1 text-sm ${
+                            className={`px-3 py-1 text-xs ${
                                 tagColors[tag] || "bg-blue-300"
                             } rounded-full`}
                         >
