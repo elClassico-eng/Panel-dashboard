@@ -8,18 +8,31 @@ export const useTask = create(
         filteredTasks: [],
         loading: false,
         error: null,
-        addTask: (title, column = "backlog", tags = []) => {
+        addTask: (
+            title,
+            column = "backlog",
+            tags = [],
+            id = uuidv4(),
+            description = ""
+        ) => {
             set((state) => ({
                 tasks: [
                     ...state.tasks,
                     {
-                        id: uuidv4(),
+                        id,
                         title,
                         column,
                         tags,
-                        createdAt: new Date().toISOString(),
+                        description,
                     },
                 ],
+            }));
+        },
+        addDescription: (id, description) => {
+            set((state) => ({
+                tasks: state.tasks.map((task) =>
+                    task.id === id ? { ...task, description } : task
+                ),
             }));
         },
         updateTask: (id, updateFields) => {

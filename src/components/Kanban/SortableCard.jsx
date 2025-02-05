@@ -39,7 +39,7 @@ export const SortableCard = ({ task }) => {
             style={style}
             {...attributes}
             {...listeners}
-            className="flex flex-col gap-3 cursor-grab rounded border border-neutral-300 shadow-xl bg-blue-50 p-3 active:cursor-grabbing"
+            className="flex flex-col text-center gap-3 cursor-grab rounded border border-neutral-300 shadow-xl bg-blue-50 p-3 active:cursor-grabbing"
         >
             {task.tags?.length > 0 && (
                 <div className="flex items-center flex-wrap gap-1 mb-2">
@@ -56,6 +56,7 @@ export const SortableCard = ({ task }) => {
                 </div>
             )}
             <p className="text-base font-bold text-black ">{task.title}</p>
+            <p className="text-sm text-neutral-500">{task.description}</p>
         </div>
     );
 };

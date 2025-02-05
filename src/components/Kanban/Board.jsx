@@ -49,7 +49,7 @@ export const Board = () => {
                         headingColor={headingColor}
                     />
                 ))}
-                <div className="fixed bottom-5 ">
+                <div className="fixed right-4 bottom-5 ">
                     <BurnBarrel />
                 </div>
             </div>
