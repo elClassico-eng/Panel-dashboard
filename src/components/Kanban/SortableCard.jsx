@@ -46,10 +46,10 @@ export const SortableCard = ({ task }) => {
             {!isEditing ? (
                 <div
                     onClick={() => setIsEditing(true)}
-                    className="flex relative flex-col gap-4 cursor-grab rounded border border-neutral-300 shadow-xl bg-blue-50 p-3 active:cursor-grabbing"
+                    className="flex relative w-64 flex-col items-center gap-4 cursor-grab rounded border border-neutral-300 shadow-xl bg-blue-50 p-3 active:cursor-grabbing"
                 >
                     <div
-                        className={`w-fit px-2 py-1 ${
+                        className={`w-fit self-start px-2 py-1 ${
                             priorityColors[task.priority] ||
                             "text-black bg-gray-200"
                         } rounded-xl`}

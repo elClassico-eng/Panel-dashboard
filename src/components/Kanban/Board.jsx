@@ -10,7 +10,6 @@ import {
 import { columnName } from "../../data/data";
 
 import { Column } from "./Column";
-import { BurnBarrel } from "./BurnBarrel";
 
 export const Board = () => {
     const tasks = useTask((state) => state.tasks);
@@ -49,9 +48,6 @@ export const Board = () => {
                         headingColor={headingColor}
                     />
                 ))}
-                <div className="fixed right-4 bottom-5 ">
-                    <BurnBarrel />
-                </div>
             </div>
         </DndContext>
     );

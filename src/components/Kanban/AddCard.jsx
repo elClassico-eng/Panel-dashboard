@@ -12,7 +12,6 @@ export const AddCard = ({ column }) => {
     const [isAdding, setIsAdding] = useState(false);
 
     const [priority, setPriority] = useState("Medium");
-    console.log(priority);
 
     // Get the addTask and addDescription functions from the store using the useTask hook.
     const addTask = useTask((state) => state.addTask);

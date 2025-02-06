@@ -1,4 +1,8 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTask } from "../../store/store";
+
+import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 
 export const EditTaskForm = ({ task, onSave, onCancel }) => {
     const {
@@ -15,6 +19,8 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
         },
     });
 
+    const removeTask = useTask((state) => state.removeTask);
+
     const toggleTag = (tag) => {
         setValue(
             "tags",
@@ -22,6 +28,12 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                 ? [...task.tags].filter((t) => t !== tag)
                 : [...task.tags, tag]
         );
+    };
+
+    // Allow dropping of tasks to another column
+    const handleDrop = (event) => {
+        removeTask(task.id);
+        onCancel();
     };
 
     const onSubmit = (data) => {
@@ -97,6 +109,9 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                 </div>
 
                 <div className="flex gap-2 justify-end">
+                    <button type="button" onClick={handleDrop}>
+                        <DeleteOutlineOutlinedIcon className="cursor-pointer text-red-500" />
+                    </button>
                     <button
                         type="button"
                         onClick={onCancel}
