@@ -11,6 +11,9 @@ export const AddCard = ({ column }) => {
     const [tags, setTags] = useState([]);
     const [isAdding, setIsAdding] = useState(false);
 
+    const [priority, setPriority] = useState("Medium");
+    console.log(priority);
+
     // Get the addTask and addDescription functions from the store using the useTask hook.
     const addTask = useTask((state) => state.addTask);
 
@@ -32,7 +35,7 @@ export const AddCard = ({ column }) => {
         const taskId = uuidv4();
 
         // Add the new task to the tasks array
-        addTask(trimmedText, column, tags, taskId, descriptionText);
+        addTask(trimmedText, column, tags, taskId, descriptionText, priority);
 
         setTags([]);
         reset();
@@ -56,7 +59,7 @@ export const AddCard = ({ column }) => {
             {isAdding ? (
                 <div className=" fixed top-0  z-50 left-0 w-full h-screen bg-black/50 flex justify-center items-center">
                     <motion.form
-                        className="bg-white p-6 rounded-xl shadow-lg w-96"
+                        className="bg-white flex flex-col gap-4 p-6 rounded-xl shadow-lg w-96"
                         layout
                         onSubmit={handleSubmit(onSubmit)}
                         initial={{ opacity: 0, y: -10 }}
@@ -64,28 +67,35 @@ export const AddCard = ({ column }) => {
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.2 }}
                     >
-                        <label className="text-sm">Task</label>
-                        <textarea
-                            {...register("text")}
-                            autoFocus
-                            placeholder="Add new task..."
-                            className="w-full rounded border p-3 text-sm text-black placeholder-violet-300 focus:outline-0 resize-none"
-                            rows={3}
-                            onKeyDown={(e) => {
-                                if (e.key === "Escape") handleCancel();
-                            }}
-                        />
-                        <label className="text-sm">Description:</label>
-                        <textarea
-                            {...register("description")}
-                            placeholder="Add description for your task..."
-                            className="w-full rounded border p-3 text-sm text-black placeholder-violet-300 focus:outline-0 resize-none"
-                            rows={3}
-                            onKeyDown={(e) => {
-                                if (e.key === "Escape") handleCancel();
-                            }}
-                        />
+                        <div className="space-y-2">
+                            <label className="text-sm">Task</label>
+                            <textarea
+                                {...register("text")}
+                                autoFocus
+                                placeholder="Add new task..."
+                                className="w-full rounded border p-3 text-sm text-black placeholder-violet-300 focus:outline-0 resize-none"
+                                rows={3}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Escape") handleCancel();
+                                }}
+                            />
+                        </div>
 
+                        {/* Render the description input */}
+                        <div className="space-y-2">
+                            <label className="text-sm">Description:</label>
+                            <textarea
+                                {...register("description")}
+                                placeholder="Add description for your task..."
+                                className="w-full rounded border p-3 text-sm text-black placeholder-violet-300 focus:outline-0 resize-none"
+                                rows={3}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Escape") handleCancel();
+                                }}
+                            />
+                        </div>
+
+                        {/* Render the selected tags */}
                         <div className="space-y-2">
                             <label className="block text-sm">Tags:</label>
                             <input
@@ -97,6 +107,22 @@ export const AddCard = ({ column }) => {
                             />
                         </div>
 
+                        {/* Render the priority dropdown */}
+                        <div className="space-y-2">
+                            <label className="block text-sm">Priority:</label>
+                            <select
+                                className="w-full rounded border p-3 text-sm text-black focus:outline-0"
+                                onChange={(e) => setPriority(e.target.value)}
+                                name="priority"
+                                value={priority}
+                            >
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+
+                        {/* Render the submit and cancel buttons */}
                         <div className="flex items-center justify-end mt-2 gap-2">
                             <button
                                 type="button"
@@ -117,6 +143,7 @@ export const AddCard = ({ column }) => {
                     </motion.form>
                 </div>
             ) : (
+                // Render the AddCard button when the column is not in edit mode
                 <motion.button
                     layout
                     onClick={() => setIsAdding(true)}
@@ -129,7 +156,7 @@ export const AddCard = ({ column }) => {
                         fontSize="small"
                         className="text-blue-300"
                     />
-                    <span className="text-xs text-neutral-600">
+                    <span className="text-xs text-neutral-600 cursor-pointer">
                         Add new task
                     </span>
                 </motion.button>

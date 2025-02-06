@@ -13,7 +13,8 @@ export const useTask = create(
             column = "backlog",
             tags = [],
             id = uuidv4(),
-            description = ""
+            description = "",
+            priority = "Medium"
         ) => {
             set((state) => ({
                 tasks: [
@@ -24,6 +25,7 @@ export const useTask = create(
                         column,
                         tags,
                         description,
+                        priority,
                     },
                 ],
             }));
