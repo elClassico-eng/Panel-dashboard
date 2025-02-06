@@ -59,7 +59,7 @@ export const AddCard = ({ column }) => {
             {isAdding ? (
                 <div className=" fixed top-0  z-50 left-0 w-full h-screen bg-black/50 flex justify-center items-center">
                     <motion.form
-                        className="bg-white flex flex-col gap-4 p-6 rounded-xl shadow-lg w-96"
+                        className="bg-white flex flex-col gap-4 p-8 rounded-xl shadow-lg w-132 text-center"
                         layout
                         onSubmit={handleSubmit(onSubmit)}
                         initial={{ opacity: 0, y: -10 }}
@@ -67,60 +67,49 @@ export const AddCard = ({ column }) => {
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.2 }}
                     >
-                        <div className="space-y-2">
-                            <label className="text-sm">Task</label>
-                            <textarea
-                                {...register("text")}
-                                autoFocus
-                                placeholder="Add new task..."
-                                className="w-full rounded border p-3 text-sm text-black placeholder-violet-300 focus:outline-0 resize-none"
-                                rows={3}
-                                onKeyDown={(e) => {
-                                    if (e.key === "Escape") handleCancel();
-                                }}
-                            />
-                        </div>
+                        <h3 className="text-xl">Add new task</h3>
+                        <textarea
+                            {...register("text")}
+                            autoFocus
+                            placeholder="Add new task..."
+                            className="w-full text-sm p-2 border border-gray-300 rounded"
+                            rows={3}
+                            onKeyDown={(e) => {
+                                if (e.key === "Escape") handleCancel();
+                            }}
+                        />
 
                         {/* Render the description input */}
-                        <div className="space-y-2">
-                            <label className="text-sm">Description:</label>
-                            <textarea
-                                {...register("description")}
-                                placeholder="Add description for your task..."
-                                className="w-full rounded border p-3 text-sm text-black placeholder-violet-300 focus:outline-0 resize-none"
-                                rows={3}
-                                onKeyDown={(e) => {
-                                    if (e.key === "Escape") handleCancel();
-                                }}
-                            />
-                        </div>
+                        <textarea
+                            {...register("description")}
+                            placeholder="Add description for your task..."
+                            className="w-full text-sm p-2 border border-gray-300 rounded"
+                            rows={3}
+                            onKeyDown={(e) => {
+                                if (e.key === "Escape") handleCancel();
+                            }}
+                        />
 
                         {/* Render the selected tags */}
-                        <div className="space-y-2">
-                            <label className="block text-sm">Tags:</label>
-                            <input
-                                type="text"
-                                value={tags.join(", ")}
-                                onChange={handleTagChange}
-                                className="w-full rounded border  p-3 text-sm text-black placeholder-neutral-500 focus:outline-0 resize-none"
-                                placeholder="e.g. urgent, backend"
-                            />
-                        </div>
+                        <input
+                            type="text"
+                            value={tags.join(", ")}
+                            onChange={handleTagChange}
+                            className="w-full text-sm p-2 border border-gray-300 rounded resize-none"
+                            placeholder="e.g. urgent, backend"
+                        />
 
                         {/* Render the priority dropdown */}
-                        <div className="space-y-2">
-                            <label className="block text-sm">Priority:</label>
-                            <select
-                                className="w-full rounded border p-3 text-sm text-black focus:outline-0"
-                                onChange={(e) => setPriority(e.target.value)}
-                                name="priority"
-                                value={priority}
-                            >
-                                <option value="Low">Low</option>
-                                <option value="Medium">Medium</option>
-                                <option value="High">High</option>
-                            </select>
-                        </div>
+                        <select
+                            className="w-full text-sm p-2 border border-gray-300 rounded"
+                            onChange={(e) => setPriority(e.target.value)}
+                            name="priority"
+                            value={priority}
+                        >
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                        </select>
 
                         {/* Render the submit and cancel buttons */}
                         <div className="flex items-center justify-end mt-2 gap-2">
@@ -134,7 +123,7 @@ export const AddCard = ({ column }) => {
                             <button
                                 type="submit"
                                 // disabled={!text.trim()}
-                                className="flex items-center gap-2 rounded bg-neutral-50 px-3 py-2 text-xs text-neutral-950 transition-colors hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="flex items-center gap-2 rounded bg-neutral-50 px-3 py-2 text-xs text-neutral-950 transition-colors hover:bg-blue-300 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <AddOutlinedIcon fontSize="small" />
                                 Add Task
