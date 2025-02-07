@@ -11,14 +11,6 @@ import { useTask } from "../../store/store";
 import { priorityColors, tagColors } from "../../data/data";
 
 export const SortableCard = ({ task }) => {
-    const {
-        attributes,
-        listeners,
-        setNodeRef,
-        transform,
-        transition,
-        isDragging,
-    } = useSortable({ id: task.id, data: { column: task.column } });
     const [isEditing, setIsEditing] = useState(false);
 
     // Get filtered tasks from the store using the useTask hook.
@@ -33,15 +25,6 @@ export const SortableCard = ({ task }) => {
     if (!filteredTasks.some((t) => t.id === task.id)) {
         return null;
     }
-
-    console.log(filteredTasks);
-
-    const style = {
-        transform: CSS.Translate.toString(transform),
-        transition,
-        opacity: isDragging ? 0.5 : 1,
-        zIndex: isDragging ? 100 : 1,
-    };
 
     return (
         <>

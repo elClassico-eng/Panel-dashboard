@@ -12,8 +12,8 @@ import { columnName } from "../../data/data";
 import { Column } from "./Column";
 
 export const Board = () => {
-    const tasks = useTask((state) => state.tasks);
     const moveTask = useTask((state) => state.moveTask);
+    const tasks = useTask((state) => state.tasks);
 
     const sensors = useSensors(
         useSensor(MouseSensor, {
@@ -45,6 +45,9 @@ export const Board = () => {
                         key={column}
                         title={column}
                         column={column}
+                        filterTask={
+                            tasks.filter((task) => task.column === column) || []
+                        }
                         headingColor={headingColor}
                     />
                 ))}

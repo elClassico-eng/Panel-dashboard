@@ -11,7 +11,7 @@ export const SearchTask = () => {
     const setFilteredTasks = useTask((state) => state.setFilteredTasks);
 
     // UseForm hook to handle form inputs and submit event
-    const { register, watch, reset, handleSubmit } = useForm();
+    const { register, watch, reset } = useForm();
 
     const watchTask = watch("task");
 

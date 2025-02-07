@@ -8,13 +8,7 @@ import { useTask } from "../../store/store";
 import { SortableCard } from "./SortableCard";
 import { AddCard } from "./AddCard";
 
-export const Column = ({ title, headingColor, column }) => {
-    const tasks = useTask((state) => state.tasks);
-
-    const filterTask = tasks
-        .map((item) => item)
-        .filter((f) => f.column === column);
-
+export const Column = ({ title, headingColor, column, filterTask }) => {
     return (
         <div className="w-56 shrink-0">
             <div className="flex items-center  p-4 rounded-2xl justify-between mb-3">
@@ -32,7 +26,7 @@ export const Column = ({ title, headingColor, column }) => {
             </div>
 
             <SortableContext
-                items={tasks}
+                items={filterTask}
                 strategy={verticalListSortingStrategy}
                 id={column}
             >

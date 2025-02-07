@@ -35,7 +35,6 @@ export const AddCard = ({ column }) => {
 
         // Add the new task to the tasks array
         addTask(trimmedText, column, tags, taskId, descriptionText, priority);
-
         setTags([]);
         reset();
         setIsAdding(false);
