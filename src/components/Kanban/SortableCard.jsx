@@ -34,6 +34,8 @@ export const SortableCard = ({ task }) => {
         return null;
     }
 
+    console.log(filteredTasks);
+
     const style = {
         transform: CSS.Translate.toString(transform),
         transition,
