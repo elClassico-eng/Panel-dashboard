@@ -1,11 +1,12 @@
 import { createRoot } from "react-dom/client";
-import { Suspense } from "react";
+import { Suspense, lazy } from "react";
 import { BrowserRouter } from "react-router";
 
-import { App } from "./App.jsx";
 import { Loader } from "./components/Loader/Loader.jsx";
 
 import "./index.css";
+
+const App = lazy(() => import("./App.jsx"));
 
 createRoot(document.getElementById("root")).render(
     <Suspense fallback={<Loader />}>

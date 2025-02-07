@@ -13,11 +13,11 @@ import { Settings } from "./pages/Setting/Settings";
 import { Navbar } from "./components/Navbar/Navbar";
 import { Sidebar } from "./components/Sidebar/Sidebar";
 
-export const App = () => {
+const App = () => {
     const [activeSidebar, setActiveSidebar] = useState(true);
 
     return (
-        <div className="w-full h-screen flex flex-col">
+        <div className="w-full h-screen flex flex-col bg-gradient-to-r from-(--custom-gray-1) via-(--custom-gray-2) to-(--custom-gray-3)">
             <Navbar
                 isActiveSidebar={activeSidebar}
                 setActive={setActiveSidebar}
@@ -50,3 +50,5 @@ export const App = () => {
         </div>
     );
 };
+
+export default App;

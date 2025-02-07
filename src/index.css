@@ -4,8 +4,11 @@
 
 @theme {
     /* Color */
-    --purple: rgba(152, 126, 255, 100);
+    --purple: rgb(152, 126, 255);
     --primary-blue: rgb(204, 229, 226);
+    --custom-gray-1: rgb(214, 214, 223);
+    --custom-gray-2: rgb(221, 222, 226);
+    --custom-gray-3: rgb(231, 231, 231);
 
     /* Font */
     --ff-addtitional: "Montserrat", serif;
