@@ -120,7 +120,6 @@ export const AddCard = ({ column }) => {
                             </button>
                             <button
                                 type="submit"
-                                // disabled={!text.trim()}
                                 className="flex items-center gap-2 rounded bg-neutral-50 px-3 py-2 text-xs text-neutral-950 transition-colors hover:bg-blue-300 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <AddOutlinedIcon fontSize="small" />
@@ -135,7 +134,7 @@ export const AddCard = ({ column }) => {
                     layout
                     onClick={() => setIsAdding(true)}
                     type="button"
-                    className="flex items-center gap-2 px-3 py-2 text-xs text-neutral-400 transition-colors hover:text-neutral-600 w-full"
+                    className="flex items-center justify-center gap-2 px-3 py-2 text-xs text-neutral-400 transition-colors hover:text-neutral-600 w-full"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                 >

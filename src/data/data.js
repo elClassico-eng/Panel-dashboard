@@ -75,10 +75,9 @@ export const menuItems = [
 ];
 
 export const columnName = [
-    { column: "backlog", headingColor: "bg-neutral-600" },
-    { column: "todo", headingColor: "bg-yellow-500" },
-    { column: "doing", headingColor: "bg-blue-500" },
-    { column: "done", headingColor: "bg-green-500" },
+    { column: "todo" },
+    { column: "doing" },
+    { column: "done" },
 ];
 
 export const priorityColors = {

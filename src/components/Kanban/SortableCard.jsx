@@ -2,11 +2,6 @@ import { useState } from "react";
 
 import { EditTaskForm } from "./EditTaskForm";
 
-// Import the useSortable hook from the @dnd-kit/sortable package
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-
-// Import the useTask hook from the store
 import { useTask } from "../../store/store";
 import { priorityColors, tagColors } from "../../data/data";
 
@@ -41,7 +36,7 @@ export const SortableCard = ({ task }) => {
                     >
                         <p className="text-xs">{task.priority}</p>
                     </div>
-                    <div className="flex flex-col text-center gap-2">
+                    <div className="flex flex-col gap-2">
                         <p className="text-base font-bold text-black">
                             {task.title}
                         </p>
