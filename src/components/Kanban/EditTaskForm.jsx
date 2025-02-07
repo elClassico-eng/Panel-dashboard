@@ -5,6 +5,8 @@ import { useTask } from "../../store/store";
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 
 export const EditTaskForm = ({ task, onSave, onCancel }) => {
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+
     const {
         register,
         handleSubmit,
@@ -30,10 +32,18 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
         );
     };
 
-    // Allow dropping of tasks to another column
-    const handleDrop = (event) => {
+    const handleDeleteClick = () => {
+        setShowDeleteConfirmation(true);
+    };
+
+    const confirmDelete = () => {
         removeTask(task.id);
+        setShowDeleteConfirmation(false);
         onCancel();
+    };
+
+    const cancelDeleteTask = () => {
+        setShowDeleteConfirmation(false);
     };
 
     const onSubmit = (data) => {
@@ -109,13 +119,14 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                 </div>
 
                 <div className="flex gap-2 justify-end">
-                    <button type="button" onClick={handleDrop}>
+                    <button type="button" onClick={handleDeleteClick}>
                         <DeleteOutlineOutlinedIcon className="cursor-pointer text-red-500" />
                     </button>
+
                     <button
                         type="button"
                         onClick={onCancel}
-                        className="px-3 py-2 text-xs text-neutral-400 transition-colors hover:text-neutral-700 "
+                        className="px-3 py-2 text-xs text-neutral-400 transition-colors hover:text-neutral-700"
                     >
                         Cancel
                     </button>
@@ -126,6 +137,30 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                         Save
                     </button>
                 </div>
+
+                {showDeleteConfirmation && (
+                    <div className="fixed inset-0 bg-neutral-900/50 flex items-center justify-center z-50">
+                        <div className="bg-white p-6 rounded-lg shadow-lg w-80">
+                            <p className="text-sm font-semibold text-gray-800 mb-4">
+                                Are you sure you want to delete this task?
+                            </p>
+                            <div className="flex justify-center gap-4">
+                                <button
+                                    onClick={cancelDeleteTask}
+                                    className="px-3 py-2 text-xs text-neutral-400 transition-colors hover:text-neutral-700"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={confirmDelete}
+                                    className="flex items-center gap-2 rounded bg-red-500 px-3 py-2 text-xs text-neutral-950 transition-colors hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </form>
         </div>
     );
