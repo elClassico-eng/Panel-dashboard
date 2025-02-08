@@ -44,7 +44,7 @@ export const SearchTask = () => {
                     key="task-input"
                     {...register("task", { required: true })}
                 />
-                <SearchIcon className="absolute left-1" />
+                <SearchIcon className="absolute left-1 text-blue-300" />
                 {watchTask && (
                     <ClearOutlinedIcon
                         onClick={clearInput}

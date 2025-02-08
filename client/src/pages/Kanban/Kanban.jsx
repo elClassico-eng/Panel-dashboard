@@ -8,7 +8,7 @@ export const Kanban = () => {
     const [open, setOpen] = useState(false);
 
     return (
-        <section className="relative w-full flex flex-col gap-3 bg-neutral-50 text-neutral-800 rounded-xl">
+        <section className="relative w-full flex flex-col gap-3  rounded-xl">
             <div className="flex w-full justify-between items-center ">
                 <Title title="Kanban Dashboard" />
                 <h2
