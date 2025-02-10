@@ -20,7 +20,10 @@ class UserService {
                 password: hashPassword,
                 activationLink,
             });
-            await mailService.sendActivationEmail(user.email, activationLink);
+            await mailService.sendActivationMail(
+                user.email,
+                `${process.env.API_URL}/api/activate/${activationLink}`
+            );
 
             const userDto = new UserDto(user); // create a new instance of the UserDto class
             const tokens = tokenService.generateToken({ ...userDto }); // generate tokens
@@ -36,6 +39,14 @@ class UserService {
             console.error(error);
             throw error;
         }
+    }
+    async activate(activationLink) {
+        const user = await UserModal.findOne({ activationLink });
+        if (!user) {
+            throw new Error("Incorrect activation link");
+        }
+        user.isActivated = true;
+        await user.save();
     }
 }
 
