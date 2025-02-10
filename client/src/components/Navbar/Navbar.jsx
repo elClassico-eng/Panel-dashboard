@@ -1,3 +1,8 @@
+import { useState } from "react";
+
+import { Link } from "react-router";
+import { BtnLogIn } from "../UI/Button/BtnLogIn";
+
 import SearchIcon from "@mui/icons-material/Search";
 import MenuIcon from "@mui/icons-material/Menu";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
@@ -11,6 +16,8 @@ export const Navbar = ({ isActiveSidebar, setActive }) => {
     const handleActiveSidebar = () => {
         setActive((prev) => !prev);
     };
+
+    const [isLoggedIn, setLoggedIn] = useState(false);
 
     return (
         <header
@@ -39,14 +46,20 @@ export const Navbar = ({ isActiveSidebar, setActive }) => {
             <div className="flex items-center gap-5">
                 <AutoFixHighOutlinedIcon className=" cursor-pointer" />
                 <NotificationsNoneOutlinedIcon className="transition cursor-pointer" />
-                <div className="flex items-center gap-2 cursor-pointer ">
-                    <span className="text-base">Thomas S.</span>
-                    <img
-                        className="object-cover object-center w-10 h-10 rounded-full "
-                        src={avatar}
-                        alt="User avatar"
-                    />
-                </div>
+                {!isLoggedIn ? (
+                    <Link to="/login">
+                        <BtnLogIn />
+                    </Link>
+                ) : (
+                    <div className="flex items-center gap-2 cursor-pointer ">
+                        <span className="text-base">Thomas S.</span>
+                        <img
+                            className="object-cover object-center w-10 h-10 rounded-full "
+                            src={avatar}
+                            alt="User avatar"
+                        />
+                    </div>
+                )}
             </div>
         </header>
     );

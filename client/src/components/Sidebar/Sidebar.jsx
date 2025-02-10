@@ -1,5 +1,3 @@
-// import { useState } from "react";
-
 import { Link } from "react-router";
 import ToggleOffOutlinedIcon from "@mui/icons-material/ToggleOffOutlined";
 
@@ -8,13 +6,6 @@ import { menuItems } from "../../data/data";
 import avatar from "../../assets/images/image-thomas.jpg";
 
 export const Sidebar = () => {
-    // const [activeMenuItem, setActiveMenuItem] = useState();
-
-    // const handleActiveMenu = (state) => {
-    //     setActiveMenuItem(!state);
-    // };
-
-    // ${activeMenuItem && "bg-blue-200"
     return (
         <div className="fixed left-0 top-0 h-full w-[64px] md:w-[200px]">
             <aside className="h-screen overflow-y-auto flex flex-col items-start justify-between  px-2 py-3 text-black">
@@ -28,20 +19,17 @@ export const Sidebar = () => {
                             <span className="text-xs text-gray-500 uppercase">
                                 {section.title}
                             </span>
-                            {section.links.map(
-                                ({ name, path, active, icon: Icon }) => (
-                                    <Link
-                                        to={path}
-                                        key={name}
-                                        // onClick={() => handleActiveMenu(active)}
-                                        className={`
+                            {section.links.map(({ name, path, icon: Icon }) => (
+                                <Link
+                                    to={path}
+                                    key={name}
+                                    className={`
                                         } flex items-center gap-3 px-4 p-2 rounded-2xl hover:bg-gray-100`}
-                                    >
-                                        <Icon />
-                                        <span className="text-sm">{name}</span>
-                                    </Link>
-                                )
-                            )}
+                                >
+                                    <Icon />
+                                    <span className="text-sm">{name}</span>
+                                </Link>
+                            ))}
                         </div>
                     ))}
                 </nav>
