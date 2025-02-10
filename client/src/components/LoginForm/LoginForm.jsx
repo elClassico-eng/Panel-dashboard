@@ -29,7 +29,7 @@ export const LoginForm = () => {
                 transition={{ duration: 0.5 }}
                 className="flex flex-col justify-center items-center"
             >
-                <h2 className="md:text-5xl text-2xl font-medium mb-2">
+                <h2 className="xl:text-4xl text-2xl font-medium mb-2">
                     Welcome in Panel-dashboard!
                 </h2>
                 <p className="text-md text-neutral-400">
@@ -118,9 +118,49 @@ export const LoginForm = () => {
                     </p>
                 </Link>
             </motion.div>
-            <div className="flex relative items-center justify-center h-screen">
-                <div className="w-96 h-96 bg-violet-600 rounded-full"></div>
-                <div className="absolute top-1/2 w-full h-[250px] backdrop-blur-lg bg-white/10 rounded-lg border border-white/30  grainy-effect"></div>
+            <div className="flex relative items-center justify-center h-screen bg-inherit overflow-hidden">
+                <motion.div
+                    className="w-96 h-96 rounded-full bg-gradient-to-r from-violet-500 to-indigo-500"
+                    animate={{
+                        y: [0, -20, 0],
+                        scale: [1, 1.05, 1],
+                        boxShadow: [
+                            "0 0 20px rgba(139, 92, 246, 0.5)",
+                            "0 0 40px rgba(139, 92, 246, 0.8)",
+                            "0 0 20px rgba(139, 92, 246, 0.5)",
+                        ],
+                    }}
+                    transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                        repeatType: "loop",
+                        ease: "easeInOut",
+                    }}
+                />
+
+                <div className="absolute top-1/2 w-full h-[250px] backdrop-blur-lg bg-white/20 rounded-lg border border-white/30  grainy-effect"></div>
+
+                {[...Array(10)].map((_, i) => (
+                    <motion.div
+                        key={i}
+                        className="absolute w-2 h-2 bg-violet-600 rounded-full opacity-50"
+                        animate={{
+                            x: [0, 50, -50, 0],
+                            y: [0, -50, 50, 0],
+                        }}
+                        transition={{
+                            duration: 4,
+                            repeat: Infinity,
+                            repeatType: "mirror",
+                            ease: "easeInOut",
+                            delay: Math.random() * 2,
+                        }}
+                        style={{
+                            top: `${Math.random() * 100}%`,
+                            left: `${Math.random() * 100}%`,
+                        }}
+                    />
+                ))}
             </div>
         </section>
     );
