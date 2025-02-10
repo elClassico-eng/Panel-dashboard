@@ -37,6 +37,17 @@ class UserService {
             throw error;
         }
     }
+    async login(email, password) {
+        const user = await UserModal.findOne({ email });
+        if (!user || !(await bcrypt.compare(password, user.password))) {
+            throw ApiError.BadRequestError("Incorrect email or password");
+        }
+        const userDto = new UserDto(user);
+        const tokens = tokenService.generateToken({ ...userDto });
+        await tokenService.saveTokens(userDto.id, tokens.refreshToken); // save tokens to the database
+
+        return { ...tokens, user: userDto };
+    }
 }
 
 module.exports = new UserService();

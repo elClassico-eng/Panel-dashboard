@@ -28,15 +28,20 @@ class UserController {
 
             return res.json(userData);
         } catch (error) {
-            console.log(error);
-            return res
-                .status(500)
-                .json({ message: "Registration failed", error: error.message });
+            next(error);
         }
     }
 
     async login(req, res, next) {
         try {
+            const { email, password } = req.body;
+            const userData = await userService.login(email, password);
+            res.cookie("refreshToken", userData.refreshToken, {
+                maxAge: 30 * 24 * 60 * 60 * 1000,
+                httpOnly: true,
+            });
+
+            return res.json(userData);
         } catch (error) {
             next(error);
         }
