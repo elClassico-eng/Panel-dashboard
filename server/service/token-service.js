@@ -16,6 +16,30 @@ class TokenService {
         return { accessToken, refreshToken };
     }
 
+    validateAccessToken(token) {
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+            return decoded;
+        } catch (error) {
+            console.error("Invalid access token:", error);
+            throw error;
+        }
+    }
+
+    validateRefreshToken(token) {
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+            return decoded;
+        } catch (error) {
+            console.error("Invalid refresh token:", error);
+            throw error;
+        }
+    }
+
+    findToken(refreshToken) {
+        return tokenModel.findOne({ refreshToken });
+    }
+
     async saveTokens(userId, refreshToken) {
         const tokenData = await tokenModel.findOne({ user: userId });
         if (tokenData) {
