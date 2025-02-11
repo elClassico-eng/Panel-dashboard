@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { useAuth } from "../../store/store";
@@ -15,14 +16,20 @@ export const AuthFormRegistration = () => {
         reset,
     } = useForm();
 
-    const onSubmit = async (data) => {
-        const success = await registration(data.email, data.password);
-        if (success) {
-            if (isAuthenticated) {
-                navigate("/dashboard");
-            }
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate("/dashboard");
         }
-        reset();
+    }, [isAuthenticated, navigate]);
+
+    const onSubmit = async (data) => {
+        try {
+            await registration(data.email, data.password);
+        } catch (registrationError) {
+            console.error("Error registering user", registrationError);
+        } finally {
+            reset();
+        }
     };
 
     return (
