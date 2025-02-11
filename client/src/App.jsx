@@ -8,7 +8,8 @@ import { Kanban } from "./pages/Kanban/Kanban";
 import { NotFound } from "./pages/NotFound/NotFound";
 import { Author } from "./pages/Author/Author";
 import { Settings } from "./pages/Setting/Settings";
-import { Login } from "./pages/Login/Login";
+import { Login } from "./pages/Auth/Login/Login";
+import { Registration } from "./pages/Auth/Registration/Registration";
 
 // Components
 import { Navbar } from "./components/Navbar/Navbar";
@@ -44,6 +45,10 @@ const App = () => {
                         <Route path="/notes" element={<Order />} />
                         <Route path="/author" element={<Author />} />
                         <Route path="/login" element={<Login />} />
+                        <Route
+                            path="/registration"
+                            element={<Registration />}
+                        />
                         <Route path="/setting" element={<Settings />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>

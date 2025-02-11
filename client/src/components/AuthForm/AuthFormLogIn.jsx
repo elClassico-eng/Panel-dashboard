@@ -1,12 +1,14 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
+import { useAuth } from "../../store/store";
 
 import { Link } from "react-router-dom";
-
-export const LoginForm = () => {
+import { useState } from "react";
+export const AuthFormLogIn = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    const { login, isLoading, error } = useAuth();
 
     const {
         register,
@@ -15,9 +17,10 @@ export const LoginForm = () => {
         reset,
     } = useForm();
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         setEmail(data.email);
         setPassword(data.password);
+        await login(email, password);
         reset();
     };
 
@@ -30,11 +33,13 @@ export const LoginForm = () => {
                 className="flex flex-col justify-center items-center"
             >
                 <h2 className="xl:text-4xl text-2xl font-medium mb-2">
-                    Welcome in Panel-dashboard!
+                    Welcome back!
                 </h2>
-                <p className="text-md text-neutral-400">
-                    Register to use the application
+                <p className="text-sm text-neutral-400">
+                    Welcome back! Please enter your details.
                 </p>
+
+                {error && <p className="text-red-500 mb-2">{error}</p>}
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     className="self-center w-full md:w-96 p-4 flex flex-col gap-5"
@@ -100,12 +105,12 @@ export const LoginForm = () => {
                         type="submit"
                         className="w-full bg-violet-500 text-white py-2 rounded-xl shadow-md hover:bg-violet-600 transition-all"
                     >
-                        Log In
+                        {isLoading ? "Logging in ..." : "Log in"}
                     </motion.button>
                 </form>
 
                 <p className="text-sm text-neutral-400">
-                    Have an account?{" "}
+                    Don`t have an account?{" "}
                     <span>
                         <Link className="text-violet-500" to="/registration">
                             Sign in
