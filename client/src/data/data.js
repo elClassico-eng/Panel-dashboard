@@ -1,4 +1,3 @@
-// import ContactsOutlinedIcon as ContactIcon from '@material-ui/icons/ContactsOutlined';
 import {
     HomeOutlined as HomeIcon,
     ShoppingBasketOutlined as BasketIcon,
@@ -12,7 +11,7 @@ import {
 import { Home } from "../pages/Home/Home";
 import { Order } from "../pages/Order/Order";
 import { Kanban } from "../pages/Kanban/Kanban";
-import { Author } from "../pages/Author/Author";
+import { Account } from "../pages/Account/Account";
 import { Settings } from "../pages/Setting/Settings";
 import { Login } from "../pages/Auth/Login/Login";
 import { Registration } from "../pages/Auth/Registration/Registration";
@@ -62,12 +61,12 @@ export const menuItems = [
         ],
     },
     {
-        title: "Author",
+        title: "Profile",
         links: [
             {
-                name: "Author",
+                name: "Profile",
                 active: false,
-                path: "/author",
+                path: "/account",
                 icon: ContactIcon,
             },
         ],
@@ -111,7 +110,7 @@ export const routes = [
     { path: "/employees", component: Order },
     { path: "/kanban-dashboard", component: Kanban },
     { path: "/calendar", component: Order },
-    { path: "/author", component: Author },
+    { path: "/account", component: Account },
     { path: "/login", component: Login },
     { path: "/registration", component: Registration },
     { path: "/setting", component: Settings },

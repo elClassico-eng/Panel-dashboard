@@ -1,4 +1,5 @@
 import { useAuth } from "../../store/store";
+import { Link } from "react-router-dom";
 
 import SearchIcon from "@mui/icons-material/Search";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -9,7 +10,6 @@ import PropTypes from "prop-types";
 
 export const Navbar = ({ isActiveSidebar, setActive }) => {
     const user = useAuth((state) => state.user);
-    const logout = useAuth((state) => state.logout);
 
     const handleActiveSidebar = () => {
         setActive((prev) => !prev);
@@ -43,9 +43,9 @@ export const Navbar = ({ isActiveSidebar, setActive }) => {
                 <AutoFixHighOutlinedIcon className=" cursor-pointer" />
                 <NotificationsNoneOutlinedIcon className="transition cursor-pointer" />
                 <div className="flex items-center gap-2 cursor-pointer ">
-                    <span onClick={() => logout()} className="text-base">
-                        {user.email}
-                    </span>
+                    <Link to="/account">
+                        <span className="text-base">{user.email}</span>
+                    </Link>
                 </div>
             </div>
         </header>
