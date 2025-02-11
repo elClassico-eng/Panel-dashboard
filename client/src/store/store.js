@@ -134,6 +134,43 @@ export const useAuth = create(
                 }
             },
 
+            // Check authentication status (for auto-login)
+            checkAuth: async () => {
+                const token = localStorage.getItem("token");
+                if (!token) {
+                    set({ isAuthenticated: false, user: null });
+                    return;
+                }
+
+                set({ isLoading: true });
+
+                try {
+                    const { data } = await authServices.fetchUsers(); // Replace with your API endpoint
+                    set({ user: data, isAuthenticated: true });
+                } catch (error) {
+                    localStorage.removeItem("token");
+                    console.log(
+                        "Token expired or invalid, trying to refresh..."
+                    );
+                    set({ isAuthenticated: false, user: null });
+                } finally {
+                    set({ isLoading: false });
+                }
+
+                try {
+                    const { data } = await authServices.refreshToken();
+                    console.log("Refresh token success:", data);
+                    localStorage.setItem("token", data.accessToken);
+                    set({ user: data.user, isAuthenticated: true });
+                } catch (refreshError) {
+                    console.log("Refresh token failed:", refreshError);
+                    localStorage.removeItem("token");
+                    set({ isAuthenticated: false, user: null });
+                } finally {
+                    set({ isLoading: false });
+                }
+            },
+
             //Exit from account
             logout: async () => {
                 set({ isLoading: true, error: null });
@@ -143,28 +180,6 @@ export const useAuth = create(
                     set({ user: null, isAuthenticated: false });
                 } catch (error) {
                     useAuth.getState().handleError(error);
-                } finally {
-                    set({ isLoading: false });
-                }
-            },
-
-            // Check authentication status (for auto-login)
-            checkAuth: async () => {
-                const token = localStorage.getItem("token");
-                console.log(token);
-                if (!token) {
-                    set({ isAuthenticated: false, user: null });
-                    return;
-                }
-
-                set({ isLoading: true });
-                try {
-                    const { data } = await authServices.fetchUsers(); // Replace with your API endpoint
-                    set({ user: data, isAuthenticated: true });
-                } catch (error) {
-                    localStorage.removeItem("token");
-                    console.log(error);
-                    set({ isAuthenticated: false, user: null });
                 } finally {
                     set({ isLoading: false });
                 }

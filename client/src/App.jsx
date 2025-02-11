@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAuth } from "./store/store";
 import { Routes, Route } from "react-router";
 
 // Pages
@@ -17,6 +18,12 @@ import { Sidebar } from "./components/Sidebar/Sidebar";
 
 const App = () => {
     const [activeSidebar, setActiveSidebar] = useState(true);
+
+    const { checkAuth } = useAuth();
+
+    useEffect(() => {
+        checkAuth();
+    }, []);
 
     return (
         <div className="w-full h-screen flex flex-col">

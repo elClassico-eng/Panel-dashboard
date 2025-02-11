@@ -16,4 +16,7 @@ export const authServices = {
     fetchUsers: async () => {
         return $api.get("/users");
     },
+    refreshToken: async () => {
+        return $api.get("/refresh");
+    },
 };
