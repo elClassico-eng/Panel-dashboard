@@ -1,14 +1,12 @@
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { useAuth } from "../../store/store";
+import { useNavigate } from "react-router-dom";
 
 import { Link } from "react-router-dom";
-import { useState } from "react";
 export const AuthFormRegistration = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-
-    const { registration, isLoading, error } = useAuth();
+    const { registration, isLoading, error, isAuthenticated } = useAuth();
+    const navigate = useNavigate();
 
     const {
         register,
@@ -18,9 +16,12 @@ export const AuthFormRegistration = () => {
     } = useForm();
 
     const onSubmit = async (data) => {
-        setEmail(data.email);
-        setPassword(data.password);
-        await registration(email, password);
+        const success = await registration(data.email, data.password);
+        if (success) {
+            if (isAuthenticated) {
+                navigate("/dashboard");
+            }
+        }
         reset();
     };
 
@@ -115,7 +116,7 @@ export const AuthFormRegistration = () => {
                         <span>Log in</span>
                     </Link>
                 </p>
-                <Link to="/home">
+                <Link to="/">
                     <p className="text-sm text-violet-500 mt-20 self-start">
                         Back home
                     </p>

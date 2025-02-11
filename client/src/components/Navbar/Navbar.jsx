@@ -1,7 +1,4 @@
-import { useState } from "react";
-
-import { Link } from "react-router";
-import { BtnLogIn } from "../UI/Button/BtnLogIn";
+import { useAuth } from "../../store/store";
 
 import SearchIcon from "@mui/icons-material/Search";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -10,14 +7,13 @@ import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNone
 import AutoFixHighOutlinedIcon from "@mui/icons-material/AutoFixHighOutlined";
 import PropTypes from "prop-types";
 
-import avatar from "../../assets/images/image-thomas.jpg";
-
 export const Navbar = ({ isActiveSidebar, setActive }) => {
+    const user = useAuth((state) => state.user);
+    const logout = useAuth((state) => state.logout);
+
     const handleActiveSidebar = () => {
         setActive((prev) => !prev);
     };
-
-    const [isLoggedIn, setLoggedIn] = useState(false);
 
     return (
         <header
@@ -46,20 +42,11 @@ export const Navbar = ({ isActiveSidebar, setActive }) => {
             <div className="flex items-center gap-5">
                 <AutoFixHighOutlinedIcon className=" cursor-pointer" />
                 <NotificationsNoneOutlinedIcon className="transition cursor-pointer" />
-                {!isLoggedIn ? (
-                    <Link to="/login">
-                        <BtnLogIn />
-                    </Link>
-                ) : (
-                    <div className="flex items-center gap-2 cursor-pointer ">
-                        <span className="text-base">Thomas S.</span>
-                        <img
-                            className="object-cover object-center w-10 h-10 rounded-full "
-                            src={avatar}
-                            alt="User avatar"
-                        />
-                    </div>
-                )}
+                <div className="flex items-center gap-2 cursor-pointer ">
+                    <span onClick={() => logout()} className="text-base">
+                        {user.email}
+                    </span>
+                </div>
             </div>
         </header>
     );

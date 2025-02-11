@@ -17,11 +17,14 @@ import { Settings } from "../pages/Setting/Settings";
 import { Login } from "../pages/Auth/Login/Login";
 import { Registration } from "../pages/Auth/Registration/Registration";
 import { NotFound } from "../pages/NotFound/NotFound";
+import { LandingHome } from "../pages/Landing/LandingHome/LandingHome";
 
 export const menuItems = [
     {
         title: "Dashboard",
-        links: [{ name: "Home", active: true, path: "/", icon: HomeIcon }],
+        links: [
+            { name: "Home", active: true, path: "/dashboard", icon: HomeIcon },
+        ],
     },
     {
         title: "Pages",
@@ -101,8 +104,8 @@ export const tagColors = {
 };
 
 export const routes = [
-    { path: "/", component: Home },
-    { path: "/home", component: Home },
+    { path: "/", component: LandingHome },
+    { path: "/dashboard", component: Home },
     { path: "/order", component: Order },
     { path: "/customers", component: Order },
     { path: "/employees", component: Order },

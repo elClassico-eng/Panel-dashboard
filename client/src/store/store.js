@@ -109,7 +109,7 @@ export const useAuth = create(
                         email,
                         password
                     );
-                    console.log(data);
+                    console.log("Registration success: ", data);
                     localStorage.setItem("token", data.accessToken);
                     set({ user: data.user, isAuthenticated: true });
                 } catch (error) {
@@ -124,7 +124,7 @@ export const useAuth = create(
                 set({ isLoading: true, error: null });
                 try {
                     const { data } = await authServices.login(email, password);
-                    console.log(data);
+                    console.log("Login enter success: ", data);
                     localStorage.setItem("token", data.accessToken);
                     set({ user: data.user, isAuthenticated: true });
                 } catch (error) {
@@ -136,34 +136,28 @@ export const useAuth = create(
 
             // Check authentication status (for auto-login)
             checkAuth: async () => {
-                const token = localStorage.getItem("token");
-                if (!token) {
-                    set({ isAuthenticated: false, user: null });
-                    return;
-                }
-
                 set({ isLoading: true });
-
                 try {
-                    const { data } = await authServices.fetchUsers(); // Replace with your API endpoint
-                    set({ user: data, isAuthenticated: true });
-                } catch (error) {
-                    localStorage.removeItem("token");
-                    console.log(
-                        "Token expired or invalid, trying to refresh..."
-                    );
-                    set({ isAuthenticated: false, user: null });
-                } finally {
-                    set({ isLoading: false });
-                }
+                    const token = localStorage.getItem("token");
+                    if (!token) throw new Error("No token");
 
-                try {
+                    // Сначала проверяем текущий токен
+                    try {
+                        const { data } = await authServices.fetchUsers();
+                        set({ user: data, isAuthenticated: true });
+                        return;
+                    } catch (error) {
+                        console.log(error);
+                        console.log("Token expired, trying to refresh...");
+                    }
+
+                    // Если не удалось, пробуем обновить
                     const { data } = await authServices.refreshToken();
-                    console.log("Refresh token success:", data);
+                    console.log("Token refresh success: ", data);
                     localStorage.setItem("token", data.accessToken);
                     set({ user: data.user, isAuthenticated: true });
-                } catch (refreshError) {
-                    console.log("Refresh token failed:", refreshError);
+                } catch (error) {
+                    console.log(error);
                     localStorage.removeItem("token");
                     set({ isAuthenticated: false, user: null });
                 } finally {

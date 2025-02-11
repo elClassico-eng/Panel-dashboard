@@ -1,15 +1,13 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { useAuth } from "../../store/store";
+import { useNavigate } from "react-router-dom";
 
 import { Link } from "react-router-dom";
-import { useState } from "react";
 export const AuthFormLogIn = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-
-    const { login, isLoading, error } = useAuth();
-
+    const { login, isLoading, error, isAuthenticated } = useAuth();
+    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
@@ -17,11 +15,20 @@ export const AuthFormLogIn = () => {
         reset,
     } = useForm();
 
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate("/dashboard");
+        }
+    }, [isAuthenticated, navigate]);
+
     const onSubmit = async (data) => {
-        setEmail(data.email);
-        setPassword(data.password);
-        await login(email, password);
-        reset();
+        try {
+            await login(data.email, data.password);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            reset();
+        }
     };
 
     return (
@@ -117,7 +124,7 @@ export const AuthFormLogIn = () => {
                         </Link>
                     </span>
                 </p>
-                <Link to="/home">
+                <Link to="/">
                     <p className="text-sm text-violet-500 mt-20 self-start">
                         Back home
                     </p>

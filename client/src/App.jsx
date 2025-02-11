@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "./store/store";
 import { Routes, Route } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { routes } from "./data/data";
 
 // Components
@@ -9,12 +10,17 @@ import { Sidebar } from "./components/Sidebar/Sidebar";
 
 const App = () => {
     const [activeSidebar, setActiveSidebar] = useState(true);
+    const navigate = useNavigate();
 
-    const { checkAuth } = useAuth();
+    const { checkAuth, isAuthenticated } = useAuth();
 
     useEffect(() => {
         checkAuth();
-    }, []);
+
+        if (!isAuthenticated) {
+            navigate("/");
+        }
+    }, [checkAuth, isAuthenticated, navigate]);
 
     return (
         <div className="w-full h-screen flex flex-col">
