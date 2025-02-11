@@ -1,16 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "./store/store";
 import { Routes, Route } from "react-router";
-
-// Pages
-import { Home } from "./pages/Home/Home";
-import { Order } from "./pages/Order/Order";
-import { Kanban } from "./pages/Kanban/Kanban";
-import { NotFound } from "./pages/NotFound/NotFound";
-import { Author } from "./pages/Author/Author";
-import { Settings } from "./pages/Setting/Settings";
-import { Login } from "./pages/Auth/Login/Login";
-import { Registration } from "./pages/Auth/Registration/Registration";
+import { routes } from "./data/data";
 
 // Components
 import { Navbar } from "./components/Navbar/Navbar";
@@ -40,24 +31,13 @@ const App = () => {
                     } pt-[70px] overflow-y-auto overflow-x-hidden`}
                 >
                     <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/home" element={<Home />} />
-
-                        <Route path="/order" element={<Order />} />
-                        <Route path="/customers" element={<Order />} />
-                        <Route path="/employees" element={<Order />} />
-
-                        <Route path="/kanban-dashboard" element={<Kanban />} />
-                        <Route path="/calendar" element={<Order />} />
-                        <Route path="/notes" element={<Order />} />
-                        <Route path="/author" element={<Author />} />
-                        <Route path="/login" element={<Login />} />
-                        <Route
-                            path="/registration"
-                            element={<Registration />}
-                        />
-                        <Route path="/setting" element={<Settings />} />
-                        <Route path="*" element={<NotFound />} />
+                        {routes.map((route) => (
+                            <Route
+                                key={route.path}
+                                path={route.path}
+                                element={<route.component />}
+                            />
+                        ))}
                     </Routes>
                 </div>
             </div>

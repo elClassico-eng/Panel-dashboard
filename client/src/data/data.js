@@ -9,6 +9,14 @@ import {
     ContactsOutlined as ContactIcon,
     SettingsOutlined as SettingIcon,
 } from "@mui/icons-material";
+import { Home } from "../pages/Home/Home";
+import { Order } from "../pages/Order/Order";
+import { Kanban } from "../pages/Kanban/Kanban";
+import { Author } from "../pages/Author/Author";
+import { Settings } from "../pages/Setting/Settings";
+import { Login } from "../pages/Auth/Login/Login";
+import { Registration } from "../pages/Auth/Registration/Registration";
+import { NotFound } from "../pages/NotFound/NotFound";
 
 export const menuItems = [
     {
@@ -91,3 +99,18 @@ export const tagColors = {
     backend: "bg-blue-200 text-blue-800",
     frontend: "bg-green-200 text-green-800",
 };
+
+export const routes = [
+    { path: "/", component: Home },
+    { path: "/home", component: Home },
+    { path: "/order", component: Order },
+    { path: "/customers", component: Order },
+    { path: "/employees", component: Order },
+    { path: "/kanban-dashboard", component: Kanban },
+    { path: "/calendar", component: Order },
+    { path: "/author", component: Author },
+    { path: "/login", component: Login },
+    { path: "/registration", component: Registration },
+    { path: "/setting", component: Settings },
+    { path: "*", component: NotFound },
+];
