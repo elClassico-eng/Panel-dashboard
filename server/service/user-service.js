@@ -78,6 +78,46 @@ class UserService {
         const users = await UserModal.find();
         return users.map((user) => new UserDto(user));
     }
+
+    async updateProfile(userId, updatedUser) {
+        try {
+            const user = await UserModal.findByIdAndUpdate(
+                userId,
+                updatedUser,
+                {
+                    new: true,
+                }
+            );
+            if (!user) {
+                throw ApiError.BadRequestError("User not found");
+            }
+
+            Object.keys(profileData).forEach((key) => {
+                if (profileData[key]) {
+                    user[key] = profileData[key];
+                }
+            });
+
+            await user.save();
+            return new UserDto(user);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async getProfile(userId) {
+        try {
+            const user = await UserModal.findById(userId);
+
+            if (!user) {
+                throw ApiError.BadRequestError("User not found");
+            }
+
+            return new UserDto(user);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }
 
 module.exports = new UserService();

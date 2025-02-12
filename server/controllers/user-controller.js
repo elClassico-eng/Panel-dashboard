@@ -79,6 +79,50 @@ class UserController {
             next(error);
         }
     }
+
+    async updateProfile(req, res, next) {
+        try {
+            const userId = req.user.id;
+            const { firstName, lastName, city, teamStatus, phoneNumber } =
+                req.body;
+
+            const updateUser = await userService.updateProfile(userId, {
+                firstName,
+                lastName,
+                city,
+                teamStatus,
+                phoneNumber,
+            });
+            return res.json(updateUser);
+        } catch (updateProfileError) {
+            next(updateProfileError);
+        }
+    }
+
+    async getProfile(req, res, next) {
+        try {
+            const userId = req.user.id;
+            const userProfile = await userService.getProfile(userId);
+
+            return res.json(userProfile);
+        } catch (getProfileError) {
+            next(getProfileError);
+        }
+    }
+
+    async uploadAvatar(req, res, next) {
+        try {
+            const userId = req.body.id;
+            const photoPath = req.file.path;
+
+            const user = await userService.uploadAvatar(userId, {
+                photo: photoPath,
+            });
+            return res.json(user);
+        } catch (uploadAvatarError) {
+            next(uploadAvatarError);
+        }
+    }
 }
 
 module.exports = new UserController();
