@@ -6,7 +6,8 @@ import { useNavigate } from "react-router-dom";
 
 import { Link } from "react-router-dom";
 export const AuthFormRegistration = () => {
-    const { registration, isLoading, error, isAuthenticated } = useAuth();
+    const { registration, isLoading, error, isAuthenticated, updateProfile } =
+        useAuth();
     const navigate = useNavigate();
 
     const {
@@ -24,7 +25,12 @@ export const AuthFormRegistration = () => {
 
     const onSubmit = async (data) => {
         try {
+            console.log(data);
             await registration(data.email, data.password);
+            await updateProfile({
+                firstName: data.firstName,
+                lastName: data.lastName,
+            });
         } catch (registrationError) {
             console.error("Error registering user", registrationError);
         } finally {
@@ -52,6 +58,60 @@ export const AuthFormRegistration = () => {
                     onSubmit={handleSubmit(onSubmit)}
                     className="self-center w-full md:w-96 p-4 flex flex-col gap-5"
                 >
+                    <div>
+                        <label htmlFor="firstName" className="text-sm">
+                            First name
+                        </label>
+                        <input
+                            type="firstName"
+                            {...register("firstName", {
+                                required: "firstName is required",
+                                pattern: {
+                                    value: /^[a-zA-Z][a-zA-Z0-9-]+$/,
+                                    message: "Enter a valid Last Name",
+                                },
+                            })}
+                            placeholder="Enter your First Name"
+                            className={`w-full px-4 mt-1 py-2 border rounded-xl focus:outline-none placeholder:text-sm focus:ring-2 focus:ring-violet-500 transition-all ${
+                                errors.lastName
+                                    ? "border-red-500"
+                                    : "border-gray-300"
+                            }`}
+                        />
+                        {errors.firstName && (
+                            <p className="text-red-500 text-sm mt-1">
+                                {errors.firstName.message}
+                            </p>
+                        )}
+                    </div>
+
+                    <div>
+                        <label htmlFor="lastName" className="text-sm">
+                            Last name
+                        </label>
+                        <input
+                            type="lastName"
+                            {...register("lastName", {
+                                required: "LastName is required",
+                                pattern: {
+                                    value: /^[a-zA-Z][a-zA-Z0-9-]+$/,
+                                    message: "Enter a valid Last Name",
+                                },
+                            })}
+                            placeholder="Enter your Last Name"
+                            className={`w-full px-4 mt-1 py-2 border rounded-xl focus:outline-none placeholder:text-sm focus:ring-2 focus:ring-violet-500 transition-all ${
+                                errors.lastName
+                                    ? "border-red-500"
+                                    : "border-gray-300"
+                            }`}
+                        />
+                        {errors.lastName && (
+                            <p className="text-red-500 text-sm mt-1">
+                                {errors.lastName.message}
+                            </p>
+                        )}
+                    </div>
+
                     <div>
                         <label htmlFor="email" className="text-sm">
                             Email

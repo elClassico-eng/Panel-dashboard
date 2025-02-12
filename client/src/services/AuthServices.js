@@ -19,4 +19,19 @@ export const authServices = {
     refreshToken: async () => {
         return $api.get("/refresh");
     },
+
+    fetchProfile: async (profileData) => {
+        return $api.get(`/profile}`, profileData);
+    },
+
+    uploadAvatar: async (file) => {
+        const formData = new FormData();
+        formData.append("avatar", file);
+
+        return $api.post(`/upload-avatar`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+    },
 };

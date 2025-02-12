@@ -1,8 +1,31 @@
+import { useEffect } from "react";
+
 import { useAuth } from "../../store/store";
 
 export const Profile = () => {
     const user = useAuth((state) => state.user);
     const logout = useAuth((state) => state.logout);
+    const fetchProfile = useAuth((state) => state.fetchProfile);
+    const updateProfile = useAuth((state) => state.updateProfile);
+    const uploadAvatar = useAuth((state) => state.uploadAvatar);
+
+    console.log(user);
+
+    useEffect(() => {
+        fetchProfile();
+    }, [fetchProfile]);
+
+    const handleSetAvatar = async (e) => {
+        try {
+            const file = e.target.files[0];
+            if (file) {
+                await uploadAvatar(file);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
         <div className="flex flex-col gap-5 px-12">
             <p className="text-lg">Email: {user.email}</p>

@@ -178,6 +178,52 @@ export const useAuth = create(
                     set({ isLoading: false });
                 }
             },
+
+            fetchProfile: async () => {
+                set({ isLoading: true });
+                try {
+                    const { data } = await authServices.fetchProfile();
+                    console.log("Profile data: ", data);
+                    set({ user: data });
+                } catch (error) {
+                    useAuth.getState().handleError(error);
+                } finally {
+                    set({ isLoading: false });
+                }
+            },
+
+            updateProfile: async (profileData) => {
+                set({ isLoading: true });
+                try {
+                    const { data } = await authServices.updateProfile(
+                        profileData
+                    );
+                    console.log("Profile updated: ", data);
+                    set({ user: data });
+                } catch (error) {
+                    useAuth.getState().handleError(error);
+                } finally {
+                    set({ isLoading: false });
+                }
+            },
+
+            uploadAvatar: async (formData) => {
+                set({ isLoading: true });
+                try {
+                    const { data } = await authServices.uploadAvatar(formData);
+                    console.log("Avatar uploaded: ", data);
+                    set({
+                        user: {
+                            ...useAuth.getState().user,
+                            avatar: data.avatar,
+                        },
+                    });
+                } catch (error) {
+                    useAuth.getState().handleError(error);
+                } finally {
+                    set({ isLoading: false });
+                }
+            },
         }),
         {
             name: "auth-storage", // name for local-storage
