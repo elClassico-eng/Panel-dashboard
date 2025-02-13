@@ -26,11 +26,15 @@ export const AuthFormRegistration = () => {
     const onSubmit = async (data) => {
         try {
             console.log(data);
-            await registration(data.email, data.password);
-            await updateProfile({
-                firstName: data.firstName,
-                lastName: data.lastName,
-            });
+            await registration(
+                data.email,
+                data.password,
+                data.firstName,
+                data.lastName,
+                data.city,
+                data.teamStatus,
+                data.phoneNumber
+            );
         } catch (registrationError) {
             console.error("Error registering user", registrationError);
         } finally {

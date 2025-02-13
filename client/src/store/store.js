@@ -102,12 +102,25 @@ export const useAuth = create(
             },
 
             //Registration
-            registration: async (email, password) => {
+            registration: async (
+                email,
+                password,
+                firstName,
+                lastName,
+                city,
+                teamStatus,
+                phoneNumber
+            ) => {
                 set({ isLoading: true, error: null });
                 try {
                     const { data } = await authServices.registration(
                         email,
-                        password
+                        password,
+                        firstName,
+                        lastName,
+                        city,
+                        teamStatus,
+                        phoneNumber
                     );
                     console.log("Registration success: ", data);
                     localStorage.setItem("token", data.accessToken);

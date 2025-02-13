@@ -1,8 +1,24 @@
 import { $api } from "../http";
 
 export const authServices = {
-    registration: async (email, password) => {
-        return $api.post("/registration", { email, password });
+    registration: async (
+        email,
+        password,
+        firstName,
+        lastName,
+        city,
+        teamStatus,
+        phoneNumber
+    ) => {
+        return $api.post("/registration", {
+            email,
+            password,
+            firstName,
+            lastName,
+            city,
+            teamStatus,
+            phoneNumber,
+        });
     },
 
     login: async (email, password) => {
