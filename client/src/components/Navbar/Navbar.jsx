@@ -44,7 +44,9 @@ export const Navbar = ({ isActiveSidebar, setActive }) => {
                 <NotificationsNoneOutlinedIcon className="transition cursor-pointer" />
                 <div className="flex items-center gap-2 cursor-pointer ">
                     <Link to="/account">
-                        <span className="text-base">{user.email}</span>
+                        <span className="text-base">
+                            {user.firstName} {user.lastName}
+                        </span>
                     </Link>
                 </div>
             </div>
