@@ -132,12 +132,21 @@ class UserController {
     async uploadAvatar(req, res, next) {
         try {
             const userId = req.body.id;
-            const photoPath = req.file.path;
+            const photoPath = req.file.path; // Локальный путь, например: uploads/123.jpg
+
+            console.log("Сохранённый путь к фото:", photoPath);
+
+            // Формируем полный URL
+            const fullPhotoUrl = `${req.protocol}://${req.get(
+                "host"
+            )}/${photoPath}`;
+            console.log("Полная ссылка на фото:", fullPhotoUrl);
 
             const user = await userService.uploadAvatar(userId, {
-                photo: photoPath,
+                photo: fullPhotoUrl,
             });
-            return res.json(user);
+
+            return res.json({ ...user, avatar: fullPhotoUrl }); // Отправляем полный URL
         } catch (uploadAvatarError) {
             next(uploadAvatarError);
         }
