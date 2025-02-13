@@ -44,10 +44,12 @@ export const authServices = {
         const formData = new FormData();
         formData.append("avatar", file);
 
-        return $api.post(`/upload-avatar`, formData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        });
+        try {
+            const response = await $api.post(`/upload-avatar`, formData);
+            return response.data;
+        } catch (error) {
+            console.error("Error adding photo", error);
+            throw error;
+        }
     },
 };

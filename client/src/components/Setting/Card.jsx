@@ -1,6 +1,7 @@
-export const Card = ({ title, subtitle, Icon, href }) => {
+export const Card = ({ title, subtitle, Icon, href, logout }) => {
     return (
         <a
+            onClick={() => logout()}
             href={href}
             className="w-full p-4 rounded border-[1px] border-slate-300 relative overflow-hidden group bg-white"
         >

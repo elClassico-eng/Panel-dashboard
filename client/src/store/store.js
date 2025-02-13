@@ -211,7 +211,6 @@ export const useAuth = create(
                     const { data } = await authServices.updateProfile(
                         profileData
                     );
-                    console.log("Profile updated: ", data);
                     set({ user: data });
                 } catch (error) {
                     useAuth.getState().handleError(error);
@@ -220,15 +219,16 @@ export const useAuth = create(
                 }
             },
 
-            uploadAvatar: async (formData) => {
+            uploadAvatar: async (file) => {
                 set({ isLoading: true });
                 try {
-                    const { data } = await authServices.uploadAvatar(formData);
-                    console.log("Avatar uploaded: ", data);
+                    const { data } = await authServices.uploadAvatar(file);
+                    console.log("Avatar uploaded:", data);
+
                     set({
                         user: {
                             ...useAuth.getState().user,
-                            avatar: data.avatar,
+                            avatar: data.avatar, // 💡 Должен быть полный URL
                         },
                     });
                 } catch (error) {

@@ -117,6 +117,60 @@ export const AuthFormRegistration = () => {
                     </div>
 
                     <div>
+                        <label htmlFor="city" className="text-sm">
+                            City
+                        </label>
+                        <input
+                            type="text"
+                            {...register("city", {
+                                required: "City is required",
+                                pattern: {
+                                    value: /^[a-zA-Z][a-zA-Z0-9-]+$/,
+                                    message: "Enter a valid Last Name",
+                                },
+                            })}
+                            placeholder="Enter your city"
+                            className={`w-full px-4 mt-1 py-2 border rounded-xl focus:outline-none placeholder:text-sm focus:ring-2 focus:ring-violet-500 transition-all ${
+                                errors.city
+                                    ? "border-red-500"
+                                    : "border-gray-300"
+                            }`}
+                        />
+                        {errors.city && (
+                            <p className="text-red-500 text-sm mt-1">
+                                {errors.city.message}
+                            </p>
+                        )}
+                    </div>
+
+                    <div>
+                        <label htmlFor="teamStatus" className="text-sm">
+                            Team Status
+                        </label>
+                        <input
+                            type="text"
+                            {...register("teamStatus", {
+                                required: "Team status is required",
+                                pattern: {
+                                    value: /^[a-zA-Z][a-zA-Z0-9-]+$/,
+                                    message: "Enter a valid Last Name",
+                                },
+                            })}
+                            placeholder="Enter your team status"
+                            className={`w-full px-4 mt-1 py-2 border rounded-xl focus:outline-none placeholder:text-sm focus:ring-2 focus:ring-violet-500 transition-all ${
+                                errors.teamStatus
+                                    ? "border-red-500"
+                                    : "border-gray-300"
+                            }`}
+                        />
+                        {errors.teamStatus && (
+                            <p className="text-red-500 text-sm mt-1">
+                                {errors.teamStatus.message}
+                            </p>
+                        )}
+                    </div>
+
+                    <div>
                         <label htmlFor="email" className="text-sm">
                             Email
                         </label>

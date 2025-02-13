@@ -1,12 +1,15 @@
 import MailOutlineOutlinedIcon from "@material-ui/icons/MailOutlineOutlined";
 import GroupOutlinedIcon from "@material-ui/icons/GroupOutlined";
 import PermIdentityOutlinedIcon from "@material-ui/icons/PermIdentityOutlined";
-import CreditCardOutlinedIcon from "@material-ui/icons/CreditCardOutlined";
+import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 
 import { Card } from "../../components/Setting/Card";
 import { Title } from "../../components/Title/Title";
+import { useAuth } from "../../store/store";
 
 export const Settings = () => {
+    const logout = useAuth((state) => state.logout);
+
     return (
         <div className="p-4">
             <Title title="Settings" />
@@ -30,10 +33,11 @@ export const Settings = () => {
                     Icon={GroupOutlinedIcon}
                 />
                 <Card
-                    title="Billing"
-                    subtitle="Manage cards"
+                    logout={logout}
+                    title="Exit"
+                    subtitle="Logout "
                     href="#"
-                    Icon={CreditCardOutlinedIcon}
+                    Icon={ExitToAppOutlinedIcon}
                 />
             </div>
         </div>
