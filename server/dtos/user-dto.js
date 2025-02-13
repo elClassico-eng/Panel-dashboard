@@ -7,7 +7,7 @@ module.exports = class UserDto {
     city;
     teamStatus;
     phoneNumber;
-    photo;
+    profilePhoto;
 
     constructor(model) {
         this.email = model.email;
@@ -18,6 +18,6 @@ module.exports = class UserDto {
         this.city = model.city;
         this.teamStatus = model.teamStatus;
         this.phoneNumber = model.phoneNumber;
-        this.photo = model.photo;
+        this.photo = model.profilePhoto;
     }
 };

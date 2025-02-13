@@ -20,6 +20,7 @@ class UserController {
                 city,
                 teamStatus,
                 phoneNumber,
+                profilePhoto,
             } = req.body;
 
             if (!email || !password) {
@@ -35,7 +36,8 @@ class UserController {
                 lastName,
                 city,
                 teamStatus,
-                phoneNumber
+                phoneNumber,
+                profilePhoto
             );
 
             res.cookie("refreshToken", userData.refreshToken, {

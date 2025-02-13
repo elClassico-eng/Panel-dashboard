@@ -14,7 +14,8 @@ class UserService {
         lastName,
         city,
         teamStatus,
-        phoneNumber
+        phoneNumber,
+        profilePhoto
     ) {
         try {
             const candidate = await UserModal.findOne({ email });
@@ -31,6 +32,7 @@ class UserService {
                 city,
                 teamStatus,
                 phoneNumber,
+                profilePhoto,
             });
 
             const userDto = new UserDto(user); // create a new instance of the UserDto class
