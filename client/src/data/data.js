@@ -30,12 +30,6 @@ export const menuItems = [
         links: [
             { name: "Order", active: false, path: "/order", icon: BasketIcon },
             {
-                name: "Customers",
-                active: false,
-                path: "/customers",
-                icon: PeopleIcon,
-            },
-            {
                 name: "Employees",
                 active: false,
                 path: "/employees",
@@ -51,12 +45,6 @@ export const menuItems = [
                 active: false,
                 path: "/kanban-dashboard",
                 icon: DashboardIcon,
-            },
-            {
-                name: "Calendar",
-                active: false,
-                path: "/calendar",
-                icon: CalendarIcon,
             },
         ],
     },
@@ -106,10 +94,8 @@ export const routes = [
     { path: "/", component: LandingHome },
     { path: "/dashboard", component: Home },
     { path: "/order", component: Order },
-    { path: "/customers", component: Order },
     { path: "/employees", component: Order },
     { path: "/kanban-dashboard", component: Kanban },
-    { path: "/calendar", component: Order },
     { path: "/account", component: Account },
     { path: "/login", component: Login },
     { path: "/registration", component: Registration },
