@@ -7,7 +7,15 @@ const UserDto = require("../dtos/user-dto");
 const ApiError = require("../exceptions/api-error");
 
 class UserService {
-    async registration(email, password) {
+    async registration(
+        email,
+        password,
+        firstName,
+        lastName,
+        city,
+        teamStatus,
+        phoneNumber
+    ) {
         try {
             const candidate = await UserModal.findOne({ email });
             if (candidate) {
@@ -18,6 +26,11 @@ class UserService {
             const user = await UserModal.create({
                 email,
                 password: hashPassword,
+                firstName,
+                lastName,
+                city,
+                teamStatus,
+                phoneNumber,
             });
 
             const userDto = new UserDto(user); // create a new instance of the UserDto class
@@ -86,22 +99,18 @@ class UserService {
                 updatedUser,
                 {
                     new: true,
+                    runValidators: true,
                 }
             );
+
             if (!user) {
                 throw ApiError.BadRequestError("User not found");
             }
 
-            Object.keys(profileData).forEach((key) => {
-                if (profileData[key]) {
-                    user[key] = profileData[key];
-                }
-            });
-
-            await user.save();
             return new UserDto(user);
         } catch (error) {
             console.log(error);
+            throw ApiError.InternalServerError("Failed to update profile");
         }
     }
 

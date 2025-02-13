@@ -11,7 +11,16 @@ class UserController {
                     ApiError.BadRequestError("Validation error", errors.array())
                 );
             }
-            const { email, password } = req.body;
+
+            const {
+                email,
+                password,
+                firstName,
+                lastName,
+                city,
+                teamStatus,
+                phoneNumber,
+            } = req.body;
 
             if (!email || !password) {
                 return res
@@ -19,7 +28,15 @@ class UserController {
                     .json({ message: "Missing email or password" });
             }
 
-            const userData = await userService.registration(email, password);
+            const userData = await userService.registration(
+                email,
+                password,
+                firstName,
+                lastName,
+                city,
+                teamStatus,
+                phoneNumber
+            );
 
             res.cookie("refreshToken", userData.refreshToken, {
                 maxAge: 30 * 24 * 60 * 60 * 1000,
