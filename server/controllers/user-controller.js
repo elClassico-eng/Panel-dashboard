@@ -12,16 +12,13 @@ class UserController {
                 );
             }
 
-            const {
-                email,
-                password,
-                firstName,
-                lastName,
-                city,
-                teamStatus,
-                phoneNumber,
-                profilePhoto,
-            } = req.body;
+            const { email, password, firstName, lastName, profilePhoto, role } =
+                req.body;
+
+            const existingAdmins = await userService.getAdminsCount();
+            console.log("Existing admins:", existingAdmins);
+            const assignedRole =
+                existingAdmins === 0 ? "Admin" : role || "Employee";
 
             if (!email || !password) {
                 return res
@@ -34,18 +31,22 @@ class UserController {
                 password,
                 firstName,
                 lastName,
-                city,
-                teamStatus,
-                phoneNumber,
-                profilePhoto
+                profilePhoto,
+                assignedRole
             );
+
+            console.log("Сохраненная роль пользователя:", userData.role);
 
             res.cookie("refreshToken", userData.refreshToken, {
                 maxAge: 30 * 24 * 60 * 60 * 1000,
                 httpOnly: true,
             });
 
-            return res.json(userData);
+            return res.status(201).json({
+                success: true,
+                message: "User registered successfully",
+                data: userData,
+            });
         } catch (error) {
             next(error);
         }
@@ -54,14 +55,30 @@ class UserController {
     async login(req, res, next) {
         try {
             const { email, password } = req.body;
+
             const userData = await userService.login(email, password);
             res.cookie("refreshToken", userData.refreshToken, {
                 maxAge: 30 * 24 * 60 * 60 * 1000,
                 httpOnly: true,
             });
 
-            return res.json(userData);
+            return res.status(201).json({
+                success: true,
+                message: "User logged in successfully",
+                data: userData,
+            });
         } catch (error) {
+            if (
+                error.message === "User not found" ||
+                error.message === "Invalid password"
+            ) {
+                return res.status(401).json({
+                    success: false,
+                    message: error.message,
+                    data: null,
+                });
+            }
+
             next(error);
         }
     }
@@ -69,9 +86,14 @@ class UserController {
     async logout(req, res, next) {
         try {
             const { refreshToken } = req.cookies;
+
             const token = await userService.logout(refreshToken);
             res.clearCookie("refreshToken");
-            return res.json(token);
+            return res.status(201).json({
+                success: true,
+                message: "User logged out successfully",
+                data: token,
+            });
         } catch (error) {
             next(error);
         }
@@ -85,7 +107,12 @@ class UserController {
                 maxAge: 30 * 24 * 60 * 60 * 1000,
                 httpOnly: true,
             });
-            return res.json(userData);
+
+            return res.status(201).json({
+                success: true,
+                message: "User refreshed successfully",
+                data: userData,
+            });
         } catch (error) {
             next(error);
         }
@@ -93,8 +120,20 @@ class UserController {
 
     async getUsers(req, res, next) {
         try {
-            return res.json(await userService.getAllUsers());
+            console.log("User Data:", req.user);
+            if (req.user.role !== "Admin") {
+                console.log("Access denied. User role:", req.user.role);
+                return next(ApiError.Forbidden("Access denied"));
+            }
+
+            const users = await userService.getAllUsers();
+            return res.status(200).json({
+                success: true,
+                message: "All users fetched successfully",
+                data: users,
+            });
         } catch (error) {
+            console.error("Error fetching users:", error);
             next(error);
         }
     }
@@ -102,17 +141,26 @@ class UserController {
     async updateProfile(req, res, next) {
         try {
             const userId = req.user.id;
-            const { firstName, lastName, city, teamStatus, phoneNumber } =
-                req.body;
+            const { firstName, lastName, role } = req.body;
+
+            if (role || email) {
+                return next(
+                    ApiError.BadRequestError(
+                        "You can't update email or role. Only first name and last name are allowed. Please check your request."
+                    )
+                );
+            }
 
             const updateUser = await userService.updateProfile(userId, {
                 firstName,
                 lastName,
-                city,
-                teamStatus,
-                phoneNumber,
             });
-            return res.json(updateUser);
+
+            return res.status(201).json({
+                success: true,
+                message: "User profile updated successfully",
+                data: updateUser,
+            });
         } catch (updateProfileError) {
             next(updateProfileError);
         }
@@ -123,32 +171,41 @@ class UserController {
             const userId = req.user.id;
             const userProfile = await userService.getProfile(userId);
 
-            return res.json(userProfile);
+            return res.status(201).json({
+                success: true,
+                message: "User profile fetched successfully",
+                data: userProfile,
+            });
         } catch (getProfileError) {
             next(getProfileError);
         }
     }
 
-    async uploadAvatar(req, res, next) {
+    async updateRole(req, res, next) {
         try {
-            const userId = req.body.id;
-            const photoPath = req.file.path; // Локальный путь, например: uploads/123.jpg
+            const adminId = req.user.id;
+            const { userId, newRole } = req.body;
 
-            console.log("Сохранённый путь к фото:", photoPath);
+            if (!["Employee", "Manager", "Admin"].includes(newRole)) {
+                return next(ApiError.BadRequestError("Invalid role"));
+            }
 
-            // Формируем полный URL
-            const fullPhotoUrl = `${req.protocol}://${req.get(
-                "host"
-            )}/${photoPath}`;
-            console.log("Полная ссылка на фото:", fullPhotoUrl);
+            const adminUser = await userService.getProfile(adminId);
+            if (adminUser.role !== "Admin" && adminUser.role !== "Manager") {
+                return next(ApiError.Forbidden("Access denied"));
+            }
 
-            const user = await userService.uploadAvatar(userId, {
-                photo: fullPhotoUrl,
+            const updatedUser = await userService.updateProfile(userId, {
+                role: newRole,
             });
 
-            return res.json({ ...user, avatar: fullPhotoUrl }); // Отправляем полный URL
-        } catch (uploadAvatarError) {
-            next(uploadAvatarError);
+            return res.status(201).json({
+                success: true,
+                message: "User role updated successfully",
+                data: updatedUser,
+            });
+        } catch (error) {
+            next(error);
         }
     }
 }

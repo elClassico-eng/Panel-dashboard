@@ -13,7 +13,7 @@ module.exports = function (req, res, next) {
             return next(ApiError.UnauthorizedError());
         }
 
-        const userData = tokenService.verifyAccessToken(accessToken);
+        const userData = tokenService.validateAccessToken(accessToken);
         if (!userData) {
             return next(ApiError.UnauthorizedError());
         }
@@ -21,6 +21,6 @@ module.exports = function (req, res, next) {
         req.user = userData;
         next();
     } catch (error) {
-        return next(ApiError.badRequest(error.message));
+        return next(ApiError.BadRequest(error.message));
     }
 };

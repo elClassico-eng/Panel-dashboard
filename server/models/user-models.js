@@ -7,10 +7,13 @@ const UserSchema = new Schema(
         isActivated: { type: Boolean, default: false },
         firstName: { type: String },
         lastName: { type: String },
-        city: { type: String },
-        teamStatus: { type: String },
-        phoneNumber: { type: String },
         profilePhoto: { type: String },
+        role: {
+            type: String,
+            enum: ["Admin", "Director", "Manager", "Employee"],
+            required: true,
+            default: "Employee",
+        },
     },
     { timestamps: true }
 );

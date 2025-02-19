@@ -3,7 +3,7 @@ const router = express.Router();
 const UserController = require("../controllers/user-controller");
 const { body } = require("express-validator");
 const authMiddleware = require("../middlewares/auth-middleware");
-const uploadMiddleware = require("../middlewares/upload-middleware");
+const checkRoleMiddleware = require("../middlewares/checkRole-middleware");
 
 router.post(
     "/registration",
@@ -11,19 +11,22 @@ router.post(
     body("password").isLength({ min: 6, max: 32 }),
     UserController.registration
 );
-router.post("/registration", UserController.registration);
 router.post("/login", UserController.login);
 router.post("/logout", UserController.logout);
-// router.get("/activate/:link", UserController.activate);
 router.get("/refresh", UserController.refresh);
-router.get("/users", authMiddleware, UserController.getUsers);
+router.get(
+    "/users",
+    authMiddleware,
+    checkRoleMiddleware("Admin"),
+    UserController.getUsers
+);
 router.put("/profile", authMiddleware, UserController.updateProfile);
 router.get("/profile", authMiddleware, UserController.getProfile);
-router.post(
-    "/upload-photo",
+router.put(
+    "/users/role",
     authMiddleware,
-    uploadMiddleware.single("avatar"),
-    UserController.uploadAvatar
+    checkRoleMiddleware("Admin", "Leader"),
+    UserController.updateRole
 );
 
 module.exports = router;
