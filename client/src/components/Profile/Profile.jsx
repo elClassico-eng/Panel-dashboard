@@ -105,9 +105,6 @@ export const Profile = () => {
                             <p className="text-sm font-medium text-white/80">
                                 {user.email}
                             </p>
-                            <p className="text-sm font-medium text-white/70">
-                                {user.teamStatus}
-                            </p>
                         </div>
                     </div>
                 </section>
@@ -142,32 +139,6 @@ export const Profile = () => {
                             Email address
                         </span>
                         <p className="text-base text-black">{user.email}</p>
-                    </div>
-
-                    <div className="w-full flex flex-col gap-1">
-                        <span className="text-sm text-neutral-400">Bio</span>
-                        <p className="text-base text-black">
-                            {user.teamStatus}
-                        </p>
-                    </div>
-                </section>
-            </div>
-
-            <div className="flex flex-col gap-5 border px-6 py-8 rounded-2xl border-neutral-300 w-1/2">
-                <div className="flex gap-2 items-center">
-                    <h2 className="text-md font-bold">Address</h2>
-                    <EditOutlinedIcon
-                        className="cursor-pointer"
-                        style={{ fontSize: 20 }}
-                    />
-                </div>
-
-                <section className="grid grid-cols-2 gap-4 w-full">
-                    <div className="w-full flex flex-col gap-1">
-                        <span className="text-sm text-neutral-400">
-                            City/State
-                        </span>
-                        <p className="text-base text-black">{user.city}</p>
                     </div>
                 </section>
             </div>
