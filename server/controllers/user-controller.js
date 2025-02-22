@@ -109,10 +109,10 @@ class UserController {
         try {
             console.log("User Data:", req.user);
 
-            if (!req.user || req.user.role !== "Admin") {
-                console.log("Access denied. User role:", req.user?.role);
-                return next(ApiError.Forbidden("Access denied"));
-            }
+            // if (!req.user || req.user.role !== "Admin") {
+            //     console.log("Access denied. User role:", req.user?.role);
+            //     return next(ApiError.Forbidden("Access denied"));
+            // }
 
             const users = await userService.getAllUsers();
             return res.status(200).json(users);

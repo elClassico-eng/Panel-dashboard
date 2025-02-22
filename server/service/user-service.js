@@ -105,15 +105,15 @@ class UserService {
         }
     }
 
-    async getAllUsers(userRole) {
+    async getAllUsers(reqUserRole) {
         try {
-            if (!userRole) {
-                throw ApiError.BadRequestError("User role is required");
-            }
+            // if (!reqUserRole) {
+            //     throw ApiError.BadRequestError("User role is required");
+            // }
 
-            if (userRole !== "Admin" && userRole !== "Manager") {
-                throw ApiError.BadRequestError("Invalid user role");
-            }
+            // if (reqUserRole !== "Admin" && reqUserRole !== "Manager") {
+            //     throw ApiError.BadRequestError("Invalid user role");
+            // }
 
             const users = await UserModal.find();
             return users.map((user) => new UserDto(user));

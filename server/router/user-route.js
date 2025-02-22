@@ -14,12 +14,7 @@ router.post(
 router.post("/login", UserController.login);
 router.post("/logout", UserController.logout);
 router.get("/refresh", UserController.refresh);
-router.get(
-    "/team",
-    authMiddleware,
-    checkRoleMiddleware("Admin"),
-    UserController.getUsers
-);
+router.get("/team", authMiddleware, UserController.getUsers);
 router.put("/profile", authMiddleware, UserController.updateProfile);
 router.get("/profile", authMiddleware, UserController.getProfile);
 router.put(
