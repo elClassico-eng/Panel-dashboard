@@ -1,18 +1,13 @@
-import { useState } from "react";
+import { useAuth } from "@/store/store";
 
-import { Calendar } from "@/components/ui/calendar";
+import { Title } from "@/components/Title/Title";
 
 export const Home = () => {
-    const [date, setDate] = useState(new Date(1970, 0, 1)); // Initial date;
+    const { user, isLoading, error } = useAuth();
 
-    return (
-        <div className="flex  w-full h-full">
-            <Calendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                className="rounded-md border shadow [&_.rdp-day--selected]:bg-blue-500 [&_.rdp-day--selected]:text-white"
-            />
-        </div>
-    );
+    if (isLoading) return <p>Loading ...</p>;
+    if (error)
+        return <p className="text-red text-xl">Error: {error.message}</p>;
+
+    return <Title title={`Hi, ${user.firstName}!`} />;
 };

@@ -7,7 +7,7 @@ import avatar from "../../assets/images/image-thomas.jpg";
 
 export const Sidebar = () => {
     return (
-        <div className="fixed left-0 top-0 h-full w-[64px] md:w-[200px]">
+        <div className="fixed left-0 top-0 h-full w-[64px] md:w-[200px] backdrop-blur-xl">
             <aside className="h-screen overflow-y-auto flex flex-col items-start justify-between  px-2 py-3 text-black">
                 <h1 className="font-bold md:text-2xl whitespace-nowrap text-lg text-center">
                     Logo.

@@ -17,6 +17,7 @@ import { Login } from "../pages/Auth/Login/Login";
 import { Registration } from "../pages/Auth/Registration/Registration";
 import { NotFound } from "../pages/NotFound/NotFound";
 import { LandingHome } from "../pages/Landing/LandingHome/LandingHome";
+import { Team } from "@/pages/Team/Team";
 
 export const menuItems = [
     {
@@ -30,9 +31,9 @@ export const menuItems = [
         links: [
             { name: "Order", active: false, path: "/order", icon: BasketIcon },
             {
-                name: "Employees",
+                name: "Team",
                 active: false,
-                path: "/employees",
+                path: "/team",
                 icon: AccountsIcon,
             },
         ],
@@ -94,7 +95,7 @@ export const routes = [
     { path: "/", component: LandingHome },
     { path: "/dashboard", component: Home },
     { path: "/order", component: Order },
-    { path: "/employees", component: Order },
+    { path: "/team", component: Team },
     { path: "/kanban-dashboard", component: Kanban },
     { path: "/account", component: Account },
     { path: "/login", component: Login },

@@ -89,6 +89,7 @@ export const useAuth = create(
     persist(
         (set) => ({
             user: null,
+            users: [],
             isAuthenticated: false,
             isLoading: false,
             error: null,
@@ -102,29 +103,22 @@ export const useAuth = create(
             },
 
             //Registration
-            registration: async (
-                email,
-                password,
-                firstName,
-                lastName,
-                city,
-                teamStatus,
-                phoneNumber
-            ) => {
+            registration: async (email, password, firstName, lastName) => {
                 set({ isLoading: true, error: null });
                 try {
                     const { data } = await authServices.registration(
                         email,
                         password,
                         firstName,
-                        lastName,
-                        city,
-                        teamStatus,
-                        phoneNumber
+                        lastName
                     );
                     console.log("Registration success: ", data);
                     localStorage.setItem("token", data.accessToken);
-                    set({ user: data.user, isAuthenticated: true });
+                    set((state) => ({
+                        user: data.user,
+                        isAuthenticated: true,
+                        users: [...state.users, data.user],
+                    }));
                 } catch (error) {
                     useAuth.getState().handleError(error);
                 } finally {
@@ -154,9 +148,9 @@ export const useAuth = create(
                     const token = localStorage.getItem("token");
                     if (!token) throw new Error("No token");
 
-                    // Сначала проверяем текущий токен
+                    // Check token
                     try {
-                        const { data } = await authServices.fetchUsers();
+                        const { data } = await authServices.fetchProfile();
                         set({ user: data, isAuthenticated: true });
                         return;
                     } catch (error) {
@@ -164,7 +158,7 @@ export const useAuth = create(
                         console.log("Token expired, trying to refresh...");
                     }
 
-                    // Если не удалось, пробуем обновить
+                    // Refresh token
                     const { data } = await authServices.refreshToken();
                     console.log("Token refresh success: ", data);
                     localStorage.setItem("token", data.accessToken);
@@ -211,7 +205,7 @@ export const useAuth = create(
                     const { data } = await authServices.updateProfile(
                         profileData
                     );
-                    set({ user: data });
+                    set((state) => ({ user: { ...state.user, ...data } }));
                 } catch (error) {
                     useAuth.getState().handleError(error);
                 } finally {
@@ -219,18 +213,13 @@ export const useAuth = create(
                 }
             },
 
-            uploadAvatar: async (file) => {
+            //Fetch all users
+            fetchUsers: async () => {
                 set({ isLoading: true });
                 try {
-                    const { data } = await authServices.uploadAvatar(file);
-                    console.log("Avatar uploaded:", data);
-
-                    set({
-                        user: {
-                            ...useAuth.getState().user,
-                            avatar: data.avatar, // 💡 Должен быть полный URL
-                        },
-                    });
+                    const { data } = await authServices.fetchUsers();
+                    // console.log("Users fetched:", data);
+                    set({ users: data });
                 } catch (error) {
                     useAuth.getState().handleError(error);
                 } finally {
