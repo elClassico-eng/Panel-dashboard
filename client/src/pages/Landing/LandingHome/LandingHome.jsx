@@ -132,12 +132,26 @@ export function LandingHome() {
                     </div>
                     <div className="text-center">
                         <h1 className="text-5xl font-semibold tracking-tight text-balance text-gray-900 sm:text-7xl">
-                            CoreCRM - a solution for your business!
+                            <span className="underline decoration-4 decoration-gray-900">
+                                CoreCRM
+                            </span>{" "}
+                            - a solution for your business!
                         </h1>
                         <p className="mt-8 text-lg font-light text-pretty text-gray-500 sm:text-md/8">
-                            Core CRM is a fast, simple and lightweight CRM
-                            solution for your business. Sign up and try CoreCRM
-                            now!
+                            Core CRM is a{" "}
+                            <span className="text-gray-900 font-semibold">
+                                fast
+                            </span>
+                            ,{" "}
+                            <span className="text-gray-900 font-semibold">
+                                simple
+                            </span>{" "}
+                            and{" "}
+                            <span className="text-gray-900 font-semibold">
+                                lightweight
+                            </span>{" "}
+                            CRM solution for your business. Sign up and try
+                            CoreCRM now!
                         </p>
                         <div className="mt-10 flex items-center justify-center gap-x-6">
                             <Link
