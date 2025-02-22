@@ -1,22 +1,23 @@
 import { Link } from "react-router";
 import ToggleOffOutlinedIcon from "@mui/icons-material/ToggleOffOutlined";
 
-import { menuItems } from "../../data/data";
-
-import avatar from "../../assets/images/image-thomas.jpg";
+import { menuItems } from "@/data/data";
+import { useAuth } from "@/store/store";
 
 export const Sidebar = () => {
+    const { user } = useAuth();
+
     return (
-        <div className="fixed left-0 top-0 h-full w-[64px] md:w-[200px] backdrop-blur-xl">
-            <aside className="h-screen overflow-y-auto flex flex-col items-start justify-between  px-2 py-3 text-black">
+        <div className="fixed left-0 top-0 h-full w-[64px] md:w-[200px] backdrop-blur-xl ">
+            <aside className="h-screen overflow-y-auto flex flex-col items-start justify-between  px-2 py-3 text-gray-900">
                 <h1 className="font-bold md:text-2xl whitespace-nowrap text-lg text-center">
-                    Logo.
+                    CoreCRM
                 </h1>
 
                 <nav className="flex flex-col gap-5 mt-10 py-4 cursor-pointer">
                     {menuItems.map((section) => (
                         <div key={section.title}>
-                            <span className="text-xs text-gray-500 uppercase">
+                            <span className="text-xs text-gray-400 uppercase">
                                 {section.title}
                             </span>
                             {section.links.map(({ name, path, icon: Icon }) => (
@@ -39,13 +40,11 @@ export const Sidebar = () => {
                         className=" cursor-pointer"
                         fontSize="large"
                     />
-                    <div className="flex items-center gap-2 cursor-pointer">
-                        <img
-                            className="object-cover w-10 h-10 rounded-full"
-                            src={avatar}
-                            alt="User avatar"
-                        />
-                        <span className="text-base">Thomas S.</span>
+                    <div className="flex flex-col items-center gap-2 cursor-pointer">
+                        <span className="text-lg">
+                            {user.firstName} {user.lastName}
+                        </span>
+                        <p className="text-sm">{user.role}</p>
                     </div>
                 </div>
             </aside>
