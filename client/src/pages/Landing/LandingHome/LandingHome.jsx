@@ -139,24 +139,16 @@ export function LandingHome() {
                         </h1>
                         <p className="mt-8 text-lg font-light text-pretty text-gray-500 sm:text-md/8">
                             Core CRM is a{" "}
-                            <span className="text-gray-900 font-semibold">
-                                fast
-                            </span>
-                            ,{" "}
-                            <span className="text-gray-900 font-semibold">
-                                simple
-                            </span>{" "}
-                            and{" "}
-                            <span className="text-gray-900 font-semibold">
-                                lightweight
-                            </span>{" "}
-                            CRM solution for your business. Sign up and try
-                            CoreCRM now!
+                            <span className="underline">fast</span>,{" "}
+                            <span className="underline">simple</span> and{" "}
+                            <span className="underline">lightweight</span> CRM
+                            solution for your business. Sign up and try CoreCRM
+                            now!
                         </p>
                         <div className="mt-10 flex items-center justify-center gap-x-6">
                             <Link
                                 to="/registration"
-                                className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                className="rounded-md bg-violet-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs active:bg-violet-700 hover:bg-violet-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             >
                                 Get started
                             </Link>
