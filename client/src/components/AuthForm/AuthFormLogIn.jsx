@@ -32,7 +32,7 @@ export const AuthFormLogIn = () => {
     };
 
     return (
-        <section className="relative mt-[70px] grid md:grid-cols-2 grid-cols-1  w-full h-screen bg-gray-100">
+        <section className="relative pt-[70px] grid md:grid-cols-2 grid-cols-1  w-full h-screen bg-gray-100">
             <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
