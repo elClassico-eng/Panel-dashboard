@@ -42,11 +42,7 @@ class UserController {
                 httpOnly: true,
             });
 
-            return res.status(201).json({
-                success: true,
-                message: "User registered successfully",
-                data: userData,
-            });
+            return res.status(201).json(userData);
         } catch (error) {
             next(error);
         }
@@ -62,11 +58,7 @@ class UserController {
                 httpOnly: true,
             });
 
-            return res.status(201).json({
-                success: true,
-                message: "User logged in successfully",
-                data: userData,
-            });
+            return res.status(201).json(userData);
         } catch (error) {
             if (
                 error.message === "User not found" ||
@@ -89,11 +81,7 @@ class UserController {
 
             const token = await userService.logout(refreshToken);
             res.clearCookie("refreshToken");
-            return res.status(201).json({
-                success: true,
-                message: "User logged out successfully",
-                data: token,
-            });
+            return res.status(201).json(token);
         } catch (error) {
             next(error);
         }
@@ -108,11 +96,7 @@ class UserController {
                 httpOnly: true,
             });
 
-            return res.status(201).json({
-                success: true,
-                message: "User refreshed successfully",
-                data: userData,
-            });
+            return res.status(201).json(userData);
         } catch (error) {
             next(error);
         }
@@ -127,11 +111,7 @@ class UserController {
             }
 
             const users = await userService.getAllUsers();
-            return res.status(200).json({
-                success: true,
-                message: "All users fetched successfully",
-                data: users,
-            });
+            return res.status(200).json(users);
         } catch (error) {
             console.error("Error fetching users:", error);
             next(error);
@@ -156,11 +136,7 @@ class UserController {
                 lastName,
             });
 
-            return res.status(201).json({
-                success: true,
-                message: "User profile updated successfully",
-                data: updateUser,
-            });
+            return res.status(201).json(updateUser);
         } catch (updateProfileError) {
             next(updateProfileError);
         }
@@ -171,11 +147,7 @@ class UserController {
             const userId = req.user.id;
             const userProfile = await userService.getProfile(userId);
 
-            return res.status(201).json({
-                success: true,
-                message: "User profile fetched successfully",
-                data: userProfile,
-            });
+            return res.status(201).json(userProfile);
         } catch (getProfileError) {
             next(getProfileError);
         }
@@ -199,11 +171,7 @@ class UserController {
                 role: newRole,
             });
 
-            return res.status(201).json({
-                success: true,
-                message: "User role updated successfully",
-                data: updatedUser,
-            });
+            return res.status(201).json(updatedUser);
         } catch (error) {
             next(error);
         }
