@@ -48,6 +48,7 @@ class UserController {
         }
     }
 
+    /* Work currently ! */
     async login(req, res, next) {
         try {
             const { email, password } = req.body;
@@ -75,6 +76,7 @@ class UserController {
         }
     }
 
+    /* Work currently ! */
     async logout(req, res, next) {
         try {
             const { refreshToken } = req.cookies;
@@ -87,6 +89,7 @@ class UserController {
         }
     }
 
+    /* Work currently ! */
     async refresh(req, res, next) {
         try {
             const { refreshToken } = req.cookies;
@@ -105,8 +108,9 @@ class UserController {
     async getUsers(req, res, next) {
         try {
             console.log("User Data:", req.user);
-            if (req.user.role !== "Admin") {
-                console.log("Access denied. User role:", req.user.role);
+
+            if (!req.user || req.user.role !== "Admin") {
+                console.log("Access denied. User role:", req.user?.role);
                 return next(ApiError.Forbidden("Access denied"));
             }
 
@@ -142,6 +146,7 @@ class UserController {
         }
     }
 
+    /* Work currently ! */
     async getProfile(req, res, next) {
         try {
             const userId = req.user.id;
