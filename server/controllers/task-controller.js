@@ -1,80 +1,71 @@
-const TaskService = require("../service/task-service");
+const Task = require("../models/Task");
 
-const TaskController = {
+class taskController {
     async createTask(req, res) {
         try {
-            const task = await TaskService.createTask({
-                ...req.body,
-                user: req.user,
-            });
-            res.status(201).json({
-                success: true,
-                message: "Task created successfully",
-                data: task,
-            });
-        } catch (error) {
-            res.status(400).json({ message: error.message });
-        }
-    },
+            const { title, description, deadline, executor } = req.body;
 
+            const newTask = new Task({
+                title,
+                description,
+                deadline,
+                executor,
+            });
+            await newTask.save();
+
+            res.status(201).json(newTask);
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: "Internal Server Error" });
+        }
+    }
     async getAllTasks(req, res) {
         try {
-            const tasks = await TaskService.getAllTasks(req.user.id);
-            res.json({ success: true, data: tasks });
+            const tasks = await Task.find().populate("executor", "name email");
+            res.status(201).json(tasks);
         } catch (error) {
-            res.status(500).json({
-                message: "Server Error",
-                error: error.message,
-            });
+            console.log(error);
+            res.status(500).json({ message: "Internal Server Error" });
         }
-    },
+    }
 
-    async getTaskById(req, res) {
+    async getUserTask(req, res) {
         try {
-            const task = await TaskService.getTaskById(
-                req.params.id,
-                req.user.id
-            );
-            res.json({ success: true, data: task });
+            console.log("User:", req);
+            const task = await Task.find({ executor: req.params.id });
+
+            console.log("Task users:", task);
+            res.json(task);
         } catch (error) {
-            res.status(error.message === "Task not found" ? 404 : 403).json({
-                message: error.message,
-            });
+            console.error(error);
+            res.status(500).json({ message: "Server error" });
         }
-    },
+    }
 
     async updateTask(req, res) {
         try {
-            const updatedTask = await TaskService.updateTask(
+            const { title, description, deadline, executor } = req.body;
+            const updatedTask = await Task.findByIdAndUpdate(
                 req.params.id,
-                req.user.id,
-                req.body
-            );
-            res.json({
-                success: true,
-                message: "Task updated successfully",
-                data: updatedTask,
-            });
+                { title, description, deadline, executor },
+                { new: true }
+            ).populate("executor", "name email");
+            res.status(200).json(updatedTask);
         } catch (error) {
-            res.status(error.message === "Task not found" ? 404 : 403).json({
-                message: error.message,
-            });
+            console.log(error);
+            res.status(500).json({ message: "Internal Server Error" });
         }
-    },
+    }
 
     async deleteTask(req, res) {
         try {
-            const result = await TaskService.deleteTask(
-                req.params.id,
-                req.user.id
-            );
-            res.json({ success: true, message: result.message });
+            await Task.findByIdAndDelete(req.params.id);
+            res.status(204).json({ message: "Task deleted successfully" });
         } catch (error) {
-            res.status(error.message === "Task not found" ? 404 : 403).json({
-                message: error.message,
-            });
+            console.error(error);
+            res.status(500).json({ message: "Server error" });
         }
-    },
-};
+    }
+}
 
-module.exports = TaskController;
+module.exports = new taskController();
