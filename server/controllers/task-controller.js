@@ -1,71 +1,80 @@
-const Task = require("../models/Task");
+const TaskService = require("../service/task-service");
 
-class taskController {
+const TaskController = {
     async createTask(req, res) {
         try {
-            const { title, description, deadline, executor } = req.body;
-
-            const newTask = new Task({
-                title,
-                description,
-                deadline,
-                executor,
+            const task = await TaskService.createTask({
+                ...req.body,
+                user: req.user,
             });
-            await newTask.save();
-
-            res.status(201).json(newTask);
+            res.status(201).json({
+                success: true,
+                message: "Task created successfully",
+                data: task,
+            });
         } catch (error) {
-            console.log(error);
-            res.status(500).json({ message: "Internal Server Error" });
+            res.status(400).json({ message: error.message });
         }
-    }
+    },
+
     async getAllTasks(req, res) {
         try {
-            const tasks = await Task.find().populate("executor", "name email");
-            res.status(201).json(tasks);
+            const tasks = await TaskService.getAllTasks(req.user.id);
+            res.json({ success: true, data: tasks });
         } catch (error) {
-            console.log(error);
-            res.status(500).json({ message: "Internal Server Error" });
+            res.status(500).json({
+                message: "Server Error",
+                error: error.message,
+            });
         }
-    }
+    },
 
-    async getUserTask(req, res) {
+    async getTaskById(req, res) {
         try {
-            console.log("User:", req);
-            const task = await Task.find({ executor: req.params.id });
-
-            console.log("Task users:", task);
-            res.json(task);
+            const task = await TaskService.getTaskById(
+                req.params.id,
+                req.user.id
+            );
+            res.json({ success: true, data: task });
         } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: "Server error" });
+            res.status(error.message === "Task not found" ? 404 : 403).json({
+                message: error.message,
+            });
         }
-    }
+    },
 
     async updateTask(req, res) {
         try {
-            const { title, description, deadline, executor } = req.body;
-            const updatedTask = await Task.findByIdAndUpdate(
+            const updatedTask = await TaskService.updateTask(
                 req.params.id,
-                { title, description, deadline, executor },
-                { new: true }
-            ).populate("executor", "name email");
-            res.status(200).json(updatedTask);
+                req.user.id,
+                req.body
+            );
+            res.json({
+                success: true,
+                message: "Task updated successfully",
+                data: updatedTask,
+            });
         } catch (error) {
-            console.log(error);
-            res.status(500).json({ message: "Internal Server Error" });
+            res.status(error.message === "Task not found" ? 404 : 403).json({
+                message: error.message,
+            });
         }
-    }
+    },
 
     async deleteTask(req, res) {
         try {
-            await Task.findByIdAndDelete(req.params.id);
-            res.status(204).json({ message: "Task deleted successfully" });
+            const result = await TaskService.deleteTask(
+                req.params.id,
+                req.user.id
+            );
+            res.json({ success: true, message: result.message });
         } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: "Server error" });
+            res.status(error.message === "Task not found" ? 404 : 403).json({
+                message: error.message,
+            });
         }
-    }
-}
+    },
+};
 
-module.exports = new taskController();
+module.exports = TaskController;
