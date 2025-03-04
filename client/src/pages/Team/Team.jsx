@@ -1,5 +1,6 @@
 import { useAuth } from "@/store/store";
 import { useEffect } from "react";
+import { Loader } from "@/components/Loader/Loader";
 
 export const Team = () => {
     const { user, users, fetchUsers, isLoading, error } = useAuth();
@@ -8,13 +9,11 @@ export const Team = () => {
         fetchUsers();
     }, []);
 
-    if (isLoading) return <p>Loading ...</p>;
+    if (isLoading) return <Loader />;
     if (error)
         return <p className="text-red text-xl">Error: {error.message}</p>;
     if (!users || users.length === 0) return <p>Users not found</p>;
 
-    console.log(user);
-    console.log(users);
     return (
         <div className="flex flex-col justify-center items-center gap-5 w-full h-full  backdrop-blur-xl">
             <div class="mx-auto grid max-w-7xl gap-20 px-6 lg:px-12 xl:grid-cols-3">

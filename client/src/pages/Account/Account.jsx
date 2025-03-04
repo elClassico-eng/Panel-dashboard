@@ -1,5 +1,5 @@
-import { Profile } from "../../components/Profile/Profile";
-import { Title } from "../../components/Title/Title";
+import { Profile } from "@/components/Profile/Profile";
+import { Title } from "@/components/Title/Title";
 
 export const Account = () => {
     return (

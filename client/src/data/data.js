@@ -27,9 +27,15 @@ export const menuItems = [
         ],
     },
     {
-        title: "Pages",
+        title: "Order",
         links: [
             { name: "Order", active: false, path: "/order", icon: BasketIcon },
+        ],
+    },
+
+    {
+        title: "Team",
+        links: [
             {
                 name: "Team",
                 active: false,
@@ -38,6 +44,7 @@ export const menuItems = [
             },
         ],
     },
+
     {
         title: "Tools",
         links: [

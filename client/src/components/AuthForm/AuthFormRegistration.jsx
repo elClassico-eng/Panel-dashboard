@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
-import { useAuth } from "../../store/store";
+import { useAuth } from "@/store/store";
 import { useNavigate } from "react-router-dom";
+import { Loader } from "../Loader/Loader";
 
 import { Link } from "react-router-dom";
 export const AuthFormRegistration = () => {
@@ -42,8 +43,10 @@ export const AuthFormRegistration = () => {
         }
     };
 
+    if (isLoading) return <Loader />;
+
     return (
-        <section className="relative pt-[70px] grid md:grid-cols-2 grid-cols-1  w-full h-screen bg-gray-100">
+        <section className="relative py-[70px] grid md:grid-cols-2 grid-cols-1  w-full h-screen bg-inherit">
             <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -53,7 +56,7 @@ export const AuthFormRegistration = () => {
                 <h2 className="xl:text-4xl text-2xl font-medium mb-2">
                     Welcome in Panel-dashboard!
                 </h2>
-                <p className="text-sm text-neutral-400">
+                <p className="text-sm text-neutral-500">
                     Register to use the application
                 </p>
 
@@ -76,7 +79,7 @@ export const AuthFormRegistration = () => {
                                 },
                             })}
                             placeholder="Enter your First Name"
-                            className={`w-full px-4 mt-1 py-2 border rounded-xl focus:outline-none placeholder:text-sm focus:ring-2 focus:ring-violet-500 transition-all ${
+                            className={`w-full px-4 mt-1 py-2 border rounded-xl focus:outline-none placeholder:text-sm focus:ring-2 focus:ring-neutral-500 transition-all ${
                                 errors.lastName
                                     ? "border-red-500"
                                     : "border-gray-300"
@@ -103,7 +106,7 @@ export const AuthFormRegistration = () => {
                                 },
                             })}
                             placeholder="Enter your Last Name"
-                            className={`w-full px-4 mt-1 py-2 border rounded-xl focus:outline-none placeholder:text-sm focus:ring-2 focus:ring-violet-500 transition-all ${
+                            className={`w-full px-4 mt-1 py-2 border rounded-xl focus:outline-none placeholder:text-sm focus:ring-2 focus:ring-neutral-500 transition-all ${
                                 errors.lastName
                                     ? "border-red-500"
                                     : "border-gray-300"
@@ -130,7 +133,7 @@ export const AuthFormRegistration = () => {
                                 },
                             })}
                             placeholder="Enter your email"
-                            className={`w-full px-4 mt-1 py-2 border rounded-xl focus:outline-none placeholder:text-sm focus:ring-2 focus:ring-violet-500 transition-all ${
+                            className={`w-full px-4 mt-1 py-2 border rounded-xl focus:outline-none placeholder:text-sm focus:ring-2 focus:ring-neutral-500 transition-all ${
                                 errors.email
                                     ? "border-red-500"
                                     : "border-gray-300"
@@ -158,7 +161,7 @@ export const AuthFormRegistration = () => {
                                 },
                             })}
                             placeholder="Create a password"
-                            className={`w-full mt-1 px-4 py-2 border rounded-xl focus:outline-none placeholder:text-sm focus:ring-2 focus:ring-violet-500 transition-all ${
+                            className={`w-full mt-1 px-4 py-2 border rounded-xl focus:outline-none placeholder:text-sm focus:ring-2 focus:ring-neutral-500 transition-all ${
                                 errors.password
                                     ? "border-red-500"
                                     : "border-gray-300"
@@ -175,7 +178,7 @@ export const AuthFormRegistration = () => {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         type="submit"
-                        className="w-full bg-violet-500 text-white py-2 rounded-xl shadow-md hover:bg-violet-600 transition-all"
+                        className="w-full bg-neutral-800 text-white py-2 rounded-xl shadow-md hover:bg-neutral-900 transition-colors"
                     >
                         {isLoading ? "Registration ... " : "Registration"}
                     </motion.button>
@@ -183,19 +186,19 @@ export const AuthFormRegistration = () => {
 
                 <p className="text-sm text-neutral-400">
                     Have an account?{" "}
-                    <Link className="text-violet-500" to="/login">
+                    <Link className="text-neutral-900" to="/login">
                         <span>Log in</span>
                     </Link>
                 </p>
                 <Link to="/">
-                    <p className="text-sm text-violet-500 mt-20 self-start">
+                    <p className="text-sm text-neutral-900 mt-20 self-start">
                         Back home
                     </p>
                 </Link>
             </motion.div>
             <div className="flex relative items-center justify-center h-screen bg-inherit overflow-hidden">
                 <motion.div
-                    className="w-96 h-96 rounded-full bg-gradient-to-r from-violet-500 to-indigo-500"
+                    className="w-96 h-96 rounded-full bg-gradient-to-r from-neutral-900 to-black"
                     animate={{
                         y: [0, -20, 0],
                         scale: [1, 1.05, 1],
@@ -213,12 +216,12 @@ export const AuthFormRegistration = () => {
                     }}
                 />
 
-                <div className="absolute top-1/2 w-full h-[250px] backdrop-blur-lg bg-white/20 rounded-lg border border-white/30  grainy-effect"></div>
+                <div className="absolute top-1/2 w-full h-[250px] backdrop-blur-lg bg-white/20 rounded-xl  grainy-effect"></div>
 
                 {[...Array(10)].map((_, i) => (
                     <motion.div
                         key={i}
-                        className="absolute w-2 h-2 bg-violet-600 rounded-full opacity-50"
+                        className="absolute w-2 h-2 bg-neutral-900 rounded-full opacity-50"
                         animate={{
                             x: [0, 50, -50, 0],
                             y: [0, -50, 50, 0],

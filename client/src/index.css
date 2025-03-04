@@ -19,10 +19,28 @@
 }
 
 body {
-    font-family: "Poppins", serif;
+    font-family: "Montserrat", sans-serif;
     min-width: 100vw;
     min-height: 100vh;
     width: 100%;
+    /* background: -webkit-linear-gradient(
+        180deg,
+        rgb(182, 181, 221),
+        rgb(182, 171, 201),
+        rgb(225, 194, 215)
+    );
+    background: -moz-linear-gradient(
+        180deg,
+        rgb(182, 181, 221),
+        rgb(182, 171, 201),
+        rgb(225, 194, 215)
+    );
+    background: linear-gradient(
+        180deg,
+        rgb(182, 181, 221),
+        rgb(182, 171, 201),
+        rgb(225, 194, 215)
+    ); */
     overflow-y: auto;
     overflow-x: hidden;
     position: relative;
