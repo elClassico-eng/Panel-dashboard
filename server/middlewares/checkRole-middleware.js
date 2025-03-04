@@ -1,23 +1,29 @@
-module.exports = function checkRole(...roles) {
+const tokenService = require("../service/token-service");
+
+module.exports = function (role) {
     return function (req, res, next) {
-        console.log("🔹 checkRoleMiddleware: проверяем роль...");
-        console.log("ℹ️ Пользователь:", req.user);
+        try {
+            const authorizationHeader = req.headers.authorization;
+            if (!authorizationHeader) {
+                return res.status(401).json({ error: "Unauthorized" });
+            }
 
-        if (!req.user) {
-            console.log("❌ Пользователь не найден в req.user");
-            return res.status(401).json({ error: "Unauthorized" });
+            const accessToken = authorizationHeader.split(" ")[1];
+            if (!accessToken) {
+                return res.status(401).json({ error: "Unauthorized" });
+            }
+
+            const userData = tokenService.validateAccessToken(accessToken);
+            console.log("✅ Декодированный токен:", userData.role);
+
+            if (userData.role !== role) {
+                return res.status(403).json({ error: "No access" });
+            }
+
+            req.user = userData;
+            next();
+        } catch (error) {
+            return res.status(400).json({ error: error.message });
         }
-
-        if (!roles.includes(req.user.role)) {
-            console.log(
-                `❌ Недостаточно прав: ${
-                    req.user.role
-                } не входит в [${roles.join(", ")}]`
-            );
-            return res.status(403).json({ error: "Forbidden" });
-        }
-
-        console.log("✅ Доступ разрешен");
-        next();
     };
 };

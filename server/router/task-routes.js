@@ -5,10 +5,25 @@ const checkRoleMiddleware = require("../middlewares/checkRole-middleware");
 
 const router = express.Router();
 
-router.post("/", authMiddleware, TaskController.createTask);
+router.post(
+    "/",
+    authMiddleware,
+    checkRoleMiddleware("Admin"),
+    TaskController.createTask
+);
 router.get("/", authMiddleware, TaskController.getAllTasks);
 router.get("/:id", authMiddleware, TaskController.getTaskById);
-router.put("/:id", authMiddleware, TaskController.updateTask);
-router.delete("/:id", authMiddleware, TaskController.deleteTask);
+router.put(
+    "/:id",
+    authMiddleware,
+    checkRoleMiddleware("Admin"),
+    TaskController.updateTask
+);
+router.delete(
+    "/:id",
+    authMiddleware,
+    checkRoleMiddleware("Admin"),
+    TaskController.deleteTask
+);
 
 module.exports = router;
