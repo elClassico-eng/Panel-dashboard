@@ -1,8 +1,10 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
-import { useAuth } from "../../store/store";
+import { useAuth } from "@/store/store";
 import { useNavigate } from "react-router-dom";
+
+import { Loader } from "../Loader/Loader";
 
 import { Link } from "react-router-dom";
 export const AuthFormLogIn = () => {
@@ -30,6 +32,8 @@ export const AuthFormLogIn = () => {
             reset();
         }
     };
+
+    if (isLoading) return <Loader />;
 
     return (
         <section className="relative pt-[70px] grid md:grid-cols-2 grid-cols-1  w-full h-screen bg-gray-100">
