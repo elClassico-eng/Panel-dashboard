@@ -35,7 +35,7 @@ class UserController {
                 assignedRole
             );
 
-            console.log("Сохраненная роль пользователя:", userData.role);
+            console.log("Saving user role:", userData.role);
 
             res.cookie("refreshToken", userData.refreshToken, {
                 maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -125,7 +125,7 @@ class UserController {
     async updateProfile(req, res, next) {
         try {
             const userId = req.user.id;
-            const { firstName, lastName, role } = req.body;
+            const { firstName, lastName, role, email } = req.body;
 
             if (role || email) {
                 return next(

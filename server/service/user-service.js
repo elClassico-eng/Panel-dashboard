@@ -16,7 +16,9 @@ class UserService {
         try {
             const candidate = await UserModal.findOne({ email });
             if (candidate) {
-                throw ApiError.BadRequestError("User already exists");
+                throw ApiError.BadRequestError(
+                    `User with ${candidate} already exists`
+                );
             }
             const hashPassword = await bcrypt.hash(password, 3);
 
