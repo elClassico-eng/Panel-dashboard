@@ -29,17 +29,4 @@ export const authServices = {
     fetchProfile: async () => {
         return $api.get("users/profile");
     },
-
-    // uploadAvatar: async (file) => {
-    //     const formData = new FormData();
-    //     formData.append("avatar", file);
-
-    //     try {
-    //         const response = await $api.post(`/upload-avatar`, formData);
-    //         return response.data;
-    //     } catch (error) {
-    //         console.error("Error adding photo", error);
-    //         throw error;
-    //     }
-    // },
 };
