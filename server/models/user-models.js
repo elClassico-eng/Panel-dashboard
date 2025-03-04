@@ -9,7 +9,7 @@ const UserSchema = new Schema(
         profilePhoto: { type: String },
         role: {
             type: String,
-            enum: ["Admin", "Director", "Manager", "Employee"],
+            enum: ["Admin", "Employee"],
             required: true,
             default: "Employee",
         },
