@@ -4,6 +4,7 @@ import { Title } from "../../components/Title/Title";
 import { SearchTask } from "../../components/Kanban/SearchTask";
 import { TaskStats } from "../../components/Kanban/TaskStats";
 import { DragCloseDrawer } from "../../components/Kanban/DragCloseDrawer";
+
 export const Kanban = () => {
     const [open, setOpen] = useState(false);
 
