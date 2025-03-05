@@ -1,64 +1,112 @@
 import { useState } from "react";
-
+import { Loader } from "../Loader/Loader";
 import { EditTaskForm } from "./EditTaskForm";
+import { useTaskStore } from "@/store/taskStore";
+import { priorityColors } from "@/data/data";
+import { motion } from "framer-motion";
 
-import { useTask } from "../../store/store";
-import { priorityColors, tagColors } from "../../data/data";
+import { format } from "date-fns";
 
 export const SortableCard = ({ task }) => {
     const [isEditing, setIsEditing] = useState(false);
+    const { updateTask, error, isLoading } = useTaskStore();
 
-    // Get filtered tasks from the store using the useTask hook.
-    const filteredTasks = useTask((state) => state.filteredTasks);
-    const updateTask = useTask((state) => state.updateTask);
+    if (isLoading) return <Loader />;
+    if (error)
+        return (
+            <p className="text-neutral-900 text-center">
+                An error occurred while receiving tasks. Try again later!
+            </p>
+        );
+    if (!task) return null;
+
+    const statusClass =
+        task.status === "Pending"
+            ? "bg-yellow-100 text-yellow-700"
+            : "bg-green-100 text-green-700";
+    const priorityClass =
+        priorityColors[task.priority] || "text-black bg-gray-200";
+
+    const formattedCreatedAt = format(
+        new Date(task.createdAt),
+        "dd MMM yyyy, HH:mm"
+    );
+    const formattedDueDate = format(new Date(task.dueDate), "dd MMM yyyy");
 
     const handleEdit = (data) => {
-        updateTask(task.id, data);
+        updateTask(task._id, data);
         setIsEditing(false);
     };
-
-    if (!filteredTasks.some((t) => t.id === task.id)) {
-        return null;
-    }
 
     return (
         <>
             {!isEditing ? (
-                <div
+                <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    whileHover={{ scale: 1.02 }}
+                    className="w-90 p-5 bg-white rounded-xl shadow-lg border border-gray-100 transition-all duration-300 cursor-pointer hover:shadow-xl"
                     onClick={() => setIsEditing(true)}
-                    className="flex relative w-64 flex-col items-center gap-4 cursor-grab rounded border border-neutral-300 shadow-xl bg-blue-50 p-3 active:cursor-grabbing"
                 >
-                    <div
-                        className={`w-fit self-start px-2 py-1 ${
-                            priorityColors[task.priority] ||
-                            "text-black bg-gray-200"
-                        } rounded-xl`}
-                    >
-                        <p className="text-xs">{task.priority}</p>
+                    {/* Proirity & Status */}
+                    <div className="w-full flex gap-2 items-center justify-between">
+                        <div
+                            className={`px-3 py-1 text-xs font-semibold rounded-full w-fit ${priorityClass}`}
+                        >
+                            {task.priority}
+                        </div>
+
+                        <div
+                            className={`px-3 py-1  text-xs font-medium rounded-full w-fit ${statusClass}`}
+                        >
+                            {task.status}
+                        </div>
                     </div>
-                    <div className="flex flex-col gap-2">
-                        <p className="text-base font-bold text-black">
+
+                    {/* Title & Description */}
+                    <div className="mt-3">
+                        <h3 className="text-lg font-semibold text-gray-900">
                             {task.title}
-                        </p>
-                        <p className="text-sm text-neutral-500">
+                        </h3>
+                        <p className="text-sm text-gray-600 mt-1">
                             {task.description}
                         </p>
                     </div>
-                    {task.tags?.length > 0 && (
-                        <div className="flex items-center flex-wrap gap-1 mb-2">
-                            {task.tags.map((tag) => (
-                                <span
-                                    key={tag}
-                                    className={`px-2 py-1 text-xs ${
-                                        tagColors[tag] || "bg-blue-300"
-                                    } rounded-full`}
-                                >
-                                    {tag}
-                                </span>
-                            ))}
+
+                    {/* Info */}
+                    <div className="mt-3 flex flex-col  justify-between items-center text-xs text-gray-500 space-y-1">
+                        <div className="w-full flex gap-2 items-center justify-between">
+                            <p>
+                                <span className="font-medium text-neutral-900">
+                                    Created:
+                                </span>{" "}
+                                {formattedCreatedAt}
+                            </p>
+                            <p>
+                                {" "}
+                                <span className="font-medium text-neutral-900">
+                                    Deadline:
+                                </span>{" "}
+                                {formattedDueDate}
+                            </p>
                         </div>
-                    )}
-                </div>
+                        <div className="w-full flex gap-2 items-center justify-between">
+                            <p>
+                                <span className="font-medium text-neutral-900">
+                                    Author:
+                                </span>{" "}
+                                {task.createdBy.email}
+                            </p>
+                            <p>
+                                {" "}
+                                <span className="font-medium text-neutral-900">
+                                    AssignedTo:
+                                </span>{" "}
+                                {task.assignedTo?.email}
+                            </p>
+                        </div>
+                    </div>
+                </motion.div>
             ) : (
                 <EditTaskForm
                     task={task}

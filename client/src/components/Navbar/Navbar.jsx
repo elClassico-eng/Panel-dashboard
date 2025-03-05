@@ -116,7 +116,7 @@ export const Navbar = ({ isActiveSidebar, setActive }) => {
                                     alt="Profile Avatar"
                                 />
                             ) : (
-                                <div className="flex justify-center items-center w-10 h-10 rounded-full bg-neutral-300 text-black cursor-pointer ">
+                                <div className="flex justify-center items-center w-10 h-10 rounded-full bg-inherit border border-black text-black cursor-pointer ">
                                     <PersonOutlineOutlinedIcon
                                         style={{ fontSize: 20 }}
                                     />

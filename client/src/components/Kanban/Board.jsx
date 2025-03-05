@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useTaskStore } from "@/store/taskStore";
 import { useAuth } from "@/store/store";
+import { columnName } from "@/data/data";
+
 import Select from "react-select";
 
 import { Column } from "./Column";
@@ -27,23 +29,16 @@ export const Board = () => {
 
     return (
         <div className="relative flex justify-between h-full w-full overflow-scroll p-12">
-            <ul>
-                {tasks.map((task) => (
-                    <li key={task._id}>
-                        {task.title} - {task.status}
-                    </li>
-                ))}
-            </ul>
-            {/* {columnName.map(({ column }) => (
+            {columnName.map(({ column }) => (
                 <Column
                     key={column}
-                    title={column.charAt(0).toUpperCase() + column.slice(1)}
+                    title={column.toUpperCase()}
                     column={column}
                     filterTask={
-                        tasks.filter((task) => task.column === column) || []
+                        tasks.filter((task) => task.status === column) || []
                     }
                 />
-            ))} */}
+            ))}
         </div>
     );
 };

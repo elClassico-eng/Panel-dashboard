@@ -81,9 +81,9 @@ export const menuItems = [
 ];
 
 export const columnName = [
-    { column: "todo" },
-    { column: "doing" },
-    { column: "done" },
+    { column: "Pending" },
+    { column: "In Progress" },
+    { column: "Completed" },
 ];
 
 export const priorityColors = {

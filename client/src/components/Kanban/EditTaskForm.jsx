@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTask } from "../../store/store";
+import { useTaskStore } from "@/store/taskStore";
 
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 
@@ -10,34 +11,25 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
     const {
         register,
         handleSubmit,
-        setValue,
         formState: { errors },
     } = useForm({
         defaultValues: {
             title: task.title,
             description: task.description,
             priority: task.priority,
-            tags: task.tags || [],
         },
     });
 
-    const removeTask = useTask((state) => state.removeTask);
+    const { deleteTask } = useTaskStore();
 
-    const toggleTag = (tag) => {
-        setValue(
-            "tags",
-            task.tags.includes(tag)
-                ? [...task.tags].filter((t) => t !== tag)
-                : [...task.tags, tag]
-        );
-    };
+    // const removeTask = useTask((state) => state.removeTask);
 
     const handleDeleteClick = () => {
         setShowDeleteConfirmation(true);
     };
 
     const confirmDelete = () => {
-        removeTask(task.id);
+        deleteTask(task._id);
         setShowDeleteConfirmation(false);
         onCancel();
     };
@@ -48,11 +40,10 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
 
     const onSubmit = (data) => {
         onSave({
-            id: task.id,
+            id: task._id,
             title: data.title,
             description: data.description,
             priority: data.priority,
-            tags: data.tags,
         });
     };
 
@@ -88,35 +79,13 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
 
                 <select
                     {...register("priority")}
+                    placeholder="Priority"
                     className="text-sm p-2 border border-gray-300 rounded"
                 >
                     <option value="Low">Low</option>
                     <option value="Medium">Medium</option>
                     <option value="High">High</option>
                 </select>
-
-                <div className="flex gap-2">
-                    {task.tags.map((tag) => (
-                        <button
-                            key={tag}
-                            className="p-1 text-xs text-gray-600 bg-gray-100 rounded"
-                            onClick={() => toggleTag(tag)}
-                        >
-                            {tag}
-                        </button>
-                    ))}
-                    <button
-                        onClick={() => toggleTag("New Tag")}
-                        className="p-1 text-xs text-gray-600 bg-gray-100 rounded"
-                    >
-                        + Add Tag
-                    </button>
-                    {errors.tags && (
-                        <p className="text-red-500 text-sm">
-                            {errors.tags.message}
-                        </p>
-                    )}
-                </div>
 
                 <div className="flex gap-2 justify-end">
                     <button type="button" onClick={handleDeleteClick}>

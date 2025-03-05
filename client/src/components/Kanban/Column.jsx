@@ -11,7 +11,7 @@ export const Column = ({ title, column, filterTask }) => {
         <div className="w-56 shrink-0">
             <div className="flex items-center  p-4 rounded-2xl justify-between mb-3">
                 <div className="flex gap-3 items-center">
-                    <h3 className="font-bold text-xl text-black ">{title}</h3>
+                    <h3 className="font-bold text-md text-black ">{title}</h3>
                 </div>
                 <span className="rounded text-sm font-bold text-neutral-800">
                     ({filterTask.length})
@@ -25,7 +25,11 @@ export const Column = ({ title, column, filterTask }) => {
             >
                 <div className="flex flex-col gap-3">
                     {filterTask.map((task) => (
-                        <SortableCard key={task.id} task={task} />
+                        <SortableCard
+                            key={task.id}
+                            task={task}
+                            filteredTask={filterTask}
+                        />
                     ))}
                 </div>
             </SortableContext>

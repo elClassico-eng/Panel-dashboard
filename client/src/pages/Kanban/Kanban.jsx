@@ -11,6 +11,7 @@ export const Kanban = () => {
         <section className="relative w-full flex flex-col gap-3  rounded-xl">
             <div className="flex w-full justify-between items-center ">
                 <Title title="Kanban Dashboard" />
+                <SearchTask />
                 <h2
                     onClick={() => setOpen(true)}
                     className="px-12 cursor-pointer hover:underline"
@@ -18,7 +19,6 @@ export const Kanban = () => {
                     View stats
                 </h2>
             </div>
-            <SearchTask />
             <Board />
 
             <DragCloseDrawer open={open} setOpen={setOpen}>

@@ -6,7 +6,7 @@ export const Sidebar = () => {
     return (
         <div className="fixed left-0 top-0 h-full justify-center items-center w-[64px] md:w-[150px] backdrop-blur-xl border-r border-neutral-400 ">
             <aside className="h-screen overflow-y-auto flex flex-col items-center justify-center  px-2 py-3 text-gray-900">
-                <nav className="flex flex-col gap-5 mt-10 py-4 cursor-pointer">
+                <nav className="flex flex-col gap-5 mt-10 py-4 cursor-pointer border-y border-neutral-400">
                     {menuItems.map((section) => (
                         <div key={section.title}>
                             {/* <span className="text-xs text-gray-400 uppercase">
