@@ -1,61 +1,78 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { useTask } from "../../store/store";
 import { useForm } from "react-hook-form";
-import { v4 as uuidv4 } from "uuid";
+import { useAuth } from "@/store/store";
+import { useTaskStore } from "@/store/taskStore";
+
+import { Loader } from "../Loader/Loader";
 
 import AddOutlinedIcon from "@material-ui/icons/AddOutlined";
 
 export const AddCard = ({ column }) => {
-    // Create a local state to manage the tags input
-    const [tags, setTags] = useState([]);
-    const [isAdding, setIsAdding] = useState(false);
-
-    const [priority, setPriority] = useState("Medium");
-
-    // Get the addTask and addDescription functions from the store using the useTask hook.
-    const addTask = useTask((state) => state.addTask);
-
-    // Use the useForm hook to handle form submission and reset form fields.
+    const { addTask, tasks, isLoading } = useTaskStore();
+    const { users, user } = useAuth();
     const { register, handleSubmit, reset } = useForm();
 
-    // Toggle the isAdding state when the AddCard button is clicked
-    const onSubmit = (data) => {
-        // Trim the input text and description text before adding to the tasks array
-        const trimmedText = data.text.trim();
+    const [isAdding, setIsAdding] = useState(false);
+    const [priority, setPriority] = useState("Medium");
+    const [assignedTo, setAssignedTo] = useState({ _id: "", email: "" });
 
-        // Check if the description text is empty
+    const [dueDate, setDueDate] = useState("");
+
+    const employeesUsers = users.filter((user) => user.role !== "Admin");
+
+    if (isLoading) return <Loader />;
+
+    const onSubmit = (data) => {
+        const trimmedText = data.text.trim();
         const descriptionText = data.description.trim();
 
-        // Check if the task text is empty
         if (!trimmedText) return;
+        const newTask = {
+            title: trimmedText,
+            description: descriptionText,
+            priority,
+            status: column,
+            dueDate: dueDate || null,
+            createdBy: user.id,
+            assignedTo,
+            createdAt: new Date(),
+        };
 
-        // Generate a unique task ID for the new task
-        const taskId = uuidv4();
-
-        // Add the new task to the tasks array
-        addTask(trimmedText, column, tags, taskId, descriptionText, priority);
-        setTags([]);
+        addTask(newTask);
         reset();
         setIsAdding(false);
     };
 
-    const handleTagChange = (e) => {
-        const inputTags = e.target.value.split(",");
-        setTags(
-            inputTags.map((tag) => tag.trim()).filter((tag) => tag === tag)
+    const handleAssignTo = (e) => {
+        const selectedUser = employeesUsers.find(
+            (user) => user.id === e.target.value
         );
+
+        if (selectedUser) {
+            setAssignedTo({
+                _id: selectedUser.id,
+                email: selectedUser.email,
+            });
+        } else {
+            setAssignedTo({
+                _id: "",
+                email: "",
+            });
+        }
     };
 
     const handleCancel = () => {
         reset();
+        setDueDate("");
+        setAssignedTo("");
         setIsAdding(false);
     };
 
     return (
         <>
             {isAdding ? (
-                <div className=" fixed top-0  z-50 left-0 w-full h-screen bg-black/50 flex justify-center items-center">
+                <div className="fixed top-0 z-50 left-0 w-full h-screen bg-black/50 flex justify-center items-center">
                     <motion.form
                         className="bg-white flex flex-col gap-4 p-8 rounded-xl shadow-lg w-132 text-center"
                         layout
@@ -67,54 +84,52 @@ export const AddCard = ({ column }) => {
                     >
                         <h3 className="text-xl">Add new task</h3>
                         <textarea
-                            {...register("text")}
+                            {...register("text", { required: true })}
                             autoFocus
-                            placeholder="Add new task..."
+                            placeholder="Task title..."
                             className="w-full text-sm p-2 border border-gray-300 rounded"
-                            rows={3}
-                            onKeyDown={(e) => {
-                                if (e.key === "Escape") handleCancel();
-                            }}
+                            rows={2}
                         />
-
-                        {/* Render the description input */}
                         <textarea
                             {...register("description")}
-                            placeholder="Add description for your task..."
+                            placeholder="Task description..."
                             className="w-full text-sm p-2 border border-gray-300 rounded"
                             rows={3}
-                            onKeyDown={(e) => {
-                                if (e.key === "Escape") handleCancel();
-                            }}
                         />
-
-                        {/* Render the selected tags */}
-                        <input
-                            type="text"
-                            value={tags.join(", ")}
-                            onChange={handleTagChange}
-                            className="w-full text-sm p-2 border border-gray-300 rounded resize-none"
-                            placeholder="e.g. urgent, backend"
-                        />
-
-                        {/* Render the priority dropdown */}
                         <select
                             className="w-full text-sm p-2 border border-gray-300 rounded"
                             onChange={(e) => setPriority(e.target.value)}
-                            name="priority"
                             value={priority}
                         >
                             <option value="Low">Low</option>
-                            <option value="Medium">Medium</option>
+                            <option value="Normal">Normal</option>
                             <option value="High">High</option>
                         </select>
+                        <select
+                            className="w-full text-sm p-2 border border-gray-300 rounded"
+                            onChange={handleAssignTo}
+                            value={assignedTo._id}
+                        >
+                            <option value="">Select user</option>
+                            {employeesUsers.map((user) => (
+                                <option key={user.id} value={user.id}>
+                                    {user.email}
+                                </option>
+                            ))}
+                        </select>
 
-                        {/* Render the submit and cancel buttons */}
+                        <input
+                            type="date"
+                            className="w-full text-sm p-2 border border-gray-300 rounded"
+                            value={dueDate}
+                            onChange={(e) => setDueDate(e.target.value)}
+                        />
+
                         <div className="flex items-center justify-end mt-2 gap-2">
                             <button
                                 type="button"
                                 onClick={handleCancel}
-                                className="px-3 py-2 text-xs text-neutral-4</div>00 transition-colors hover:text-neutral-700"
+                                className="px-3 py-2 text-xs text-neutral-400 transition-colors hover:text-neutral-700"
                             >
                                 Cancel
                             </button>
@@ -129,7 +144,6 @@ export const AddCard = ({ column }) => {
                     </motion.form>
                 </div>
             ) : (
-                // Render the AddCard button when the column is not in edit mode
                 <motion.button
                     layout
                     onClick={() => setIsAdding(true)}

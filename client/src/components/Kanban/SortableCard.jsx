@@ -20,6 +20,8 @@ export const SortableCard = ({ task }) => {
         );
     if (!task) return null;
 
+    console.log(task);
+
     const statusClass =
         task.status === "Pending"
             ? "bg-yellow-100 text-yellow-700"
@@ -45,7 +47,7 @@ export const SortableCard = ({ task }) => {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     whileHover={{ scale: 1.02 }}
-                    className="w-90 p-5 bg-white rounded-xl shadow-lg border border-gray-100 transition-all duration-300 cursor-pointer hover:shadow-xl"
+                    className="w-90 p-5 bg-white rounded-xl flex flex-col gap-4 shadow-lg border border-gray-100 transition-all duration-300 cursor-pointer hover:shadow-xl"
                     onClick={() => setIsEditing(true)}
                 >
                     {/* Proirity & Status */}
@@ -68,29 +70,17 @@ export const SortableCard = ({ task }) => {
                         <h3 className="text-lg font-semibold text-gray-900">
                             {task.title}
                         </h3>
-                        <p className="text-sm text-gray-600 mt-1">
+                    </div>
+
+                    <div>
+                        <p className="text-sm text-gray-500">
                             {task.description}
                         </p>
                     </div>
 
                     {/* Info */}
-                    <div className="mt-3 flex flex-col  justify-between items-center text-xs text-gray-500 space-y-1">
-                        <div className="w-full flex gap-2 items-center justify-between">
-                            <p>
-                                <span className="font-medium text-neutral-900">
-                                    Created:
-                                </span>{" "}
-                                {formattedCreatedAt}
-                            </p>
-                            <p>
-                                {" "}
-                                <span className="font-medium text-neutral-900">
-                                    Deadline:
-                                </span>{" "}
-                                {formattedDueDate}
-                            </p>
-                        </div>
-                        <div className="w-full flex gap-2 items-center justify-between">
+                    <div className="grid grid-cols-2 gap-2 text-xs text-gray-500 space-y-1 bg-violet-200 p-4 rounded-lg">
+                        <div className="w-full flex flex-col gap-2 items-center justify-between">
                             <p>
                                 <span className="font-medium text-neutral-900">
                                     Author:
@@ -103,6 +93,21 @@ export const SortableCard = ({ task }) => {
                                     AssignedTo:
                                 </span>{" "}
                                 {task.assignedTo?.email}
+                            </p>
+                        </div>
+                        <div className="w-full flex flex-col gap-2 justify-between ">
+                            <p>
+                                <span className="font-medium text-neutral-900">
+                                    Created:
+                                </span>{" "}
+                                {formattedCreatedAt}
+                            </p>
+                            <p>
+                                {" "}
+                                <span className="font-medium text-neutral-900">
+                                    Deadline:
+                                </span>{" "}
+                                {formattedDueDate}
                             </p>
                         </div>
                     </div>

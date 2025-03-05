@@ -7,8 +7,7 @@ import { Loader } from "../Loader/Loader";
 
 import { Link } from "react-router-dom";
 export const AuthFormRegistration = () => {
-    const { registration, isLoading, error, isAuthenticated, updateProfile } =
-        useAuth();
+    const { registration, isLoading, error, isAuthenticated } = useAuth();
     const navigate = useNavigate();
 
     const {
@@ -25,6 +24,7 @@ export const AuthFormRegistration = () => {
     }, [isAuthenticated, navigate]);
 
     const onSubmit = async (data) => {
+        console.log(data);
         try {
             console.log(data);
             await registration(

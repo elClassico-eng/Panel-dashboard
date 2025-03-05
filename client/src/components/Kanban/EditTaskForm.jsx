@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useTask } from "../../store/store";
 import { useTaskStore } from "@/store/taskStore";
 
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
@@ -21,8 +20,6 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
     });
 
     const { deleteTask } = useTaskStore();
-
-    // const removeTask = useTask((state) => state.removeTask);
 
     const handleDeleteClick = () => {
         setShowDeleteConfirmation(true);
