@@ -7,20 +7,15 @@ import { motion } from "framer-motion";
 
 import { format } from "date-fns";
 
+import { ErrorMessage } from "../Error/ErrorMessage";
+
 export const SortableCard = ({ task }) => {
     const [isEditing, setIsEditing] = useState(false);
     const { updateTask, error, isLoading } = useTaskStore();
 
     if (isLoading) return <Loader />;
-    if (error)
-        return (
-            <p className="text-neutral-900 text-center">
-                An error occurred while receiving tasks. Try again later!
-            </p>
-        );
+    if (error) return <ErrorMessage message={error} />;
     if (!task) return null;
-
-    console.log(task);
 
     const statusClass =
         task.status === "Pending"
