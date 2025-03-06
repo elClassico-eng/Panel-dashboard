@@ -13,7 +13,7 @@ import { ErrorMessage } from "../Error/ErrorMessage";
 
 export const SortableCard = ({ task }) => {
     const [isEditing, setIsEditing] = useState(false);
-    const { updateTask, error, isLoading } = useTaskStore();
+    const { updateTask, error, isLoading, filteredTasks } = useTaskStore();
 
     if (isLoading) return <Loader />;
     if (error) return <ErrorMessage message={error} />;
@@ -38,6 +38,8 @@ export const SortableCard = ({ task }) => {
         updateTask(task._id, data);
         setIsEditing(false);
     };
+
+    if (!filteredTasks.some((t) => t._id === task._id)) return null;
 
     return (
         <>

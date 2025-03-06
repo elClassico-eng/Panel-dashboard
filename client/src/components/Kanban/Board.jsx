@@ -13,8 +13,6 @@ export const Board = () => {
         fetchTasks();
     }, [fetchTasks]);
 
-    console.log(tasks);
-
     if (isLoading) return <Loader />;
     if (error) return <ErrorMessage message={error} />;
     if (!tasks) return null;

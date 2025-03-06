@@ -3,6 +3,7 @@ import { taskServices } from "@/services/TaskServices";
 
 export const useTaskStore = create((set) => ({
     tasks: [],
+    filteredTasks: [],
     isLoading: true,
     error: null,
 
@@ -49,7 +50,7 @@ export const useTaskStore = create((set) => ({
         }
     },
 
-    // Update task ❌
+    // Update task ✔
     updateTask: async (taskId, updatedTaskData) => {
         set({ isLoading: true, error: null });
         try {
@@ -68,6 +69,18 @@ export const useTaskStore = create((set) => ({
         } finally {
             set({ isLoading: false });
         }
+    },
+
+    setFilteredTasks: (filteredTasks) => {
+        console.log(filteredTasks);
+        set({ filteredTasks });
+    },
+    filterTasks: (searchTerm) => {
+        set({
+            filteredTasks: tasks.filter((task) =>
+                task.title.toLowerCase().includes(searchTerm.toLowerCase())
+            ),
+        });
     },
 
     // Delete task ✔
