@@ -99,7 +99,7 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
         <div className=" fixed top-0  z-50 left-0 w-full h-screen bg-black/50 flex justify-center items-center">
             <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="bg-white flex flex-col  gap-4 p-8 rounded-xl shadow-lg w-132 text-center"
+                className="bg-white flex flex-col  gap-4 p-8 rounded-xl shadow-lg lg:w-1/2 mx-5 w-full text-center"
             >
                 {/* Title */}
                 <h3 className="text-xl">{task.title}</h3>

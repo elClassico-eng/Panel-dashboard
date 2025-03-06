@@ -72,15 +72,18 @@ export const useTaskStore = create((set) => ({
     },
 
     setFilteredTasks: (filteredTasks) => {
-        console.log(filteredTasks);
-        set({ filteredTasks });
+        set((state) => {
+            return filteredTasks.length === 0
+                ? { filteredTasks: state.tasks }
+                : { filteredTasks };
+        });
     },
     filterTasks: (searchTerm) => {
-        set({
-            filteredTasks: tasks.filter((task) =>
+        set((state) => ({
+            filteredTasks: state.tasks.filter((task) =>
                 task.title.toLowerCase().includes(searchTerm.toLowerCase())
             ),
-        });
+        }));
     },
 
     // Delete task ✔

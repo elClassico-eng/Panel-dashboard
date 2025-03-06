@@ -34,12 +34,11 @@ export const SortableCard = ({ task }) => {
     const formattedDueDate = format(new Date(task.dueDate), "dd MMM yyyy");
 
     const handleEdit = (data) => {
-        console.log(data);
         updateTask(task._id, data);
         setIsEditing(false);
     };
 
-    if (!filteredTasks.some((t) => t._id === task._id)) return null;
+    // if (!filteredTasks.some((t) => t._id === task._id)) return null;
 
     return (
         <>
@@ -48,7 +47,7 @@ export const SortableCard = ({ task }) => {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     whileHover={{ scale: 1.02 }}
-                    className="w-90 p-5 bg-white rounded-xl flex flex-col gap-4 shadow-lg border border-gray-100 transition-all duration-300 cursor-pointer hover:shadow-xl"
+                    className="w-90 p-5 bg-white rounded-xl my-5 flex flex-col gap-4 shadow-lg border border-gray-100 transition-all duration-300 cursor-pointer hover:shadow-xl"
                     onClick={() => setIsEditing(true)}
                 >
                     {/* Proirity & Status */}
