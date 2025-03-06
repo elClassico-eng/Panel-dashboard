@@ -81,21 +81,15 @@ export const menuItems = [
 ];
 
 export const columnName = [
-    { column: "Pending" },
-    { column: "In Progress" },
-    { column: "Completed" },
+    { column: "Pending", style: "bg-yellow-100 text-yellow-700" },
+    { column: "In Progress", style: "bg-green-100 text-green-700" },
+    { column: "Completed", style: "bg-blue-100 text-blue-700" },
 ];
 
 export const priorityColors = {
     Low: "text-green-600 bg-green-200",
     Medium: "text-yellow-600 bg-yellow-200",
     High: "text-red-600 bg-red-200",
-};
-
-export const tagColors = {
-    dev: "bg-red-200 text-red-800",
-    backend: "bg-blue-200 text-blue-800",
-    frontend: "bg-green-200 text-green-800",
 };
 
 export const routes = [

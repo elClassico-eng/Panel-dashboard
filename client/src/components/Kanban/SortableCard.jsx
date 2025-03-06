@@ -23,6 +23,7 @@ export const SortableCard = ({ task }) => {
         task.status === "Pending"
             ? "bg-yellow-100 text-yellow-700"
             : "bg-green-100 text-green-700";
+
     const priorityClass =
         priorityColors[task.priority] || "text-black bg-gray-200";
 
