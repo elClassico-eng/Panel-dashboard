@@ -48,25 +48,4 @@ router.get(
     TaskController.getUserTasks
 );
 
-// router.post(
-//     "/",
-//     authMiddleware,
-//     checkRoleMiddleware("Admin"),
-//     TaskController.createTask
-// );
-// router.get("/", authMiddleware, TaskController.getAllTasks);
-// router.get("/:id", authMiddleware, TaskController.getTaskById);
-// router.put(
-//     "/:id",
-//     authMiddleware,
-//     checkRoleMiddleware("Admin"),
-//     TaskController.updateTask
-// );
-// router.delete(
-//     "/:id",
-//     authMiddleware,
-//     checkRoleMiddleware("Admin"),
-//     TaskController.deleteTask
-// );
-
 module.exports = router;

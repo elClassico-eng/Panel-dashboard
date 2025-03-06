@@ -3,8 +3,14 @@ const TaskService = require("../service/task-service");
 class TaskController {
     async createTask(req, res) {
         try {
-            const { title, description, priority, assignedTo, dueDate } =
-                req.body;
+            const {
+                title,
+                description,
+                priority,
+                assignedTo,
+                dueDate,
+                status,
+            } = req.body;
             const createdBy = req.user.id;
 
             if (!dueDate || isNaN(new Date(dueDate))) {
@@ -15,6 +21,7 @@ class TaskController {
                 title,
                 description,
                 priority,
+                status,
                 assignedTo,
                 createdBy,
                 dueDate,
