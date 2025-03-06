@@ -39,6 +39,7 @@ export const useTaskStore = create((set) => ({
         set({ isLoading: true, error: null });
         try {
             const response = await taskServices.createTask(taskData);
+            console.log(response);
             set((state) => ({ tasks: [...state.tasks, response.data] }));
         } catch (error) {
             console.log(error);

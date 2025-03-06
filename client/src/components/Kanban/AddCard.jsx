@@ -12,6 +12,7 @@ import AddOutlinedIcon from "@material-ui/icons/AddOutlined";
 
 export const AddCard = ({ column }) => {
     const { addTask, tasks, error, isLoading } = useTaskStore();
+    const [status, setStatus] = useState("");
     const { users, user } = useAuth();
     const {
         register,
@@ -37,11 +38,13 @@ export const AddCard = ({ column }) => {
     if (error) return <ErrorMessage />;
 
     const onSubmit = async (data) => {
+        console.log("Form data:", data);
+        console.log("Selected status:", status); // Проверь в консоли
         const newTask = {
             title: data?.title?.trim(),
             description: data?.description?.trim(),
             priority,
-            status: column ? column : columnName[0].column,
+            status: column,
             dueDate,
             createdBy: user?.id,
             assignedTo: assignedTo ? { _id: assignedTo } : null,
@@ -51,24 +54,6 @@ export const AddCard = ({ column }) => {
         await addTask(newTask);
         reset();
         setIsAdding(false);
-    };
-
-    const handleAssignTo = (e) => {
-        const selectedUser = employeesUsers.find(
-            (user) => user.id === e.target.value
-        );
-
-        if (selectedUser) {
-            setAssignedTo({
-                _id: selectedUser.id,
-                email: selectedUser.email,
-            });
-        } else {
-            setAssignedTo({
-                _id: "",
-                email: "",
-            });
-        }
     };
 
     const handleCancel = () => {
@@ -147,16 +132,10 @@ export const AddCard = ({ column }) => {
                             {...register("status", {
                                 required: "The execution status is required",
                             })}
+                            value={column}
                             className="w-full text-sm p-2 border border-gray-300 rounded"
                         >
-                            <option value="">
-                                Select the execution status
-                            </option>
-                            {columnName.map((column, i) => (
-                                <option key={i} value={column.column}>
-                                    {column.column}
-                                </option>
-                            ))}
+                            <option value={column}>{column}</option>
                         </select>
                         {errors.status && (
                             <span className="text-red-500 text-xs">

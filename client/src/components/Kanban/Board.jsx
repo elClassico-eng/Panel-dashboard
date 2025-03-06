@@ -13,12 +13,14 @@ export const Board = () => {
         fetchTasks();
     }, [fetchTasks]);
 
+    console.log(tasks);
+
     if (isLoading) return <Loader />;
     if (error) return <ErrorMessage message={error} />;
     if (!tasks) return null;
 
     return (
-        <div className="relative flex justify-between h-full w-full overflow-scroll p-12">
+        <div className="relative overflow-x-scroll flex justify-between h-full w-full overflow-scroll p-12">
             {columnName.map(({ column }) => (
                 <Column
                     key={column}
