@@ -1,25 +1,47 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useTaskStore } from "@/store/taskStore";
 
-import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
+import { useTaskStore } from "@/store/taskStore";
+import { useAuth } from "@/store/store";
+import { columnName } from "@/data/data";
+
+import { Trash2 } from "lucide-react";
 
 export const EditTaskForm = ({ task, onSave, onCancel }) => {
+    const { deleteTask } = useTaskStore();
+    const { user, users } = useAuth();
+
+    const employeesUsers = users.filter((user) => user.role !== "Admin");
+
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+    const [assignedTo, setAssignedTo] = useState({ _id: "", email: "" });
+    const [dueDate, setDueDate] = useState("");
 
     const {
         register,
         handleSubmit,
+        reset,
+        setValue,
         formState: { errors },
     } = useForm({
         defaultValues: {
             title: task.title,
             description: task.description,
             priority: task.priority,
+            setDueDate: task.dueDate,
+            assignedTo: task.assignedTo ? task.assignedTo._id : "",
         },
     });
 
-    const { deleteTask } = useTaskStore();
+    console.log(task);
+
+    useEffect(() => {
+        reset({
+            title: task.title,
+            description: task.description,
+            priority: task.priority,
+        });
+    }, [task, reset]);
 
     const handleDeleteClick = () => {
         setShowDeleteConfirmation(true);
@@ -35,12 +57,41 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
         setShowDeleteConfirmation(false);
     };
 
+    const handleAssignTo = (e) => {
+        const selectUser = employeesUsers.find(
+            (user) => user.id === e.target.value
+        );
+        if (selectUser) {
+            setAssignedTo({
+                _id: selectUser.id,
+                email: selectUser.email,
+            });
+            setValue("assignedTo", selectUser.id);
+        } else {
+            setAssignedTo({
+                _id: "",
+                email: "",
+            });
+            setValue("assignedTo", "");
+        }
+    };
+
+    const handleDueDate = (e) => {
+        setDueDate(e.target.value);
+        setValue("dueDate", e.target.value);
+    };
+
     const onSubmit = (data) => {
         onSave({
             id: task._id,
-            title: data.title,
-            description: data.description,
-            priority: data.priority,
+            title: data.title ? data.title : task.title,
+            description: data.description ? data.description : task.description,
+            priority: data.priority ? data.priority : task.priority,
+            status: task.status ? task.status : data.status,
+            dueDate: dueDate ? dueDate : task.dueDate,
+            createdBy: user.id,
+            assignedTo: assignedTo._id ? assignedTo : task.assignedTo,
+            createdAt: task.createdAt ? task.createdAt : new Date(),
         });
     };
 
@@ -50,6 +101,7 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                 onSubmit={handleSubmit(onSubmit)}
                 className="bg-white flex flex-col  gap-4 p-8 rounded-xl shadow-lg w-132 text-center"
             >
+                {/* Title */}
                 <h3 className="text-xl">{task.title}</h3>
                 <input
                     type="text"
@@ -63,6 +115,7 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                     </p>
                 )}
 
+                {/* Description */}
                 <textarea
                     {...register("description", {})}
                     placeholder="Description"
@@ -74,6 +127,7 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                     </p>
                 )}
 
+                {/* Priority */}
                 <select
                     {...register("priority")}
                     placeholder="Priority"
@@ -84,9 +138,52 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                     <option value="High">High</option>
                 </select>
 
+                {/* Status */}
+                <select
+                    {...register("status")}
+                    placeholder="Status task"
+                    className="text-sm p-2 border border-gray-300 rounded"
+                >
+                    <option value="">{task.status}</option>
+                    {columnName.map((column, i) => (
+                        <option key={i} value={column.column}>
+                            {column.column}
+                        </option>
+                    ))}
+                </select>
+
+                {/* Assigned to */}
+                <select
+                    {...register("assignedTo")}
+                    onChange={handleAssignTo}
+                    value={assignedTo._id}
+                    placeholder="Assigned to..."
+                    className="text-sm p-2 border border-gray-300 rounded"
+                >
+                    <option value="">Assign an employee</option>
+                    {employeesUsers.map((user) => (
+                        <option key={user.id} value={user.id}>
+                            {user.email}
+                        </option>
+                    ))}
+                </select>
+
+                {/* Due Date */}
+                <input
+                    {...register("dueDate")}
+                    onChange={(e) => handleDueDate(e)}
+                    type="date"
+                    className="w-full text-sm p-2 border border-gray-300 rounded"
+                    value={task.dueDate ? task.dueDate.split("T")[0] : ""}
+                />
+
+                {/* Options */}
                 <div className="flex gap-2 justify-end">
                     <button type="button" onClick={handleDeleteClick}>
-                        <DeleteOutlineOutlinedIcon className="cursor-pointer text-red-500" />
+                        <Trash2
+                            size={20}
+                            className="cursor-pointer text-red-500"
+                        />
                     </button>
 
                     <button
@@ -98,7 +195,7 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                     </button>
                     <button
                         type="submit"
-                        className="flex items-center gap-2 rounded bg-neutral-50 px-3 py-2 text-xs text-neutral-950 transition-colors hover:bg-blue-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="flex items-center gap-2 rounded bg-neutral-50 px-3 py-2 text-xs text-neutral-950 transition-colors hover:bg-neutral-300 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         Save
                     </button>

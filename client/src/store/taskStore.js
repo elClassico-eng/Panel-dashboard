@@ -6,7 +6,7 @@ export const useTaskStore = create((set) => ({
     isLoading: true,
     error: null,
 
-    // Загрузка всех задач
+    // Fetch all Tasks ✔
     fetchTasks: async () => {
         set({ isLoading: true, error: null });
         try {
@@ -20,7 +20,7 @@ export const useTaskStore = create((set) => ({
         }
     },
 
-    // Получение задачи по id
+    // Fetch Task by ID ✔
     fetchTaskById: async (taskId) => {
         set({ isLoading: true, error: null });
         try {
@@ -34,7 +34,7 @@ export const useTaskStore = create((set) => ({
         }
     },
 
-    // Создание новой задачи
+    // Create task ✔
     addTask: async (taskData) => {
         set({ isLoading: true, error: null });
         try {
@@ -48,7 +48,7 @@ export const useTaskStore = create((set) => ({
         }
     },
 
-    // Обновление задачи
+    // Update task ❌
     updateTask: async (taskId, updatedTaskData) => {
         set({ isLoading: true, error: null });
         try {
@@ -58,7 +58,7 @@ export const useTaskStore = create((set) => ({
             );
             set((state) => ({
                 tasks: state.tasks.map((task) => {
-                    task._id === taskId ? response.data : task;
+                    return task._id === taskId ? response.data : task;
                 }),
             }));
         } catch (error) {
@@ -69,7 +69,7 @@ export const useTaskStore = create((set) => ({
         }
     },
 
-    // Удаление задачи
+    // Delete task ✔
     deleteTask: async (taskId) => {
         set({ isLoading: true, error: null });
         try {

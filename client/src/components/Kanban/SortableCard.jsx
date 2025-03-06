@@ -5,6 +5,8 @@ import { useTaskStore } from "@/store/taskStore";
 import { priorityColors } from "@/data/data";
 import { motion } from "framer-motion";
 
+import { ClipLoader } from "react-spinners";
+
 import { format } from "date-fns";
 
 import { ErrorMessage } from "../Error/ErrorMessage";
@@ -31,6 +33,7 @@ export const SortableCard = ({ task }) => {
     const formattedDueDate = format(new Date(task.dueDate), "dd MMM yyyy");
 
     const handleEdit = (data) => {
+        console.log(data);
         updateTask(task._id, data);
         setIsEditing(false);
     };
@@ -80,14 +83,22 @@ export const SortableCard = ({ task }) => {
                                 <span className="font-medium text-neutral-900">
                                     Author:
                                 </span>{" "}
-                                {task.createdBy.email}
+                                {task.createdBy.email ? (
+                                    task.createdBy.email
+                                ) : (
+                                    <ClipLoader color="#000" size={10} />
+                                )}
                             </p>
                             <p>
                                 {" "}
                                 <span className="font-medium text-neutral-900">
                                     AssignedTo:
                                 </span>{" "}
-                                {task.assignedTo?.email}
+                                {task.assignedTo.email ? (
+                                    task.assignedTo.email
+                                ) : (
+                                    <ClipLoader color="#000" size={10} />
+                                )}
                             </p>
                         </div>
                         <div className="w-full flex flex-col gap-2 justify-between ">

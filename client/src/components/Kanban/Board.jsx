@@ -25,7 +25,7 @@ export const Board = () => {
                     title={column.toUpperCase()}
                     column={column}
                     filterTask={
-                        tasks.filter((task) => task.status === column) || []
+                        tasks.filter((task) => task?.status === column) || []
                     }
                 />
             ))}

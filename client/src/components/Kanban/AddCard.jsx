@@ -1,17 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@/store/store";
 import { useTaskStore } from "@/store/taskStore";
+import { columnName } from "@/data/data";
 
 import { Loader } from "../Loader/Loader";
+import { ErrorMessage } from "../Error/ErrorMessage";
 
 import AddOutlinedIcon from "@material-ui/icons/AddOutlined";
 
 export const AddCard = ({ column }) => {
-    const { addTask, tasks, isLoading } = useTaskStore();
+    const { addTask, tasks, error, isLoading } = useTaskStore();
     const { users, user } = useAuth();
-    const { register, handleSubmit, reset } = useForm();
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors },
+    } = useForm();
 
     const [isAdding, setIsAdding] = useState(false);
     const [priority, setPriority] = useState("Medium");
@@ -21,25 +28,27 @@ export const AddCard = ({ column }) => {
 
     const employeesUsers = users.filter((user) => user.role !== "Admin");
 
+    useEffect(() => {
+        if (isAdding)
+            setTimeout(() => document.getElementById("taskTitle")?.focus(), 0);
+    }, [isAdding]);
+
     if (isLoading) return <Loader />;
+    if (error) return <ErrorMessage />;
 
-    const onSubmit = (data) => {
-        const trimmedText = data.text.trim();
-        const descriptionText = data.description.trim();
-
-        if (!trimmedText) return;
+    const onSubmit = async (data) => {
         const newTask = {
-            title: trimmedText,
-            description: descriptionText,
+            title: data?.title?.trim(),
+            description: data?.description?.trim(),
             priority,
-            status: column,
-            dueDate: dueDate || null,
-            createdBy: user.id,
-            assignedTo,
+            status: column ? column : columnName[0].column,
+            dueDate,
+            createdBy: user?.id,
+            assignedTo: assignedTo ? { _id: assignedTo } : null,
             createdAt: new Date(),
         };
 
-        addTask(newTask);
+        await addTask(newTask);
         reset();
         setIsAdding(false);
     };
@@ -65,7 +74,8 @@ export const AddCard = ({ column }) => {
     const handleCancel = () => {
         reset();
         setDueDate("");
-        setAssignedTo("");
+        setAssignedTo({ _id: "", email: "" });
+        setPriority("Medium");
         setIsAdding(false);
     };
 
@@ -83,32 +93,83 @@ export const AddCard = ({ column }) => {
                         transition={{ duration: 0.2 }}
                     >
                         <h3 className="text-xl">Add new task</h3>
+
+                        {/* Title */}
                         <textarea
-                            {...register("text", { required: true })}
+                            id="taskTitle"
+                            {...register("title", {
+                                required: "Title is required",
+                            })}
                             autoFocus
                             placeholder="Task title..."
                             className="w-full text-sm p-2 border border-gray-300 rounded"
                             rows={2}
                         />
+                        {errors.title && (
+                            <span className="text-red-500 text-xs">
+                                {errors.title.message}
+                            </span>
+                        )}
+
+                        {/* Description */}
                         <textarea
                             {...register("description")}
                             placeholder="Task description..."
                             className="w-full text-sm p-2 border border-gray-300 rounded"
                             rows={3}
                         />
+
+                        {/* Priority */}
                         <select
+                            {...register("priority", {
+                                required: "Priority is required",
+                            })}
+                            placeholder="Priority"
                             className="w-full text-sm p-2 border border-gray-300 rounded"
                             onChange={(e) => setPriority(e.target.value)}
                             value={priority}
                         >
+                            <option value="">
+                                Select priority for the task
+                            </option>
                             <option value="Low">Low</option>
                             <option value="Normal">Normal</option>
                             <option value="High">High</option>
                         </select>
+                        {errors.status && (
+                            <span className="text-red-500 text-xs">
+                                {errors.priority.message}
+                            </span>
+                        )}
+
+                        {/* Status */}
                         <select
+                            {...register("status", {
+                                required: "The execution status is required",
+                            })}
                             className="w-full text-sm p-2 border border-gray-300 rounded"
-                            onChange={handleAssignTo}
-                            value={assignedTo._id}
+                        >
+                            <option value="">
+                                Select the execution status
+                            </option>
+                            {columnName.map((column, i) => (
+                                <option key={i} value={column.column}>
+                                    {column.column}
+                                </option>
+                            ))}
+                        </select>
+                        {errors.status && (
+                            <span className="text-red-500 text-xs">
+                                {errors.status.message}
+                            </span>
+                        )}
+
+                        <select
+                            {...register("assignedTo", {
+                                required: "Assignee is required",
+                            })}
+                            className="w-full text-sm p-2 border border-gray-300 rounded"
+                            onChange={(e) => setAssignedTo(e.target.value)}
                         >
                             <option value="">Select user</option>
                             {employeesUsers.map((user) => (
@@ -117,13 +178,26 @@ export const AddCard = ({ column }) => {
                                 </option>
                             ))}
                         </select>
+                        {errors.assignedTo && (
+                            <span className="text-red-500 text-xs">
+                                {errors.assignedTo.message}
+                            </span>
+                        )}
 
+                        {/* Due Date */}
                         <input
                             type="date"
+                            {...register("dueDate", {
+                                required: "Due date is required",
+                            })}
                             className="w-full text-sm p-2 border border-gray-300 rounded"
-                            value={dueDate}
                             onChange={(e) => setDueDate(e.target.value)}
                         />
+                        {errors.dueDate && (
+                            <span className="text-red-500 text-xs">
+                                {errors.dueDate.message}
+                            </span>
+                        )}
 
                         <div className="flex items-center justify-end mt-2 gap-2">
                             <button
