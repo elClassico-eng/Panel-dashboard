@@ -56,9 +56,16 @@ class TaskController {
         }
     }
 
-    async getUserTasks(req, res) {
+    async getTaskByEmployee(req, res) {
         try {
-            const tasks = await TaskService.getTasksByUser(req.user.id);
+            const { employeeId } = req.params;
+            const tasks = await TaskService.getTaskByEmployee(employeeId);
+
+            if (!tasks.length) {
+                return res
+                    .status(404)
+                    .json({ message: "No tasks found for this employee" });
+            }
 
             res.json(tasks);
         } catch (error) {
@@ -89,7 +96,7 @@ class TaskController {
             if (!deletedTask)
                 return res.status(404).json({ error: "Task not found" });
 
-            res.json("Task success deleted", deletedTask);
+            res.json({ message: "Task deleted", task: deletedTask });
         } catch (error) {
             console.log(error);
             res.status(500).json({ error: error.message });

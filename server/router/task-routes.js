@@ -40,12 +40,11 @@ router.delete(
     TaskController.deleteTask
 );
 
-// ❗ Доступ у сотрудника — только к своим задачам
 router.get(
-    "/my-tasks",
+    "/employee/:employeeId",
     authMiddleware,
-    // checkRoleMiddleware("Employee"),
-    TaskController.getUserTasks
+    checkRoleMiddleware("Employee"),
+    TaskController.getTaskByEmployee
 );
 
 module.exports = router;

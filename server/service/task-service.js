@@ -6,20 +6,23 @@ class TaskService {
     }
 
     async getAllTasks() {
-        return await Task.find().populate("createdBy assignedTo", "name email");
+        return await Task.find().populate(
+            "createdBy assignedTo",
+            "firstName lastName email"
+        );
     }
 
     async getTaskById(id) {
         return await Task.findById(id).populate(
             "createdBy assignedTo",
-            "name email"
+            "firstName lastName email"
         );
     }
 
-    async getTasksByUser(userId) {
-        return await Task.find({ assignedTo: userId }).populate(
-            "createdBy",
-            "name email"
+    async getTaskByEmployee(employeeId) {
+        return await Task.find({ assignedTo: employeeId }).populate(
+            "createdBy assignedTo",
+            "firstName lastName"
         );
     }
 
