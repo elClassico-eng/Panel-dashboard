@@ -81,10 +81,26 @@ export const menuItems = [
 ];
 
 export const columnName = [
-    { column: "Pending", style: "bg-yellow-100 text-yellow-700" },
-    { column: "In Progress", style: "bg-green-100 text-green-700" },
-    { column: "Completed", style: "bg-blue-100 text-blue-700" },
+    {
+        column: "Pending",
+    },
+    {
+        column: "In Progress",
+    },
+    {
+        column: "Review",
+    },
+    {
+        column: "Completed",
+    },
 ];
+
+export const columnColors = {
+    Pending: "text-yellow-500",
+    "In Progress": "text-blue-500",
+    Review: "text-purple-500",
+    Completed: "text-green-500",
+};
 
 export const priorityColors = {
     Low: "text-green-600 bg-green-200",

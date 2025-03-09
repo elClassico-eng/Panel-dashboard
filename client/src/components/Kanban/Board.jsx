@@ -25,8 +25,6 @@ export const Board = () => {
         return () => clearInterval(refetch);
     }, [fetchTasks, fetchTasksByEmployee]);
 
-    console.log(tasks);
-
     if (isLoading) return <Loader />;
     if (error) return <ErrorMessage message={error} />;
     if (!tasks) return null;
