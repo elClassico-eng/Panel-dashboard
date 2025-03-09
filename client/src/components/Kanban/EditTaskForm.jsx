@@ -16,6 +16,7 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [assignedTo, setAssignedTo] = useState({ _id: "", email: "" });
     const [dueDate, setDueDate] = useState("");
+    const [status, setStatus] = useState(task.status);
 
     const {
         register,
@@ -28,18 +29,18 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
             title: task.title,
             description: task.description,
             priority: task.priority,
+            status: task.status,
             setDueDate: task.dueDate,
             assignedTo: task.assignedTo ? task.assignedTo._id : "",
         },
     });
-
-    console.log(task);
 
     useEffect(() => {
         reset({
             title: task.title,
             description: task.description,
             priority: task.priority,
+            status: task.status,
         });
     }, [task, reset]);
 
@@ -76,18 +77,24 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
         }
     };
 
+    const handleStatus = (e) => {
+        setStatus(e.target.value);
+        setValue("status", e.target.value);
+    };
+
     const handleDueDate = (e) => {
         setDueDate(e.target.value);
         setValue("dueDate", e.target.value);
     };
 
     const onSubmit = (data) => {
+        console.log(data);
         onSave({
             id: task._id,
             title: data.title ? data.title : task.title,
             description: data.description ? data.description : task.description,
             priority: data.priority ? data.priority : task.priority,
-            status: task.status ? task.status : data.status,
+            status: status ? status : task.status,
             dueDate: dueDate ? dueDate : task.dueDate,
             createdBy: user.id,
             assignedTo: assignedTo._id ? assignedTo : task.assignedTo,
@@ -141,6 +148,7 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                 {/* Status */}
                 <select
                     {...register("status")}
+                    onChange={handleStatus}
                     placeholder="Status task"
                     className="text-sm p-2 border border-gray-300 rounded"
                 >
@@ -160,7 +168,7 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                     placeholder="Assigned to..."
                     className="text-sm p-2 border border-gray-300 rounded"
                 >
-                    <option value="">Assign an employee</option>
+                    <option value="">Select artist</option>
                     {employeesUsers.map((user) => (
                         <option key={user.id} value={user.id}>
                             {user.email}
