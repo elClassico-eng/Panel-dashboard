@@ -171,7 +171,7 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                     <option value="">Select artist</option>
                     {employeesUsers.map((user) => (
                         <option key={user.id} value={user.id}>
-                            {user.email}
+                            {user.firstName} {user.lastName}
                         </option>
                     ))}
                 </select>

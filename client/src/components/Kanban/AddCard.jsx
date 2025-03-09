@@ -153,6 +153,7 @@ export const AddCard = ({ column }) => {
                                 </span>
                             )}
 
+                            {/* Assigned To */}
                             <select
                                 {...register("assignedTo", {
                                     required: "Assignee is required",
@@ -163,7 +164,7 @@ export const AddCard = ({ column }) => {
                                 <option value="">Select user</option>
                                 {employeesUsers.map((user) => (
                                     <option key={user.id} value={user.id}>
-                                        {user.email}
+                                        {user.firstName} {user.lastName}
                                     </option>
                                 ))}
                             </select>

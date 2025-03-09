@@ -71,6 +71,19 @@ export const useTaskStore = create((set) => ({
         }
     },
 
+    fetchTasksByEmployee: async (employeeId) => {
+        set({ isLoading: true, error: null });
+        try {
+            const response = await taskServices.getTasksByEmployee(employeeId);
+            set({ tasks: response.data, isLoading: false });
+        } catch (error) {
+            console.log(error);
+            set({ error: error.message });
+        } finally {
+            set({ isLoading: false });
+        }
+    },
+
     setFilteredTasks: (filteredTasks) => {
         set((state) => {
             return filteredTasks.length === 0

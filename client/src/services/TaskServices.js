@@ -13,6 +13,10 @@ export const taskServices = {
         return $api.delete(`tasks/${taskId}`);
     },
 
+    getTasksByEmployee: async (employeeId) => {
+        return $api.get(`tasks/employee/${employeeId}`);
+    },
+
     getTaskById: async (taskId) => {
         return $api.get(`tasks/${taskId}`);
     },

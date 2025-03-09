@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useTaskStore } from "@/store/taskStore";
+import { useAuth } from "@/store/store";
 import { columnName } from "@/data/data";
 
 import { Column } from "./Column";
@@ -7,11 +8,24 @@ import { Loader } from "../Loader/Loader";
 import { ErrorMessage } from "../Error/ErrorMessage";
 
 export const Board = () => {
-    const { tasks, isLoading, error, fetchTasks } = useTaskStore();
+    const { tasks, isLoading, error, fetchTasks, fetchTasksByEmployee } =
+        useTaskStore();
+
+    const { user } = useAuth();
 
     useEffect(() => {
-        fetchTasks();
-    }, [fetchTasks]);
+        user?.role === "Admin" ? fetchTasks() : fetchTasksByEmployee(user.id);
+
+        const refetch = setInterval(() => {
+            user?.role === "Admin"
+                ? fetchTasks()
+                : fetchTasksByEmployee(user.id);
+        }, 300000);
+
+        return () => clearInterval(refetch);
+    }, [fetchTasks, fetchTasksByEmployee]);
+
+    console.log(tasks);
 
     if (isLoading) return <Loader />;
     if (error) return <ErrorMessage message={error} />;
