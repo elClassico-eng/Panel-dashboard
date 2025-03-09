@@ -9,29 +9,29 @@ import {
     Tooltip,
     Legend,
 } from "recharts";
-import { useTask } from "../../store/store";
+import { useTaskStore } from "@/store/taskStore";
 
 import AnimatedNumber from "react-animated-number";
 
 export const TaskStats = () => {
     const COLORS = ["#A5B4FC", "#6EE7B7", "#FCD34D", "#FCA5A5"];
 
-    const tasks = useTask((state) => state.tasks);
+    const tasks = useTaskStore((state) => state.tasks);
 
     const totalTasks = tasks.length;
 
     const columnData = [
         {
-            name: "To-Do",
-            count: tasks.filter((task) => task.column === "todo").length,
+            name: "Pending",
+            count: tasks.filter((task) => task.status === "Pending").length,
         },
         {
-            name: "Doing",
-            count: tasks.filter((task) => task.column === "doing").length,
+            name: "In Progress",
+            count: tasks.filter((task) => task.status === "In progress").length,
         },
         {
-            name: "Done",
-            count: tasks.filter((task) => task.column === "done").length,
+            name: "Completed",
+            count: tasks.filter((task) => task.status === "Completed").length,
         },
     ];
 
@@ -42,7 +42,7 @@ export const TaskStats = () => {
         },
         {
             name: "Medium",
-            count: tasks.filter((task) => task.priority === "Medium").length,
+            count: tasks.filter((task) => task.priority === "Normal").length,
         },
         {
             name: "High",
