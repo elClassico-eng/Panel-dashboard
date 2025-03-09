@@ -50,7 +50,7 @@ export const SortableCard = ({ task }) => {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     whileHover={{ scale: 1.02 }}
-                    className="w-60 h-40  p-5 bg-white rounded-xl my-5 flex flex-col gap-4 shadow-lg border  border-gray-100 transition-all duration-300 cursor-pointer hover:shadow-xl"
+                    className="w-64 h-40  p-5 bg-violet-200 rounded-xl my-5 flex flex-col gap-4 shadow-lg border  border-gray-100 transition-all duration-300 cursor-pointer hover:shadow-xl"
                 >
                     {/* Proirity & Status */}
                     <div className="w-full flex gap-2 items-center justify-between">

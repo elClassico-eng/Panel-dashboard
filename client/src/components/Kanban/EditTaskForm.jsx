@@ -1,18 +1,23 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-
 import { useTaskStore } from "@/store/taskStore";
 import { useAuth } from "@/store/store";
 import { columnName } from "@/data/data";
-
-import { Trash2 } from "lucide-react";
+import {
+    Trash2,
+    Edit,
+    X,
+    ArrowUpCircle,
+    CheckCircle,
+    UserCheck,
+    User,
+    CalendarClock,
+} from "lucide-react";
 
 export const EditTaskForm = ({ task, onSave, onCancel }) => {
     const { deleteTask } = useTaskStore();
     const { user, users } = useAuth();
-
-    const employeesUsers = users.filter((user) => user.role !== "Admin");
-
+    const [isEditing, setIsEditing] = useState(false);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [assignedTo, setAssignedTo] = useState({ _id: "", email: "" });
     const [dueDate, setDueDate] = useState("");
@@ -44,195 +49,319 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
         });
     }, [task, reset]);
 
-    const handleDeleteClick = () => {
-        setShowDeleteConfirmation(true);
-    };
-
-    const confirmDelete = () => {
+    const handleDelete = () => {
         deleteTask(task._id);
-        setShowDeleteConfirmation(false);
         onCancel();
     };
 
-    const cancelDeleteTask = () => {
-        setShowDeleteConfirmation(false);
-    };
-
-    const handleAssignTo = (e) => {
-        const selectUser = employeesUsers.find(
-            (user) => user.id === e.target.value
-        );
-        if (selectUser) {
-            setAssignedTo({
-                _id: selectUser.id,
-                email: selectUser.email,
-            });
-            setValue("assignedTo", selectUser.id);
-        } else {
-            setAssignedTo({
-                _id: "",
-                email: "",
-            });
-            setValue("assignedTo", "");
-        }
-    };
-
-    const handleStatus = (e) => {
-        setStatus(e.target.value);
-        setValue("status", e.target.value);
-    };
-
-    const handleDueDate = (e) => {
-        setDueDate(e.target.value);
-        setValue("dueDate", e.target.value);
-    };
-
     const onSubmit = (data) => {
-        console.log(data);
         onSave({
             id: task._id,
-            title: data.title ? data.title : task.title,
-            description: data.description ? data.description : task.description,
-            priority: data.priority ? data.priority : task.priority,
-            status: status ? status : task.status,
-            dueDate: dueDate ? dueDate : task.dueDate,
+            ...data,
+            status: status || task.status,
+            dueDate: dueDate || task.dueDate,
             createdBy: user.id,
             assignedTo: assignedTo._id ? assignedTo : task.assignedTo,
-            createdAt: task.createdAt ? task.createdAt : new Date(),
+            createdAt: task.createdAt || new Date(),
         });
+        setIsEditing(false);
     };
 
     return (
-        <div className=" fixed top-0  z-50 left-0 w-full h-screen bg-black/50 flex justify-center items-center">
-            <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="bg-white flex flex-col  gap-4 p-8 rounded-xl shadow-lg lg:w-1/2 mx-5 w-full text-center"
-            >
-                {/* Title */}
-                <h3 className="text-xl">{task.title}</h3>
-                <input
-                    type="text"
-                    {...register("title")}
-                    placeholder="Task Title"
-                    className="text-sm p-2 border border-gray-300 rounded"
-                />
-                {errors.title && (
-                    <p className="text-red-500 text-sm">
-                        {errors.title.message}
-                    </p>
-                )}
-
-                {/* Description */}
-                <textarea
-                    {...register("description", {})}
-                    placeholder="Description"
-                    className="text-sm p-2 border border-gray-300 rounded"
-                />
-                {errors.description && (
-                    <p className="text-red-500 text-sm">
-                        {errors.description.message}
-                    </p>
-                )}
-
-                {/* Priority */}
-                <select
-                    {...register("priority")}
-                    placeholder="Priority"
-                    className="text-sm p-2 border border-gray-300 rounded"
-                >
-                    <option value="Low">Low</option>
-                    <option value="Medium">Medium</option>
-                    <option value="High">High</option>
-                </select>
-
-                {/* Status */}
-                <select
-                    {...register("status")}
-                    onChange={handleStatus}
-                    placeholder="Status task"
-                    className="text-sm p-2 border border-gray-300 rounded"
-                >
-                    <option value="">{task.status}</option>
-                    {columnName.map((column, i) => (
-                        <option key={i} value={column.column}>
-                            {column.column}
-                        </option>
-                    ))}
-                </select>
-
-                {/* Assigned to */}
-                <select
-                    {...register("assignedTo")}
-                    onChange={handleAssignTo}
-                    value={assignedTo._id}
-                    placeholder="Assigned to..."
-                    className="text-sm p-2 border border-gray-300 rounded"
-                >
-                    <option value="">Select artist</option>
-                    {employeesUsers.map((user) => (
-                        <option key={user.id} value={user.id}>
-                            {user.firstName} {user.lastName}
-                        </option>
-                    ))}
-                </select>
-
-                {/* Due Date */}
-                <input
-                    {...register("dueDate")}
-                    onChange={(e) => handleDueDate(e)}
-                    type="date"
-                    className="w-full text-sm p-2 border border-gray-300 rounded"
-                    value={task.dueDate ? task.dueDate.split("T")[0] : ""}
-                />
-
-                {/* Options */}
-                <div className="flex gap-2 justify-end">
-                    <button type="button" onClick={handleDeleteClick}>
-                        <Trash2
-                            size={20}
-                            className="cursor-pointer text-red-500"
-                        />
-                    </button>
-
-                    <button
-                        type="button"
-                        onClick={onCancel}
-                        className="px-3 py-2 text-xs text-neutral-400 transition-colors hover:text-neutral-700"
-                    >
-                        Cancel
-                    </button>
-                    <button
-                        type="submit"
-                        className="flex items-center gap-2 rounded bg-neutral-50 px-3 py-2 text-xs text-neutral-950 transition-colors hover:bg-neutral-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        Save
-                    </button>
-                </div>
-
-                {showDeleteConfirmation && (
-                    <div className="fixed inset-0 bg-neutral-900/50 flex items-center justify-center z-50">
-                        <div className="bg-white p-6 rounded-lg shadow-lg w-80">
-                            <p className="text-sm font-semibold text-gray-800 mb-4">
-                                Are you sure you want to delete this task?
-                            </p>
-                            <div className="flex justify-center gap-4">
+        <div className="fixed inset-0 z-50 bg-black/50">
+            <div className="absolute right-0 h-full w-full max-w-md bg-white shadow-xl">
+                <div className="p-6 h-full overflow-y-auto">
+                    {!isEditing ? (
+                        <div className="flex flex-col gap-4">
+                            {/* Task Details View */}
+                            <div className="flex justify-between items-start mb-4">
+                                <h2 className="text-xl font-bold">
+                                    Show Details
+                                </h2>
                                 <button
-                                    onClick={cancelDeleteTask}
-                                    className="px-3 py-2 text-xs text-neutral-400 transition-colors hover:text-neutral-700"
+                                    onClick={onCancel}
+                                    className="text-gray-400 hover:text-gray-600"
+                                >
+                                    <X size={18} className="cursor-pointer" />
+                                </button>
+                            </div>
+
+                            <div className="space-y-4">
+                                <div>
+                                    <p className="mt-1 text-sm text-gray-900">
+                                        {task.title}
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <p className="mt-1 text-sm text-gray-900">
+                                        {task.description}
+                                    </p>
+                                </div>
+
+                                <div className="flex justify-between items-center">
+                                    <label className="flex gap-1 items-center text-sm font-medium text-gray-500">
+                                        <CheckCircle size={16} />
+                                        Priority
+                                    </label>
+                                    <p className="mt-1 text-sm  text-gray-900">
+                                        {task.priority}
+                                    </p>
+                                </div>
+
+                                <div className="flex justify-between items-center">
+                                    <label className="flex gap-1 items-center text-sm font-medium text-gray-500">
+                                        <ArrowUpCircle size={16} />
+                                        Status
+                                    </label>
+                                    <p className="mt-1 text-sm  text-gray-900">
+                                        {task.status}
+                                    </p>
+                                </div>
+
+                                <div className="flex justify-between items-center">
+                                    <label className="flex gap-1 items-center text-sm font-medium text-gray-500">
+                                        <User size={16} />
+                                        Author
+                                    </label>
+                                    <p className="mt-1 text-sm  text-gray-900">
+                                        {task?.createdBy?.firstName ||
+                                            "Unassigned"}{" "}
+                                        {task?.createdBy?.lastName ||
+                                            "Unassigned"}
+                                    </p>
+                                </div>
+
+                                <div className="flex justify-between items-center">
+                                    <label className="flex gap-1 items-center text-sm font-medium text-gray-500">
+                                        <UserCheck size={16} />
+                                        Assigned To
+                                    </label>
+                                    <p className="mt-1 text-sm  text-gray-900">
+                                        {task.assignedTo?.firstName ||
+                                            "Unassigned"}{" "}
+                                        {task.assignedTo?.lastName ||
+                                            "Unassigned"}
+                                    </p>
+                                </div>
+
+                                <div className="flex justify-between items-center">
+                                    <label className="flex gap-1 items-center text-sm font-medium text-gray-500">
+                                        <CalendarClock size={16} />
+                                        Created At
+                                    </label>
+                                    <p className="mt-1 text-sm  text-gray-900">
+                                        {task?.createdAt
+                                            ? new Date(
+                                                  task.createdAt
+                                              ).toLocaleDateString()
+                                            : "No Date"}
+                                    </p>
+                                </div>
+
+                                <div className="flex justify-between items-center">
+                                    <label className="flex gap-1 items-center text-sm font-medium text-gray-500">
+                                        <CalendarClock size={16} />
+                                        Deadline
+                                    </label>
+                                    <p className="mt-1 text-sm  text-gray-900">
+                                        {new Date(
+                                            task.dueDate
+                                        ).toLocaleDateString()}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="flex gap-2 justify-end mt-6">
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        setShowDeleteConfirmation(true)
+                                    }
+                                    className="p-2 hover:bg-red-50 rounded-full"
+                                >
+                                    <Trash2
+                                        size={16}
+                                        className="text-red-500 cursor-pointer"
+                                    />
+                                </button>
+                                <button
+                                    onClick={() => setIsEditing(true)}
+                                    className="flex items-center gap-2 p-2 text-sm bg-neutral-500 text-white hover:bg-neutral-700 rounded-md "
+                                >
+                                    <Edit size={16} />
+                                    Edit Task
+                                </button>
+                            </div>
+                        </div>
+                    ) : (
+                        <form
+                            onSubmit={handleSubmit(onSubmit)}
+                            className="flex flex-col gap-4 text-sm"
+                        >
+                            {/* Edit Form */}
+                            <div className="flex justify-between items-start mb-4">
+                                <h2 className="text-2xl font-bold">
+                                    Edit Task
+                                </h2>
+                                <button
+                                    onClick={() => setIsEditing(false)}
+                                    className="text-gray-400 hover:text-gray-600"
+                                >
+                                    <X size={18} className="cursor-pointer" />
+                                </button>
+                            </div>
+
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                        Title
+                                    </label>
+                                    <input
+                                        {...register("title")}
+                                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                        Description
+                                    </label>
+                                    <textarea
+                                        {...register("description")}
+                                        rows={3}
+                                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                        Priority
+                                    </label>
+                                    <select
+                                        {...register("priority")}
+                                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                                    >
+                                        <option value="Low">Low</option>
+                                        <option value="Medium">Medium</option>
+                                        <option value="High">High</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                        Status
+                                    </label>
+                                    <select
+                                        {...register("status")}
+                                        onChange={(e) =>
+                                            setStatus(e.target.value)
+                                        }
+                                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                                    >
+                                        {columnName.map((column, i) => (
+                                            <option
+                                                key={i}
+                                                value={column.column}
+                                            >
+                                                {column.column}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                        Assign To
+                                    </label>
+                                    <select
+                                        {...register("assignedTo")}
+                                        onChange={(e) => {
+                                            const user = users.find(
+                                                (u) => u.id === e.target.value
+                                            );
+                                            setAssignedTo(
+                                                user || { _id: "", email: "" }
+                                            );
+                                        }}
+                                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                                    >
+                                        <option value="">Select Artist</option>
+                                        {users
+                                            .filter((u) => u.role !== "Admin")
+                                            .map((user) => (
+                                                <option
+                                                    key={user.id}
+                                                    value={user.id}
+                                                >
+                                                    {user.firstName}{" "}
+                                                    {user.lastName}
+                                                </option>
+                                            ))}
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                        Due Date
+                                    </label>
+                                    <input
+                                        type="date"
+                                        {...register("dueDate")}
+                                        onChange={(e) =>
+                                            setDueDate(e.target.value)
+                                        }
+                                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="flex gap-2 justify-end mt-6">
+                                <button
+                                    type="button"
+                                    onClick={() => setIsEditing(false)}
+                                    className="text-sm px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-md cursor-pointer"
                                 >
                                     Cancel
                                 </button>
                                 <button
-                                    onClick={confirmDelete}
-                                    className="flex items-center gap-2 rounded bg-red-500 px-3 py-2 text-xs text-neutral-950 transition-colors hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    type="submit"
+                                    className="flex items-center gap-2 p-2 text-sm bg-neutral-500 text-white hover:bg-neutral-700 rounded-md cursor-pointer"
                                 >
-                                    Delete
+                                    Save Changes
                                 </button>
                             </div>
+                        </form>
+                    )}
+
+                    {/* Delete Confirmation */}
+                    {showDeleteConfirmation && (
+                        <div className="fixed inset-0 bg-black/50 flex items-center justify-center text-sm">
+                            <div className="bg-white p-6 rounded-lg max-w-sm">
+                                <p className="text-lg font-semibold mb-4">
+                                    Delete this task?
+                                </p>
+                                <div className="flex gap-3 justify-end">
+                                    <button
+                                        onClick={() =>
+                                            setShowDeleteConfirmation(false)
+                                        }
+                                        className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        onClick={handleDelete}
+                                        className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                )}
-            </form>
+                    )}
+                </div>
+            </div>
         </div>
     );
 };
