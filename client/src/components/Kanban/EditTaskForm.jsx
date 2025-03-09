@@ -336,7 +336,7 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
 
                     {/* Delete Confirmation */}
                     {showDeleteConfirmation && (
-                        <div className="fixed inset-0 bg-black/50 flex items-center justify-center text-sm">
+                        <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
                             <div className="bg-white p-6 rounded-lg max-w-sm">
                                 <p className="text-lg font-semibold mb-4">
                                     Delete this task?

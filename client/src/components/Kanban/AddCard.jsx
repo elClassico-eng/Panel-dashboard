@@ -209,22 +209,26 @@ export const AddCard = ({ column }) => {
                     </div>
                 </div>
             ) : (
-                <motion.button
-                    layout
-                    onClick={() => setIsAdding(true)}
-                    type="button"
-                    className="flex items-center justify-center gap-2 px-3 py-2 text-xs text-neutral-400 transition-colors hover:text-neutral-600 w-full"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                >
-                    <AddOutlinedIcon
-                        fontSize="small"
-                        className="text-blue-300"
-                    />
-                    <span className="text-xs text-neutral-600 cursor-pointer">
-                        Add new task
-                    </span>
-                </motion.button>
+                <>
+                    {user.role === "Admin" && (
+                        <motion.button
+                            layout
+                            onClick={() => setIsAdding(true)}
+                            type="button"
+                            className="flex items-center justify-center gap-2 px-3 py-2 text-xs text-neutral-400 transition-colors hover:text-neutral-600 w-full"
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                        >
+                            <AddOutlinedIcon
+                                fontSize="small"
+                                className="text-blue-300"
+                            />
+                            <span className="text-xs text-neutral-600 cursor-pointer">
+                                Add new task
+                            </span>
+                        </motion.button>
+                    )}
+                </>
             )}
         </>
     );
