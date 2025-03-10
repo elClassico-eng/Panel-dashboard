@@ -91,6 +91,9 @@ export const columnName = [
         column: "Review",
     },
     {
+        column: "Remake",
+    },
+    {
         column: "Completed",
     },
 ];
@@ -99,6 +102,7 @@ export const columnColors = {
     Pending: "text-yellow-500",
     "In Progress": "text-blue-500",
     Review: "text-purple-500",
+    Remake: "text-red-500",
     Completed: "text-green-500",
 };
 
