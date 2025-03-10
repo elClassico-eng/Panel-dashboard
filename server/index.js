@@ -4,6 +4,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const router = require("./router/index");
+const path = require("path");
 const errorMiddleware = require("./middlewares/error-middleware");
 
 const app = express();
@@ -26,6 +27,7 @@ app.use(
     })
 );
 app.use(cookieParser());
+app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/api", router);
 app.use(errorMiddleware);
 
