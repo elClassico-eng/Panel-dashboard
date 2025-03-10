@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { useAuth } from "../../store/store";
+import { useAuth } from "../../store/userStore";
 import { UploadAvatar } from "./UploadAvatar";
 
 import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";

@@ -20,8 +20,6 @@ export const SortableCard = ({ task }) => {
     if (error) return <ErrorMessage message={error} />;
     if (!task) return null;
 
-    console.log(task);
-
     const statusClass =
         task.status === "Pending"
             ? "bg-yellow-100 text-yellow-700"

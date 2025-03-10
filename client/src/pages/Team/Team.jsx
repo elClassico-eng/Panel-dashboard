@@ -1,4 +1,4 @@
-import { useAuth } from "@/store/store";
+import { useAuth } from "@/store/userStore";
 import { useEffect } from "react";
 import { Loader } from "@/components/Loader/Loader";
 

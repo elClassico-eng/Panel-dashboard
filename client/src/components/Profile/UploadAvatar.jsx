@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { useAuth } from "../../store/store";
+import { useAuth } from "../../store/userStore";
 export const UploadAvatar = () => {
     const fileInputRef = useRef(null);
     const [avatar, setAvatar] = useState(null);

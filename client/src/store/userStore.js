@@ -1,89 +1,6 @@
 import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
-import { v4 as uuidv4 } from "uuid";
+import { persist } from "zustand/middleware";
 import { authServices } from "../services/AuthServices";
-
-//Kanban-task
-export const useTask = create(
-    persist((set) => ({
-        tasks: [],
-        filteredTasks: [],
-        loading: false,
-        error: null,
-        addTask: (
-            title,
-            column = "backlog",
-            tags = [],
-            id = uuidv4(),
-            description = "",
-            priority = "Medium"
-        ) => {
-            set((state) => ({
-                tasks: [
-                    ...state.tasks,
-                    {
-                        id,
-                        title,
-                        column,
-                        tags,
-                        description,
-                        priority,
-                    },
-                ],
-            }));
-        },
-        addDescription: (id, description) => {
-            set((state) => ({
-                tasks: state.tasks.map((task) =>
-                    task.id === id ? { ...task, description } : task
-                ),
-            }));
-        },
-        updateTask: (id, updateFields) => {
-            set((state) => ({
-                tasks: state.tasks.map((task) =>
-                    task.id === id ? { ...task, ...updateFields } : task
-                ),
-            }));
-        },
-        moveTask: (id, newColumn) => {
-            set((state) => ({
-                tasks: state.tasks.map((task) =>
-                    task.id === id ? { ...task, column: newColumn } : task
-                ),
-            }));
-        },
-        removeTask: (id) => {
-            set((state) => ({
-                tasks: state.tasks.filter((task) => task.id !== id),
-            }));
-        },
-        setFilteredTasks: (filteredTasks) => set({ filteredTasks }),
-        filterTasks: (searchTerm) =>
-            set((state) => ({
-                filteredTasks: state.tasks.filter((task) =>
-                    task.title.toLowerCase().includes(searchTerm.toLowerCase())
-                ),
-            })),
-    })),
-    {
-        name: "task-storage",
-        storage: createJSONStorage(() => {
-            try {
-                return localStorage;
-            } catch (error) {
-                console.error("LocalStorage access failed:", error);
-                return {
-                    getItem: () => null,
-                    setItem: () => {},
-                    removeItem: () => {},
-                };
-            }
-        }),
-    }
-);
-
-//Authorizations
 
 export const useAuth = create(
     persist(
@@ -94,7 +11,6 @@ export const useAuth = create(
             isLoading: false,
             error: null,
 
-            //Function error handler
             handleError: (error) => {
                 const message =
                     error.response?.data?.message || "An error occurred";
@@ -102,7 +18,6 @@ export const useAuth = create(
                 set({ error: message });
             },
 
-            //Registration
             registration: async (email, password, firstName, lastName) => {
                 set({ isLoading: true, error: null });
                 try {
@@ -126,7 +41,6 @@ export const useAuth = create(
                 }
             },
 
-            //Login
             login: async (email, password) => {
                 set({ isLoading: true, error: null });
                 try {
@@ -141,7 +55,6 @@ export const useAuth = create(
                 }
             },
 
-            // Check authentication status (for auto-login)
             checkAuth: async () => {
                 set({ isLoading: true });
                 try {
@@ -172,7 +85,6 @@ export const useAuth = create(
                 }
             },
 
-            //Exit from account
             logout: async () => {
                 set({ isLoading: true, error: null });
                 try {
@@ -213,7 +125,6 @@ export const useAuth = create(
                 }
             },
 
-            //Fetch all users
             fetchUsers: async () => {
                 set({ isLoading: true });
                 try {

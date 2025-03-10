@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "./store/store";
+import { useAuth } from "./store/userStore";
 import { Routes, Route } from "react-router";
 import { useNavigate } from "react-router-dom";
 import { routes } from "./data/data";

@@ -5,7 +5,7 @@ import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 
 import { Card } from "@/components/Setting/Card";
 import { Title } from "@/components/Title/Title";
-import { useAuth } from "@/store/store";
+import { useAuth } from "@/store/userStore";
 import { Loader } from "@/components/Loader/Loader";
 
 export const Settings = () => {

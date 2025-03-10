@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { useAuth } from "@/store/store";
+import { useAuth } from "@/store/userStore";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+
+import { UserAvatar } from "../Upload/userAvatar";
 
 import WbSunnyOutlinedIcon from "@material-ui/icons/WbSunnyOutlined";
 import NightsStayOutlinedIcon from "@material-ui/icons/NightsStayOutlined";
@@ -107,23 +109,9 @@ export const Navbar = ({ isActiveSidebar, setActive }) => {
 
                 {/* Profile */}
                 <div className="flex items-center gap-2 cursor-pointer ">
-                    <Link to="/account">
-                        <label htmlFor="avatar-upload">
-                            {user.profilePhoto ? (
-                                <img
-                                    className="w-full h-full rounded-full"
-                                    src={user.profilePhoto}
-                                    alt="Profile Avatar"
-                                />
-                            ) : (
-                                <div className="flex justify-center items-center w-10 h-10 rounded-full bg-inherit border border-black text-black cursor-pointer ">
-                                    <PersonOutlineOutlinedIcon
-                                        style={{ fontSize: 20 }}
-                                    />
-                                </div>
-                            )}
-                        </label>
-                    </Link>
+                    {/* <Link to="/account"> */}
+                    <UserAvatar />
+                    {/* </Link> */}
                 </div>
             </div>
         </header>

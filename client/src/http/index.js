@@ -18,9 +18,7 @@ $api.interceptors.request.use((config) => {
 
 // Setting JWT & Refresh Token
 $api.interceptors.response.use(
-    (config) => {
-        return config;
-    },
+    (config) => config,
     async (error) => {
         if (error.response && error.response.status === 401) {
             const refreshToken = localStorage.getItem("refreshToken");
@@ -31,20 +29,18 @@ $api.interceptors.response.use(
                     localStorage.setItem("token", data.accessToken);
                     localStorage.setItem("refreshToken", data.refreshToken);
 
-                    // Make a new request with the new token
-                    config.headers.Authorization = `Bearer ${localStorage.getItem(
-                        "token"
-                    )}`;
-                    return $api(error.config);
+                    error.config.headers.Authorization = `Bearer ${data.accessToken}`;
+
+                    return $api.request(error.config);
                 } catch (error) {
                     console.log("Token refresh failed: ", error);
                     localStorage.removeItem("token");
                     localStorage.removeItem("refreshToken");
                 }
-            } else {
-                console.log("No refresh token found, redirecting to login");
-                window.location.href = "/login";
             }
+            console.log("No refresh token found, redirecting to login");
+            window.location.href = "/login";
         }
+        return Promise.reject(error);
     }
 );

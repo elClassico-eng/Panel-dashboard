@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
-import { useAuth } from "@/store/store";
+import { useAuth } from "@/store/userStore";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "../Loader/Loader";
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useTaskStore } from "@/store/taskStore";
-import { useAuth } from "@/store/store";
+import { useAuth } from "@/store/userStore";
 import { columnName } from "@/data/data";
 import {
     Trash2,
