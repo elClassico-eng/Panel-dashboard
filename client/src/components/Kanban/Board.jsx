@@ -30,7 +30,7 @@ export const Board = () => {
     if (!tasks) return null;
 
     return (
-        <div className="relative overflow-x-scroll max:md:flex-col max:lg:flex-col xl:flex justify-between h-full w-full  p-12">
+        <div className="relative overflow-x-scroll max:md:flex-col max:lg:flex-col xl:flex justify-between h-full gap-5 w-full  p-12">
             {columnName.map(({ column }) => (
                 <Column
                     key={column}

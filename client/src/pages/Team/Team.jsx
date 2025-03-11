@@ -1,6 +1,8 @@
 import { useAuth } from "@/store/userStore";
 import { useEffect } from "react";
+
 import { Loader } from "@/components/Loader/Loader";
+import { ErrorMessage } from "@/components/Error/ErrorMessage";
 
 export const Team = () => {
     const { user, users, fetchUsers, isLoading, error } = useAuth();
@@ -9,11 +11,10 @@ export const Team = () => {
 
     useEffect(() => {
         fetchUsers();
-    }, [fetchUsers]); // если ESLint требует зависимость
+    }, [fetchUsers]);
 
     if (isLoading) return <Loader />;
-    if (error)
-        return <p className="text-red text-xl">Error: {error.message}</p>;
+    if (error) return <ErrorMessage message={error} />;
     if (!users || users.length === 0) return <p>Users not found</p>;
 
     return (

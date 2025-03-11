@@ -4,6 +4,7 @@ import { taskServices } from "@/services/TaskServices";
 export const useTaskStore = create((set) => ({
     tasks: [],
     filteredTasks: [],
+    sortedTasks: [],
     isLoading: true,
     error: null,
 

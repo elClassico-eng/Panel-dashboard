@@ -34,7 +34,12 @@ export const UserAvatar = () => {
     };
 
     if (isLoading) return <Loader />;
-    if (error) return <ErrorMessage />;
+    if (error)
+        return (
+            <div className="w-10 h-10 flex justify-center items-center rounded-full border border-neutral-600">
+                <User size={18} />
+            </div>
+        );
 
     return (
         <div className="relative flex items-center justify-center cursor-pointer">

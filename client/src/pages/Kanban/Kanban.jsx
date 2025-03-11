@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import { Board } from "../../components/Kanban/Board";
 import { Title } from "../../components/Title/Title";
 import { SearchTask } from "../../components/Kanban/SearchTask";
@@ -13,6 +14,7 @@ export const Kanban = () => {
             <div className="flex w-full justify-between items-center ">
                 <Title title="Kanban Dashboard" />
                 <SearchTask />
+
                 <h2
                     onClick={() => setOpen(true)}
                     className="px-12 cursor-pointer hover:underline"

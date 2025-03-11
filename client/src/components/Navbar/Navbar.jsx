@@ -9,7 +9,6 @@ import WbSunnyOutlinedIcon from "@material-ui/icons/WbSunnyOutlined";
 import NightsStayOutlinedIcon from "@material-ui/icons/NightsStayOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
-import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";
 
 import PropTypes from "prop-types";
@@ -48,7 +47,7 @@ export const Navbar = ({ isActiveSidebar, setActive }) => {
                     <span>/</span>
                     {/* Team title */}
                     <span className="text-lg hover:underline cursor-pointer transition-all">
-                        Paytina
+                        Demo
                     </span>
                 </div>
             </div>
@@ -103,9 +102,6 @@ export const Navbar = ({ isActiveSidebar, setActive }) => {
                         </div>
                     </div>
                 </div>
-
-                {/* Notifications */}
-                <NotificationsNoneOutlinedIcon className="transition cursor-pointer" />
 
                 {/* Profile */}
                 <div className="flex items-center gap-2 cursor-pointer ">
