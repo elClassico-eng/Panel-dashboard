@@ -1,13 +1,4 @@
-import {
-    HomeOutlined as HomeIcon,
-    ShoppingBasketOutlined as BasketIcon,
-    PeopleAltOutlined as PeopleIcon,
-    ManageAccountsOutlined as AccountsIcon,
-    SpaceDashboardOutlined as DashboardIcon,
-    CalendarMonthOutlined as CalendarIcon,
-    ContactsOutlined as ContactIcon,
-    SettingsOutlined as SettingIcon,
-} from "@mui/icons-material";
+//Pages
 import { Home } from "../pages/Home/Home";
 import { Order } from "../pages/Order/Order";
 import { Kanban } from "../pages/Kanban/Kanban";
@@ -19,17 +10,33 @@ import { NotFound } from "../pages/NotFound/NotFound";
 import { LandingHome } from "../pages/Landing/LandingHome/LandingHome";
 import { Team } from "@/pages/Team/Team";
 
+// Icons
+import {
+    House,
+    ShoppingBasket,
+    Users,
+    LayoutDashboard,
+    UserRoundCog,
+    Settings as SettingsIcon,
+} from "lucide-react";
+
+//Sidebar Menu Items
 export const menuItems = [
     {
         title: "Dashboard",
         links: [
-            { name: "Home", active: true, path: "/dashboard", icon: HomeIcon },
+            { name: "Home", active: true, path: "/dashboard", icon: House },
         ],
     },
     {
         title: "Order",
         links: [
-            { name: "Order", active: false, path: "/order", icon: BasketIcon },
+            {
+                name: "Order",
+                active: false,
+                path: "/order",
+                icon: ShoppingBasket,
+            },
         ],
     },
 
@@ -40,7 +47,7 @@ export const menuItems = [
                 name: "Team",
                 active: false,
                 path: "/team",
-                icon: AccountsIcon,
+                icon: Users,
             },
         ],
     },
@@ -52,7 +59,7 @@ export const menuItems = [
                 name: "Kanban",
                 active: false,
                 path: "/kanban-dashboard",
-                icon: DashboardIcon,
+                icon: LayoutDashboard,
             },
         ],
     },
@@ -63,7 +70,7 @@ export const menuItems = [
                 name: "Profile",
                 active: false,
                 path: "/account",
-                icon: ContactIcon,
+                icon: UserRoundCog,
             },
         ],
     },
@@ -74,12 +81,13 @@ export const menuItems = [
                 name: "Setting",
                 active: false,
                 path: "/setting",
-                icon: SettingIcon,
+                icon: SettingsIcon,
             },
         ],
     },
 ];
 
+//Kanban Data
 export const columnName = [
     {
         column: "Pending",
@@ -112,6 +120,7 @@ export const priorityColors = {
     High: "text-red-600 bg-red-200",
 };
 
+// Routes
 export const routes = [
     { path: "/", component: LandingHome },
     { path: "/dashboard", component: Home },
