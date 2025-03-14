@@ -34,7 +34,7 @@ export const AddCard = ({ column }) => {
     }, [isAdding]);
 
     if (isLoading) return <Loader />;
-    if (error) return <ErrorMessage />;
+    if (error) return <ErrorMessage message={error} />;
 
     const onSubmit = async (data) => {
         const newTask = {

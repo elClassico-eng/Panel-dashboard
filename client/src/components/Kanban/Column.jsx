@@ -12,7 +12,7 @@ import { AddCard } from "./AddCard";
 export const Column = ({ title, column, filterTask }) => {
     return (
         <div className="w-56 shrink-0">
-            <div className="flex items-center bg-violet-200  p-2 rounded justify-between mb-3">
+            <div className="flex items-center   p-2 rounded justify-between mb-3">
                 <div className="flex gap-3 items-center">
                     <Circle
                         size={16}

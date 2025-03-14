@@ -14,9 +14,9 @@ import { useTaskStore } from "@/store/taskStore";
 import AnimatedNumber from "react-animated-number";
 
 export const TaskStats = () => {
-    const COLORS = ["#A5B4FC", "#6EE7B7", "#FCD34D", "#FCA5A5"];
-
     const tasks = useTaskStore((state) => state.tasks);
+
+    const COLORS = ["#A5B4FC", "#6EE7B7", "#FCD34D", "#FCA5A5"];
 
     const totalTasks = tasks.length;
 
@@ -28,6 +28,14 @@ export const TaskStats = () => {
         {
             name: "In Progress",
             count: tasks.filter((task) => task.status === "In progress").length,
+        },
+        {
+            name: "Review",
+            count: tasks.filter((task) => task.status === "Review").length,
+        },
+        {
+            name: "Remake",
+            count: tasks.filter((task) => task.status === "Remake").length,
         },
         {
             name: "Completed",
@@ -49,7 +57,6 @@ export const TaskStats = () => {
             count: tasks.filter((task) => task.priority === "High").length,
         },
     ];
-
     return (
         <div className="w-full flex flex-col gap-5 justify-center items-center">
             <h2 className="text-3xl text-white">Statistics for all tasks</h2>

@@ -1,3 +1,5 @@
+import { useTaskStore } from "@/store/taskStore";
+
 //Pages
 import { Home } from "../pages/Home/Home";
 import { Order } from "../pages/Order/Order";
