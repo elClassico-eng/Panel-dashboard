@@ -36,23 +36,19 @@ export const Kanban = () => {
             </div>
 
             <div className="w-full flex justify-center items-center gap-7">
-                <button className="flex gap-2 items-center justify-center p-2 hover:bg-violet-300 hover:rounded">
+                <button className="flex gap-2 items-center justify-center p-2 cursor-pointer hover:bg-violet-300 hover:rounded">
                     <LayoutDashboard size={16} />
                     <span>Kanban</span>
                 </button>
-                <button className="flex gap-2 items-center justify-center p-2 hover:bg-violet-300 hover:rounded">
+                <button className="flex gap-2 items-center justify-center p-2 cursor-pointer hover:bg-violet-300 hover:rounded">
                     <Table2 size={16} />
                     <span>Table</span>
                 </button>
-                <button className="flex gap-2 items-center justify-center p-2 hover:bg-violet-300 hover:rounded">
-                    <Table2 size={16} />
-                    <span>Table</span>
-                </button>
-                <button className="flex gap-2 items-center justify-center p-2 hover:bg-violet-300 hover:rounded">
+                <button className="flex gap-2 items-center justify-center p-2 cursor-pointer hover:bg-violet-300 hover:rounded">
                     <List size={16} />
                     <span>List</span>
                 </button>
-                <button className="flex gap-2 items-center justify-center p-2 hover:bg-violet-300 hover:rounded">
+                <button className="flex gap-2 items-center justify-center p-2 cursor-pointer hover:bg-violet-300 hover:rounded">
                     <ChartNoAxesGantt size={16} />
                     <span>Timeline</span>
                 </button>
