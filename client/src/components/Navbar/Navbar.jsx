@@ -1,120 +1,92 @@
+// Desc: Navbar component for the application
 import { useState } from "react";
-import { useAuth } from "@/store/userStore";
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
+// Components
 import { UserAvatar } from "../Upload/userAvatar";
 
-import WbSunnyOutlinedIcon from "@material-ui/icons/WbSunnyOutlined";
-import NightsStayOutlinedIcon from "@material-ui/icons/NightsStayOutlined";
-import MenuIcon from "@mui/icons-material/Menu";
-import MenuOpenIcon from "@mui/icons-material/MenuOpen";
-import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";
-
-import PropTypes from "prop-types";
+// Icons
+import {
+    Sun,
+    Moon,
+    AlignJustify,
+    SquareChevronLeft,
+    Languages,
+} from "lucide-react";
 
 export const Navbar = ({ isActiveSidebar, setActive }) => {
-    const [selected, setSelected] = useState("light");
-    const user = useAuth((state) => state.user);
+    const [theme, setTheme] = useState("light");
 
-    const handleActiveSidebar = () => {
+    const handleToggleSidebar = () => {
         setActive((prev) => !prev);
     };
 
-    const TOGGLE_CLASSES =
-        "text-sm font-medium flex items-center gap-2 px-3 md:pl-3 md:pr-3.5 py-3 md:py-1.5 transition-colors relative z-10";
-
     return (
         <header
-            className={`fixed w-full top-0 h-[60px] backdrop-blur-xl px-4 flex items-center justify-between text-black  transition-all z-50 border-b border-neutral-300 ${
-                isActiveSidebar ? "md:left-[0px] left-[64px]" : "left-0"
+            className={`fixed w-full top-0 h-[60px] backdrop-blur-lg px-4 flex items-center justify-between bg-white/80 dark:bg-gray-900/80 transition-all z-50 border-b border-black/20 ${
+                isActiveSidebar ? "md:left-0 left-[64px]" : "left-0"
             }`}
         >
-            {/* Logo */}
-            <div className="flex gap-3 items-center">
+            {/* Left side: Logo & Sidebar Toggle */}
+            <div className="flex items-center gap-3">
                 <button
-                    onClick={handleActiveSidebar}
+                    onClick={handleToggleSidebar}
                     aria-label="Toggle Sidebar"
-                    className="p-2 text-white rounded-lg bg-neutral-700 transition hover:bg-neutral-900 active:bg-black cursor-pointer"
+                    className="p-2 text-white rounded-lg bg-violet-400 transition hover:bg-violet-500 active:bg-violet-600"
                 >
-                    {isActiveSidebar ? <MenuOpenIcon /> : <MenuIcon />}
+                    {isActiveSidebar ? <SquareChevronLeft /> : <AlignJustify />}
                 </button>
 
-                <div className="flex justify-center items-center gap-2 w-fit  p-2">
-                    <h1 className="text-xl md:text-normal whitespace-nowrap text-center">
-                        CoreCRM
-                    </h1>
-                    <span>/</span>
-                    {/* Team title */}
-                    <span className="text-lg hover:underline cursor-pointer transition-all">
-                        Demo
-                    </span>
-                </div>
+                <h1 className="text-lg md:text-xl font-semibold whitespace-nowrap mr-4 md:mr-2 ">
+                    CoreCRM
+                </h1>
+
+                {/* Language Selector */}
+                <button className="flex items-center gap-2 cursor-pointer text-gray-700 hover:text-black transition-colors">
+                    <Languages size={20} />
+                    <span className="text-sm">English</span>
+                </button>
             </div>
+
+            {/* Right side: Theme toggle, Language, Profile */}
             <div className="flex items-center gap-5">
-                {/* Toggle dark|white */}
+                {/* Theme Toggle */}
                 <div
-                    className={`grid h-fit place-content-center px-4 transition-colors rounded-full cursor-pointer`}
+                    className="relative flex items-center w-24 h-8 bg-gray-200 dark:bg-gray-700 rounded-full p-1 cursor-pointer"
+                    onClick={() =>
+                        setTheme(theme === "light" ? "dark" : "light")
+                    }
                 >
-                    <div className="relative flex w-fit items-center rounded-full">
-                        <button
-                            className={`${TOGGLE_CLASSES} ${
-                                selected === "light"
-                                    ? "text-white"
-                                    : "text-slate-300"
-                            }`}
-                            onClick={() => {
-                                setSelected("light");
-                            }}
-                        >
-                            <WbSunnyOutlinedIcon className="relative z-10 text-lg md:text-sm" />
-                            <span className="relative z-10">Light</span>
-                        </button>
-                        <button
-                            className={`${TOGGLE_CLASSES} ${
-                                selected === "dark"
-                                    ? "text-white"
-                                    : "text-slate-800"
-                            }`}
-                            onClick={() => {
-                                setSelected("dark");
-                            }}
-                        >
-                            <NightsStayOutlinedIcon className="relative z-10 text-lg md:text-sm" />
-                            <span className="relative z-10">Dark</span>
-                        </button>
-                        <div
-                            className={`absolute inset-0 z-0 flex ${
-                                selected === "dark"
-                                    ? "justify-end"
-                                    : "justify-start"
-                            }`}
-                        >
-                            <motion.span
-                                layout
-                                transition={{
-                                    type: "spring",
-                                    damping: 15,
-                                    stiffness: 250,
-                                }}
-                                className="h-full w-1/2 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600"
-                            />
-                        </div>
-                    </div>
+                    <motion.div
+                        layout
+                        transition={{
+                            type: "spring",
+                            damping: 15,
+                            stiffness: 250,
+                        }}
+                        className={`absolute top-0 bottom-0 w-1/2 rounded-full bg-gradient-to-r from-violet-500 to-indigo-500 ${
+                            theme === "dark" ? "right-1" : "left-1"
+                        }`}
+                    />
+                    <button
+                        className={`relative flex items-center justify-center cursor-pointer  gap-1 px-3 transition-colors ${
+                            theme === "light" ? "text-white" : "text-gray-600"
+                        }`}
+                    >
+                        <Sun size={18} />
+                    </button>
+                    <button
+                        className={`relative flex items-center justify-center cursor-pointer gap-1 px-3 transition-colors ${
+                            theme === "dark" ? "text-white" : "text-gray-600"
+                        }`}
+                    >
+                        <Moon size={18} />
+                    </button>
                 </div>
 
                 {/* Profile */}
-                <div className="flex items-center gap-2 cursor-pointer ">
-                    {/* <Link to="/account"> */}
-                    <UserAvatar />
-                    {/* </Link> */}
-                </div>
+                <UserAvatar />
             </div>
         </header>
     );
-};
-
-Navbar.propTypes = {
-    isActiveSidebar: PropTypes.bool.isRequired,
-    setActive: PropTypes.func.isRequired,
 };

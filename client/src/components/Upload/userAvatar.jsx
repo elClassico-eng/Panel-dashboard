@@ -2,9 +2,7 @@ import { useAuth } from "@/store/userStore";
 import { useFile } from "@/store/fileStore";
 import { useRef } from "react";
 
-import { Loader } from "../Loader/Loader";
-import { ErrorMessage } from "../Error/ErrorMessage";
-
+import { PulseLoader } from "react-spinners";
 import { User } from "lucide-react";
 
 export const UserAvatar = () => {
@@ -33,7 +31,7 @@ export const UserAvatar = () => {
         }
     };
 
-    if (isLoading) return <Loader />;
+    if (isLoading) return <PulseLoader size={9} />;
     if (error)
         return (
             <div className="w-10 h-10 flex justify-center items-center rounded-full border border-neutral-600">
@@ -42,18 +40,27 @@ export const UserAvatar = () => {
         );
 
     return (
-        <div className="relative flex items-center justify-center cursor-pointer">
-            <img
-                src={user?.profilePhoto || null}
-                alt="User Avatar"
-                className={`w-10 h-10 rounded-full object-cover border-2 border-gray-300 
-                    ${
-                        isLoading
-                            ? "opacity-50 cursor-wait"
-                            : "hover:opacity-80"
-                    }`}
-                onClick={handleAvatarClick}
-            />
+        <div
+            className={`relative flex items-center justify-center cursor-pointer ${
+                !user?.profilePhoto &&
+                " rounded-full p-3 border border-violet-300 hover:border-violet-500 transition-all"
+            }`}
+        >
+            {user?.profilePhoto ? (
+                <img
+                    src={user?.profilePhoto || null}
+                    alt="User Avatar"
+                    className={`w-10 h-10 rounded-full object-cover border-2 border-gray-300 
+                                ${
+                                    isLoading
+                                        ? "opacity-50 cursor-wait"
+                                        : "hover:opacity-80"
+                                }`}
+                    onClick={handleAvatarClick}
+                />
+            ) : (
+                <User size={20} />
+            )}
             <input
                 type="file"
                 ref={fileInputRef}
