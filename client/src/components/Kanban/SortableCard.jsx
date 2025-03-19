@@ -55,13 +55,13 @@ export const SortableCard = ({ task }) => {
 
                     {/* Title & Description */}
                     <div className="mt-3">
-                        <h3 className="text-lg font-semibold text-gray-900 truncate">
+                        <h3 className="text-lg font-semibold text-gray-900 truncate select-none">
                             {task.title}
                         </h3>
                     </div>
 
                     <div>
-                        <p className="text-sm text-gray-500 truncate">
+                        <p className="text-sm text-gray-500 truncate select-none">
                             {task.description}
                         </p>
                     </div>
