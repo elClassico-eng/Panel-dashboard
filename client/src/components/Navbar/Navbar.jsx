@@ -1,6 +1,6 @@
 // Desc: Navbar component for the application
-import { useState } from "react";
 import { motion } from "framer-motion";
+import { useTheme } from "@/hooks/use-theme";
 
 // Components
 import { UserAvatar } from "../Upload/userAvatar";
@@ -15,10 +15,18 @@ import {
 } from "lucide-react";
 
 export const Navbar = ({ isActiveSidebar, setActive }) => {
-    const [theme, setTheme] = useState("light");
+    const { theme, setTheme } = useTheme();
 
     const handleToggleSidebar = () => {
         setActive((prev) => !prev);
+    };
+
+    const handleLightThemeClick = () => {
+        setTheme("light");
+    };
+
+    const handleDarkThemeClick = () => {
+        setTheme("dark");
     };
 
     return (
@@ -51,12 +59,7 @@ export const Navbar = ({ isActiveSidebar, setActive }) => {
             {/* Right side: Theme toggle, Language, Profile */}
             <div className="flex items-center gap-5">
                 {/* Theme Toggle */}
-                <div
-                    className="relative flex items-center w-24 h-8 bg-gray-200 dark:bg-gray-700 rounded-full p-1 cursor-pointer"
-                    onClick={() =>
-                        setTheme(theme === "light" ? "dark" : "light")
-                    }
-                >
+                <div className="relative flex items-center w-24 h-8 bg-gray-200 dark:bg-gray-700 rounded-full p-1 cursor-pointer">
                     <motion.div
                         layout
                         transition={{
@@ -69,15 +72,17 @@ export const Navbar = ({ isActiveSidebar, setActive }) => {
                         }`}
                     />
                     <button
+                        onClick={handleLightThemeClick}
                         className={`relative flex items-center justify-center cursor-pointer  gap-1 px-3 transition-colors ${
-                            theme === "light" ? "text-white" : "text-gray-600"
+                            theme === "light" ? "text-white" : "text-white-600"
                         }`}
                     >
                         <Sun size={18} />
                     </button>
                     <button
+                        onClick={handleDarkThemeClick}
                         className={`relative flex items-center justify-center cursor-pointer gap-1 px-3 transition-colors ${
-                            theme === "dark" ? "text-white" : "text-gray-600"
+                            theme === "dark" ? "text-white" : "text-white-600"
                         }`}
                     >
                         <Moon size={18} />
