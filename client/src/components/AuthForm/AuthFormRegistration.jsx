@@ -4,9 +4,11 @@ import { motion } from "framer-motion";
 import { useAuth } from "@/store/userStore";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "../Loader/Loader";
+import { useTheme } from "@/hooks/use-theme";
 
 import { Link } from "react-router-dom";
 export const AuthFormRegistration = () => {
+    const { theme } = useTheme();
     const { registration, isLoading, error, isAuthenticated } = useAuth();
     const navigate = useNavigate();
 
@@ -216,12 +218,18 @@ export const AuthFormRegistration = () => {
                     }}
                 />
 
-                <div className="absolute top-1/2 w-full h-[250px] backdrop-blur-lg bg-white/20 rounded-xl  grainy-effect"></div>
+                <div
+                    className={`${
+                        theme === "dark"
+                            ? "hidden"
+                            : "absolute top-1/2 w-full h-[250px] backdrop-blur-lg bg-white/20 rounded-xl  grainy-effect"
+                    } `}
+                ></div>
 
                 {[...Array(10)].map((_, i) => (
                     <motion.div
                         key={i}
-                        className="absolute w-2 h-2 bg-neutral-900 rounded-full opacity-50"
+                        className="absolute w-2 h-2 bg-neutral-900 dark:bg-violet-500 rounded-full opacity-50"
                         animate={{
                             x: [0, 50, -50, 0],
                             y: [0, -50, 50, 0],
