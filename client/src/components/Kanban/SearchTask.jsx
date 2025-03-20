@@ -32,7 +32,7 @@ export const SearchTask = () => {
     return (
         <form className="hidden relative md:flex items-center gap-3   md:w-1/2 rounded-lg  py-1">
             <input
-                className="w-full h-full px-10 py-2 rounded-lg outline-none bg-transparent border border-neutral-300 text-neutral-900 dark:text-white text-sm placeholder-neutral-400 placeholder:text-sm focus:ring-2 focus:ring-gray-800 focus:border-gray-800  py-1"
+                className="w-full h-full px-10 py-2 rounded-lg outline-none bg-transparent border border-neutral-300 text-neutral-900 dark:text-white text-sm placeholder-neutral-400 placeholder:text-sm focus:ring-2 focus:ring-gray-800 focus:border-gray-800 "
                 placeholder="Search for something..."
                 type="text"
                 key="task-input"
