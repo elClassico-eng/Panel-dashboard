@@ -69,7 +69,7 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
 
     return (
         <div className="fixed inset-0 z-50 bg-black/50">
-            <div className="absolute right-0 h-full w-full max-w-md bg-white shadow-xl">
+            <div className="absolute right-0 h-full w-full max-w-md bg-white dark:bg-neutral-950 shadow-xl">
                 <div className="p-6 h-full overflow-y-auto">
                     {!isEditing ? (
                         <div className="flex flex-col gap-4">
@@ -88,13 +88,13 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
 
                             <div className="space-y-4">
                                 <div>
-                                    <p className="mt-1 text-sm text-gray-900">
+                                    <p className="mt-1 text-sm text-gray-900 dark:text-white ">
                                         {task.title}
                                     </p>
                                 </div>
 
                                 <div>
-                                    <p className="mt-1 text-sm text-gray-900">
+                                    <p className="mt-1 text-sm text-gray-900 dark:text-white">
                                         {task.description}
                                     </p>
                                 </div>
@@ -104,7 +104,7 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                                         <CheckCircle size={16} />
                                         Priority
                                     </label>
-                                    <p className="mt-1 text-sm  text-gray-900">
+                                    <p className="mt-1 text-sm  text-gray-900 dark:text-white">
                                         {task.priority}
                                     </p>
                                 </div>
@@ -114,7 +114,7 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                                         <ArrowUpCircle size={16} />
                                         Status
                                     </label>
-                                    <p className="mt-1 text-sm  text-gray-900">
+                                    <p className="mt-1 text-sm  text-gray-900 dark:text-white">
                                         {task.status}
                                     </p>
                                 </div>
@@ -124,7 +124,7 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                                         <User size={16} />
                                         Author
                                     </label>
-                                    <p className="mt-1 text-sm  text-gray-900">
+                                    <p className="mt-1 text-sm  text-gray-900 dark:text-white">
                                         {task?.createdBy?.firstName ||
                                             "Unassigned"}{" "}
                                         {task?.createdBy?.lastName ||
@@ -137,7 +137,7 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                                         <UserCheck size={16} />
                                         Assigned To
                                     </label>
-                                    <p className="mt-1 text-sm  text-gray-900">
+                                    <p className="mt-1 text-sm  text-gray-900 dark:text-white">
                                         {task.assignedTo?.firstName ||
                                             "Unassigned"}{" "}
                                         {task.assignedTo?.lastName ||
@@ -150,7 +150,7 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                                         <CalendarClock size={16} />
                                         Created At
                                     </label>
-                                    <p className="mt-1 text-sm  text-gray-900">
+                                    <p className="mt-1 text-sm  text-gray-900 dark:text-white">
                                         {task?.createdAt
                                             ? new Date(
                                                   task.createdAt
@@ -164,7 +164,7 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                                         <CalendarClock size={16} />
                                         Deadline
                                     </label>
-                                    <p className="mt-1 text-sm  text-gray-900">
+                                    <p className="mt-1 text-sm  text-gray-900 dark:text-white">
                                         {new Date(
                                             task.dueDate
                                         ).toLocaleDateString()}
@@ -240,7 +240,7 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                                     </label>
                                     <select
                                         {...register("priority")}
-                                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                                        className="w-full px-3 py-2 border rounded-md bg-white dark:bg-neutral-950 cursor-pointer focus:ring-2 focus:ring-blue-500"
                                     >
                                         <option value="Low">Low</option>
                                         <option value="Medium">Medium</option>
@@ -257,7 +257,7 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                                         onChange={(e) =>
                                             setStatus(e.target.value)
                                         }
-                                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                                        className="w-full px-3 py-2 border rounded-md bg-white dark:bg-neutral-950 cursor-pointer focus:ring-2 focus:ring-blue-500"
                                     >
                                         {columnName.map((column, i) => (
                                             <option
@@ -284,7 +284,7 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                                                 user || { _id: "", email: "" }
                                             );
                                         }}
-                                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                                        className="w-full px-3 py-2 border rounded-md bg-white dark:bg-neutral-950 cursor-pointer focus:ring-2 focus:ring-blue-500"
                                     >
                                         <option value="">Select Artist</option>
                                         {users
@@ -302,7 +302,7 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    <label className="block text-sm font-medium text-gray-700 cursor-pointer mb-1">
                                         Due Date
                                     </label>
                                     <input
@@ -311,7 +311,7 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                                         onChange={(e) =>
                                             setDueDate(e.target.value)
                                         }
-                                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+                                        className="w-full px-3 py-2 border rounded-md focus:ring-2  focus:ring-blue-500"
                                     />
                                 </div>
                             </div>

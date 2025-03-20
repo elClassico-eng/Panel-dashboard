@@ -26,7 +26,7 @@ export const Team = () => {
             <div className="flex flex-col justify-center items-center gap-5 w-full h-full backdrop-blur-xl">
                 <div className="mx-auto grid max-w-7xl gap-20 px-6 lg:px-12 xl:grid-cols-2">
                     <div>
-                        <h2 className="text-xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-3xl">
+                        <h2 className="text-xl font-semibold tracking-tight text-pretty text-gray-900 dark:text-white sm:text-3xl">
                             Meet our leadership
                         </h2>
                         <p className="mt-6 text-md/8 text-gray-600">
@@ -56,7 +56,7 @@ export const Team = () => {
                                         />
                                     </div>
                                     <div>
-                                        <h3 className="text-lg/7 font-semibold tracking-tight text-black">
+                                        <h3 className="text-lg/7 font-semibold tracking-tight text-black dark:text-white">
                                             {team.firstName} {team.lastName}{" "}
                                             {user.firstName ===
                                                 team.firstName &&

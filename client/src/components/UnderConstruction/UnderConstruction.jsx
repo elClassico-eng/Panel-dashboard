@@ -14,7 +14,7 @@ export const UnderConstruction = ({ message }) => {
                     size={24}
                     className="text-yellow-600 dark:text-yellow-300"
                 />
-                <span className="text-lg font-medium">{message}</span>
+                <span className="text-sm font-medium">{message}</span>
             </div>
         </motion.div>
     );

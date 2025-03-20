@@ -66,7 +66,7 @@ export const AddCard = ({ column }) => {
             {isAdding ? (
                 <div className="fixed top-0 z-50 left-0 w-full h-screen bg-black/50 flex justify-center items-center">
                     <div className="grid grid-cols-2 bg-white rounded-xl shadow-lg w-full mx-10">
-                        <div className="bg-gradient-to-br from-blue-500 to-purple-600 p-8 flex flex-col justify-center items-center text-white">
+                        <div className="bg-gradient-to-br from-blue-500 to-purple-600 p-8 flex flex-col justify-center items-center  rounded-l-xl text-white">
                             <h2 className="text-3xl font-bold mb-4">
                                 Create a New Task
                             </h2>
@@ -78,7 +78,7 @@ export const AddCard = ({ column }) => {
                         </div>
 
                         <motion.form
-                            className="bg-white flex flex-col gap-4 p-8 rounded-xl shadow-lg"
+                            className="bg-white dark:bg-neutral-900 flex flex-col gap-4 p-8 rounded-r-xl dark:rounded-none  shadow-lg"
                             layout
                             onSubmit={handleSubmit(onSubmit)}
                             initial={{ opacity: 0, y: -10 }}
@@ -119,7 +119,7 @@ export const AddCard = ({ column }) => {
                                     required: "Priority is required",
                                 })}
                                 placeholder="Priority"
-                                className="w-full text-sm p-2 border border-gray-300 rounded"
+                                className="w-full text-sm p-2 border border-gray-300 dark:bg-neutral-900 cursor-pointer rounded"
                                 onChange={(e) => setPriority(e.target.value)}
                                 value={priority}
                             >
@@ -143,7 +143,7 @@ export const AddCard = ({ column }) => {
                                         "The execution status is required",
                                 })}
                                 value={column}
-                                className="w-full text-sm p-2 border border-gray-300 rounded"
+                                className="w-full text-sm p-2 border border-gray-300 rounded dark:bg-neutral-900 cursor-pointer"
                             >
                                 <option value={column}>{column}</option>
                             </select>
@@ -158,7 +158,7 @@ export const AddCard = ({ column }) => {
                                 {...register("assignedTo", {
                                     required: "Assignee is required",
                                 })}
-                                className="w-full text-sm p-2 border border-gray-300 rounded"
+                                className="w-full text-sm p-2 border border-gray-300 rounded dark:bg-neutral-900 cursor-pointer"
                                 onChange={(e) => setAssignedTo(e.target.value)}
                             >
                                 <option value="">Select user</option>
@@ -180,7 +180,7 @@ export const AddCard = ({ column }) => {
                                 {...register("dueDate", {
                                     required: "Due date is required",
                                 })}
-                                className="w-full text-sm p-2 border border-gray-300 rounded"
+                                className="w-full text-sm p-2 border border-gray-300 rounded cursor-pointer"
                                 onChange={(e) => setDueDate(e.target.value)}
                             />
                             {errors.dueDate && (
@@ -199,7 +199,7 @@ export const AddCard = ({ column }) => {
                                 </button>
                                 <button
                                     type="submit"
-                                    className="flex items-center gap-2 rounded bg-neutral-50 px-3 py-2 text-xs text-neutral-950 transition-colors hover:bg-blue-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="flex items-center gap-2 rounded bg-violet-300 px-3 py-2 text-xs text-neutral-950 transition-colors hover:bg-violet-500 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     <AddOutlinedIcon fontSize="small" />
                                     Add Task
@@ -223,7 +223,7 @@ export const AddCard = ({ column }) => {
                                 fontSize="small"
                                 className="text-blue-300"
                             />
-                            <span className="text-xs text-neutral-600 cursor-pointer">
+                            <span className="text-xs text-neutral-600 dark:text-violet-300 dark:hover:text-violet-400 transition-colors cursor-pointer">
                                 Add new task
                             </span>
                         </motion.button>

@@ -31,7 +31,7 @@ export const Navbar = ({ isActiveSidebar, setActive }) => {
 
     return (
         <header
-            className={`fixed w-full top-0 h-[60px] backdrop-blur-lg px-4 flex items-center justify-between bg-white/80 dark:bg-gray-900/80 transition-all z-50 border-b border-black/20 ${
+            className={`fixed w-full top-0 h-[60px] backdrop-blur-lg px-4 flex items-center justify-between bg-white/80 dark:bg-neutral-950/80 transition-all z-50 border-b border-black/20 dark:border-violet-300 ${
                 isActiveSidebar ? "md:left-0 left-[64px]" : "left-0"
             }`}
         >
@@ -50,7 +50,13 @@ export const Navbar = ({ isActiveSidebar, setActive }) => {
                 </h1>
 
                 {/* Language Selector */}
-                <button className="flex items-center gap-2 cursor-pointer text-gray-700 hover:text-black transition-colors">
+                <button
+                    className={`${
+                        theme === "dark"
+                            ? "text-white hover:text-gray-300 "
+                            : "text-gray-900 hover:text-black "
+                    } flex items-center gap-2 cursor-pointer transition-colors`}
+                >
                     <Languages size={20} />
                     <span className="text-sm">English</span>
                 </button>
