@@ -320,13 +320,13 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                                 <button
                                     type="button"
                                     onClick={() => setIsEditing(false)}
-                                    className="text-sm px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-md cursor-pointer"
+                                    className="text-sm px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-md cursor-pointer transition-colors"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
-                                    className="flex items-center gap-2 p-2 text-sm bg-neutral-500 text-white hover:bg-neutral-700 rounded-md cursor-pointer"
+                                    className="flex items-center gap-2 p-2 text-sm bg-neutral-500 text-white hover:bg-neutral-700 rounded-md cursor-pointer transition-colors"
                                 >
                                     Save Changes
                                 </button>
