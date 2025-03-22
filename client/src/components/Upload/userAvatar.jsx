@@ -1,6 +1,7 @@
 import { useAuth } from "@/store/userStore";
 import { useFile } from "@/store/fileStore";
 import { useRef } from "react";
+import { useTheme } from "@/hooks/use-theme";
 
 import { PulseLoader } from "react-spinners";
 import { User } from "lucide-react";
@@ -9,6 +10,8 @@ export const UserAvatar = () => {
     const { user, updateProfile, isLoading, error } = useAuth();
     const { uploadAvatar } = useFile();
     const fileInputRef = useRef(null);
+
+    const theme = useTheme();
 
     const handleAvatarClick = () => {
         fileInputRef.current?.click();
@@ -31,7 +34,13 @@ export const UserAvatar = () => {
         }
     };
 
-    if (isLoading) return <PulseLoader size={9} />;
+    if (isLoading)
+        return (
+            <PulseLoader
+                color={`${theme === "light" ? "#000" : "#fff"}`}
+                size={9}
+            />
+        );
     if (error)
         return (
             <div className="w-10 h-10 flex justify-center items-center rounded-full border border-neutral-600">

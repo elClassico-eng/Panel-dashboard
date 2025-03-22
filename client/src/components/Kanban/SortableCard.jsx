@@ -35,7 +35,7 @@ export const SortableCard = ({ task }) => {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     whileHover={{ scale: 1.02 }}
-                    className="w-60 h-40  p-5 bg-inherit rounded-xl my-5 flex flex-col gap-4 shadow-lg border  border-gray-100 transition-all duration-300 hover:shadow-xl border-b-10 border-b-violet-300 hover:border-b-violet-500"
+                    className="w-60 h-40  p-5 bg-inherit rounded-xl my-5 flex flex-col gap-4 shadow-lg  border-t  border-gray-100 transition-all duration-300 cursor-pointer hover:shadow-xl border-b-10 border-b-violet-300 hover:border-b-violet-500 "
                 >
                     {/* Proirity & Status */}
                     <div className="w-full flex gap-2 items-center justify-between">
@@ -47,7 +47,7 @@ export const SortableCard = ({ task }) => {
 
                         <button
                             onClick={() => setIsEditing(true)}
-                            className="text-gray-500 hover:text-gray-900 cursor-pointer"
+                            className="text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
                         >
                             <SquarePen size={16} />
                         </button>
@@ -55,13 +55,13 @@ export const SortableCard = ({ task }) => {
 
                     {/* Title & Description */}
                     <div className="mt-3">
-                        <h3 className="text-lg font-semibold text-gray-900 truncate select-none">
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white truncate">
                             {task.title}
                         </h3>
                     </div>
 
                     <div>
-                        <p className="text-sm text-gray-500 truncate select-none">
+                        <p className="text-sm text-gray-500 dark:text-white truncate">
                             {task.description}
                         </p>
                     </div>
