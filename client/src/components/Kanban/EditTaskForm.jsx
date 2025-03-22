@@ -178,7 +178,7 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                                     onClick={() =>
                                         setShowDeleteConfirmation(true)
                                     }
-                                    className="p-2 hover:bg-red-50 rounded-full"
+                                    className="p-3 hover:bg-red-50 dark:hover:bg-red-300 rounded-full transition-colors"
                                 >
                                     <Trash2
                                         size={16}
@@ -187,7 +187,7 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                                 </button>
                                 <button
                                     onClick={() => setIsEditing(true)}
-                                    className="flex items-center gap-2 p-2 text-sm bg-neutral-500 text-white hover:bg-neutral-700 rounded-md "
+                                    className="flex items-center gap-2 p-2 text-sm bg-neutral-500 text-white hover:bg-neutral-700 rounded-md cursor-pointer transition-colors"
                                 >
                                     <Edit size={16} />
                                     Edit Task
@@ -337,7 +337,7 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                     {/* Delete Confirmation */}
                     {showDeleteConfirmation && (
                         <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-                            <div className="bg-white p-6 rounded-lg max-w-sm">
+                            <div className="bg-white dark:bg-neutral-900 text-center p-6 rounded-lg max-w-sm">
                                 <p className="text-lg font-semibold mb-4">
                                     Delete this task?
                                 </p>
@@ -346,7 +346,7 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                                         onClick={() =>
                                             setShowDeleteConfirmation(false)
                                         }
-                                        className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                                        className="px-4 py-2 text-gray-600 hover:text-gray-800 dark:hover:text-neutral-200"
                                     >
                                         Cancel
                                     </button>

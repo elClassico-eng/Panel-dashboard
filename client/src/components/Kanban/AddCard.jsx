@@ -127,7 +127,7 @@ export const AddCard = ({ column }) => {
                                     Select priority for the task
                                 </option>
                                 <option value="Low">Low</option>
-                                <option value="Normal">Normal</option>
+                                <option value="Medium">Medium</option>
                                 <option value="High">High</option>
                             </select>
                             {errors.status && (
