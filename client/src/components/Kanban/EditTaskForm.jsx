@@ -23,6 +23,8 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
     const [dueDate, setDueDate] = useState("");
     const [status, setStatus] = useState(task.status);
 
+    console.log(user);
+
     const {
         register,
         handleSubmit,
@@ -54,17 +56,34 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
         onCancel();
     };
 
-    const onSubmit = (data) => {
-        onSave({
-            id: task._id,
-            ...data,
-            status: status || task.status,
-            dueDate: dueDate || task.dueDate,
-            createdBy: user.id,
-            assignedTo: assignedTo._id ? assignedTo : task.assignedTo,
-            createdAt: task.createdAt || new Date(),
-        });
-        setIsEditing(false);
+    const onSubmit = async (data) => {
+        try {
+            let updateData;
+
+            if (user.role === "Admin") {
+                updateData = {
+                    id: task._id,
+                    ...data,
+                    status: status || task.status,
+                    dueDate: dueDate || task.dueDate,
+                    createdBy: user.id,
+                    assignedTo: assignedTo._id ? assignedTo : task.assignedTo,
+                    createdAt: task.createdAt || new Date(),
+                };
+            } else {
+                updateData = {
+                    id: task._id,
+                    status: data.status,
+                };
+            }
+
+            await onSave(updateData);
+        } catch (error) {
+            console.error("Update failed:", error);
+            // Можно добавить отображение ошибки пользователю
+        } finally {
+            setIsUpdating(false);
+        }
     };
 
     return (
@@ -199,64 +218,112 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                             onSubmit={handleSubmit(onSubmit)}
                             className="flex flex-col gap-4 text-sm"
                         >
-                            {/* Edit Form */}
-                            <div className="flex justify-between items-start mb-4">
-                                <h2 className="text-2xl font-bold">
-                                    Edit Task
-                                </h2>
-                                <button
-                                    onClick={() => setIsEditing(false)}
-                                    className="text-gray-400 hover:text-gray-600"
-                                >
-                                    <X size={18} className="cursor-pointer" />
-                                </button>
-                            </div>
+                            {user.role === "Admin" ? (
+                                <>
+                                    <div className="space-y-4">
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                                Priority
+                                            </label>
+                                            <select
+                                                {...register("priority")}
+                                                className="w-full px-3 py-2 border rounded-md bg-white dark:bg-neutral-950 cursor-pointer focus:ring-2 focus:ring-blue-500"
+                                            >
+                                                <option value="Low">Low</option>
+                                                <option value="Medium">
+                                                    Medium
+                                                </option>
+                                                <option value="High">
+                                                    High
+                                                </option>
+                                            </select>
+                                        </div>
 
-                            <div className="space-y-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        Title
-                                    </label>
-                                    <input
-                                        {...register("title")}
-                                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
-                                    />
-                                </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                                Status
+                                            </label>
+                                            <select
+                                                {...register("status")}
+                                                onChange={(e) =>
+                                                    setStatus(e.target.value)
+                                                }
+                                                className="w-full px-3 py-2 border rounded-md bg-white dark:bg-neutral-950 cursor-pointer focus:ring-2 focus:ring-blue-500"
+                                            >
+                                                {columnName.map((column, i) => (
+                                                    <option
+                                                        key={i}
+                                                        value={column.column}
+                                                    >
+                                                        {column.column}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
 
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        Description
-                                    </label>
-                                    <textarea
-                                        {...register("description")}
-                                        rows={3}
-                                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
-                                    />
-                                </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                                Assign To
+                                            </label>
+                                            <select
+                                                {...register("assignedTo")}
+                                                onChange={(e) => {
+                                                    const user = users.find(
+                                                        (u) =>
+                                                            u.id ===
+                                                            e.target.value
+                                                    );
+                                                    setAssignedTo(
+                                                        user || {
+                                                            _id: "",
+                                                            email: "",
+                                                        }
+                                                    );
+                                                }}
+                                                className="w-full px-3 py-2 border rounded-md bg-white dark:bg-neutral-950 cursor-pointer focus:ring-2 focus:ring-blue-500"
+                                            >
+                                                <option value="">
+                                                    Select Artist
+                                                </option>
+                                                {users
+                                                    .filter(
+                                                        (u) =>
+                                                            u.role !== "Admin"
+                                                    )
+                                                    .map((user) => (
+                                                        <option
+                                                            key={user.id}
+                                                            value={user.id}
+                                                        >
+                                                            {user.firstName}{" "}
+                                                            {user.lastName}
+                                                        </option>
+                                                    ))}
+                                            </select>
+                                        </div>
 
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        Priority
-                                    </label>
-                                    <select
-                                        {...register("priority")}
-                                        className="w-full px-3 py-2 border rounded-md bg-white dark:bg-neutral-950 cursor-pointer focus:ring-2 focus:ring-blue-500"
-                                    >
-                                        <option value="Low">Low</option>
-                                        <option value="Medium">Medium</option>
-                                        <option value="High">High</option>
-                                    </select>
-                                </div>
-
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 cursor-pointer mb-1">
+                                                Due Date
+                                            </label>
+                                            <input
+                                                type="date"
+                                                {...register("dueDate")}
+                                                onChange={(e) =>
+                                                    setDueDate(e.target.value)
+                                                }
+                                                className="w-full px-3 py-2 border rounded-md focus:ring-2  focus:ring-blue-500"
+                                            />
+                                        </div>
+                                    </div>
+                                </>
+                            ) : (
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1">
                                         Status
                                     </label>
                                     <select
                                         {...register("status")}
-                                        onChange={(e) =>
-                                            setStatus(e.target.value)
-                                        }
                                         className="w-full px-3 py-2 border rounded-md bg-white dark:bg-neutral-950 cursor-pointer focus:ring-2 focus:ring-blue-500"
                                     >
                                         {columnName.map((column, i) => (
@@ -269,53 +336,7 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                                         ))}
                                     </select>
                                 </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        Assign To
-                                    </label>
-                                    <select
-                                        {...register("assignedTo")}
-                                        onChange={(e) => {
-                                            const user = users.find(
-                                                (u) => u.id === e.target.value
-                                            );
-                                            setAssignedTo(
-                                                user || { _id: "", email: "" }
-                                            );
-                                        }}
-                                        className="w-full px-3 py-2 border rounded-md bg-white dark:bg-neutral-950 cursor-pointer focus:ring-2 focus:ring-blue-500"
-                                    >
-                                        <option value="">Select Artist</option>
-                                        {users
-                                            .filter((u) => u.role !== "Admin")
-                                            .map((user) => (
-                                                <option
-                                                    key={user.id}
-                                                    value={user.id}
-                                                >
-                                                    {user.firstName}{" "}
-                                                    {user.lastName}
-                                                </option>
-                                            ))}
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 cursor-pointer mb-1">
-                                        Due Date
-                                    </label>
-                                    <input
-                                        type="date"
-                                        {...register("dueDate")}
-                                        onChange={(e) =>
-                                            setDueDate(e.target.value)
-                                        }
-                                        className="w-full px-3 py-2 border rounded-md focus:ring-2  focus:ring-blue-500"
-                                    />
-                                </div>
-                            </div>
-
+                            )}
                             <div className="flex gap-2 justify-end mt-6">
                                 <button
                                     type="button"
