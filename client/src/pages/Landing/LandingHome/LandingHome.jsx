@@ -3,7 +3,12 @@ import { Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 
-const navigation = [{ name: "Author", href: "#" }];
+const navigation = [
+    {
+        name: "Проект на GitHub",
+        href: "https://github.com/elClassico-eng/Panel-dashboard",
+    },
+];
 
 export function LandingHome() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -17,7 +22,7 @@ export function LandingHome() {
                 >
                     <div className="flex lg:flex-1">
                         <a href="#" className="-m-1.5 p-1.5">
-                            <span className="text-xl">CoreSRM</span>
+                            <span className="text-xl">Управление задачами</span>
                         </a>
                     </div>
                     <div className="flex lg:hidden">
@@ -35,19 +40,20 @@ export function LandingHome() {
                             <a
                                 key={item.name}
                                 href={item.href}
-                                className="text-sm/6 font-semibold text-gray-900"
+                                className="text-sm/6 font-semibold text-gray-900 border px-4 py-2 rounded-lg hover:bg-black/90 hover:text-white transition-colors"
                             >
                                 {item.name}
                             </a>
                         ))}
                     </div>
                     <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                        <a
+                        <Link
+                            to="/login"
                             href="#"
                             className="text-sm/6 font-semibold text-gray-900"
                         >
-                            Log in <span aria-hidden="true">&rarr;</span>
-                        </a>
+                            Войти <span aria-hidden="true">&rarr;</span>
+                        </Link>
                     </div>
                 </nav>
                 <Dialog
@@ -59,7 +65,9 @@ export function LandingHome() {
                     <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
                         <div className="flex items-center justify-between">
                             <a href="#" className="-m-1.5 p-1.5">
-                                <span className="text-lg/8">CoreCRM</span>
+                                <span className="text-lg/8">
+                                    Управление задачами
+                                </span>
                             </a>
                             <button
                                 type="button"
@@ -92,7 +100,7 @@ export function LandingHome() {
                                         href="#"
                                         className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                                     >
-                                        Log in
+                                        Войти
                                     </Link>
                                 </div>
                             </div>
@@ -115,49 +123,30 @@ export function LandingHome() {
                     />
                 </div>
                 <div className="mx-auto py-32 max-w-4xl sm:py-48 lg:py-48">
-                    <div className="hidden sm:mb-8 sm:flex sm:justify-center">
-                        <div className="relative rounded-full px-3 py-1 text-sm/6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
-                            Please review the MIT license before use{" "}
-                            <a
-                                href="#"
-                                className="font-semibold text-indigo-600"
-                            >
-                                <span
-                                    aria-hidden="true"
-                                    className="absolute inset-0"
-                                />
-                                Read more <span aria-hidden="true">&rarr;</span>
-                            </a>
-                        </div>
-                    </div>
                     <div className="text-center">
                         <h1 className="text-5xl font-semibold tracking-tight text-balance text-gray-900 sm:text-7xl">
-                            <span className="underline decoration-4 decoration-gray-900">
-                                CoreCRM
-                            </span>{" "}
-                            - a solution for your business!
+                            <span className=" decoration-4 decoration-gray-900">
+                                Панель управлением задач в команде
+                            </span>
                         </h1>
                         <p className="mt-8 text-lg font-light text-pretty text-gray-500 sm:text-md/8">
-                            Core CRM is a{" "}
-                            <span className="underline">fast</span>,{" "}
-                            <span className="underline">simple</span> and{" "}
-                            <span className="underline">lightweight</span> CRM
-                            solution for your business. Sign up and try CoreCRM
-                            now!
+                            Попробуйте внедрить этот инструмент в вашу команду и
+                            посмотрите на результат!
                         </p>
                         <div className="mt-10 flex items-center justify-center gap-x-6">
                             <Link
-                                to="/registration"
+                                to="login"
                                 className="rounded-md bg-neutral-800 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs active:bg-neutral-900 hover:bg-neutral-900  focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             >
-                                Get started
+                                Войти
                             </Link>
                             <Link
-                                to="login"
+                                to="registration"
                                 href="#"
                                 className="text-sm/6 font-semibold text-gray-900"
                             >
-                                Log in <span aria-hidden="true">→</span>
+                                Попробовать сейчас{" "}
+                                <span aria-hidden="true">→</span>
                             </Link>
                         </div>
                     </div>
