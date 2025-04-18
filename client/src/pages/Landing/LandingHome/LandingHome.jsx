@@ -22,7 +22,9 @@ export function LandingHome() {
                 >
                     <div className="flex lg:flex-1">
                         <a href="#" className="-m-1.5 p-1.5">
-                            <span className="text-xl">Управление задачами</span>
+                            <span className="text-md/6 font-semibold text-gray-900">
+                                Управление задачами
+                            </span>
                         </a>
                     </div>
                     <div className="flex lg:hidden">
