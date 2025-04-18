@@ -14,6 +14,9 @@ import { AuthFormLogIn } from "./components/AuthForm/AuthFormLogIn.jsx";
 import { AuthFormRegistration } from "./components/AuthForm/AuthFormRegistration.jsx";
 import { NotFound } from "./pages/NotFound/NotFound.jsx";
 
+import { Login } from "./pages/Auth/Login/Login.jsx";
+import { Registration } from "./pages/Auth/Registration/Registration.jsx";
+
 import "./index.css";
 
 import { LandingHome } from "./pages/Landing/LandingHome/LandingHome.jsx";
@@ -38,11 +41,8 @@ export const Root = () => {
                 <Routes>
                     {/* Публичные маршруты */}
                     <Route path="/" element={<LandingHome />} />
-                    <Route path="/login" element={<AuthFormLogIn />} />
-                    <Route
-                        path="/registration"
-                        element={<AuthFormRegistration />}
-                    />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/registration" element={<Registration />} />
 
                     {/* Защищенные маршруты */}
                     <Route
