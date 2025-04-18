@@ -1,7 +1,5 @@
-# Panel-dashboard
+# Управление задачами
 
-# Description tree in project
-
--   **main** — Main stable version, used for production.
--   **feature** — Branch for new feature.
--   **bugfix** — Bug fixes in project.
+* В процессе разработки...
+  
+В ближайшее время приложение будет переходить с JavaScript на TypeScript.
