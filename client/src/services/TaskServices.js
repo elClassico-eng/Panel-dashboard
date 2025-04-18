@@ -9,6 +9,10 @@ export const taskServices = {
         return $api.put(`tasks/${taskId}`, taskData);
     },
 
+    updateTaskByEmployee: async (taskId, status) => {
+        return $api.patch(`tasks/${taskId}/status`, { status });
+    },
+
     deleteTask: async (taskId) => {
         return $api.delete(`tasks/${taskId}`);
     },
