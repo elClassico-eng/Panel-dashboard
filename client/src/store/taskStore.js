@@ -13,7 +13,7 @@ export const useTaskStore = create((set) => ({
         set({ isLoading: true, error: null });
         try {
             const response = await taskServices.getAllTasks();
-            set({ tasks: response.data, loading: false });
+            set({ tasks: response.data, isLoading: false });
         } catch (error) {
             console.log(error);
             set({ error: error.message });
@@ -41,7 +41,6 @@ export const useTaskStore = create((set) => ({
         set({ isLoading: true, error: null });
         try {
             const response = await taskServices.createTask(taskData);
-            console.log(response);
             set((state) => ({ tasks: [...state.tasks, response.data] }));
         } catch (error) {
             console.log(error);
@@ -51,7 +50,7 @@ export const useTaskStore = create((set) => ({
         }
     },
 
-    // Update task ✔
+    // Update task (Admin only) ✔
     updateTask: async (taskId, updatedTaskData) => {
         set({ isLoading: true, error: null });
         try {
@@ -60,9 +59,32 @@ export const useTaskStore = create((set) => ({
                 updatedTaskData
             );
             set((state) => ({
-                tasks: state.tasks.map((task) => {
-                    return task._id === taskId ? response.data : task;
-                }),
+                tasks: state.tasks.map((task) =>
+                    task._id === taskId ? response.data : task
+                ),
+            }));
+        } catch (error) {
+            console.log(error);
+            set({ error: error.message });
+        } finally {
+            set({ isLoading: false });
+        }
+    },
+
+    // ** Update task status (Employee only) **
+    updateTaskStatus: async (taskId, status) => {
+        set({ isLoading: true, error: null });
+        try {
+            const response = await taskServices.updateTaskByEmployee(
+                taskId,
+                status
+            );
+            set((state) => ({
+                tasks: state.tasks.map((task) =>
+                    task._id === taskId
+                        ? { ...task, status: response.data.status }
+                        : task
+                ),
             }));
         } catch (error) {
             console.log(error);
@@ -86,11 +108,10 @@ export const useTaskStore = create((set) => ({
     },
 
     setFilteredTasks: (filteredTasks) => {
-        set((state) => {
-            return filteredTasks.length === 0
-                ? { filteredTasks: state.tasks }
-                : { filteredTasks };
-        });
+        set((state) => ({
+            filteredTasks:
+                filteredTasks.length === 0 ? state.tasks : filteredTasks,
+        }));
     },
     filterTasks: (searchTerm) => {
         set((state) => ({
