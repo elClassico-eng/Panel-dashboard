@@ -33,6 +33,13 @@ router.put(
     TaskController.updateTask
 );
 
+router.patch(
+    "/:id/status",
+    authMiddleware,
+    checkRoleMiddleware("Employee"),
+    TaskController.updateTask
+);
+
 router.delete(
     "/:id",
     authMiddleware,

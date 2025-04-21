@@ -76,13 +76,21 @@ class TaskController {
 
     async updateTask(req, res) {
         try {
-            const updatedTask = await TaskService.updateTask(
-                req.params.id,
-                req.body
-            );
-            if (!updatedTask)
-                return res.status(404).json({ error: "Task not found" });
+            const { role, id: userId } = req.user; // Данные пользователя из токена
+            const { id } = req.params;
+            const updateData = req.body;
 
+            const task = await TaskService.getTaskById(id);
+            if (!task) return res.status(404).json({ error: "Task not found" });
+
+            if (role === "Employee") {
+                if (task.assignedTo.toString() !== userId) {
+                    return res.status(403).json({ error: "Access denied" });
+                }
+                updateData = { status: updateData.status };
+            }
+
+            const updatedTask = await TaskService.updateTask(id, updateData);
             res.json(updatedTask);
         } catch (error) {
             console.log(error);

@@ -5,12 +5,18 @@ const TaskSchema = new mongoose.Schema({
     description: { type: String },
     status: {
         type: String,
-        enum: ["Pending", "In Progress", "Review", "Remake", "Completed"],
+        enum: [
+            "Ожидает",
+            "В процессе",
+            "На рассмотрении",
+            "Переделать",
+            "Завершено",
+        ],
     },
     priority: {
         type: String,
-        enum: ["Low", "Medium", "High"],
-        default: "Normal",
+        enum: ["Низкий", "Средний", "Высокий"],
+        default: "Средний",
     },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
