@@ -11,6 +11,8 @@ import { Plus } from "lucide-react";
 import { AuthVisual } from "../ui/authVisual";
 import { useTheme } from "@/hooks/use-theme";
 
+import { toast } from "sonner";
+
 import {
     titleValidation,
     descriptionValidation,
@@ -50,20 +52,29 @@ export const AddCard = ({ column }) => {
     if (error) return <ErrorMessage message={error} />;
 
     const onSubmit = async (data) => {
-        const newTask = {
-            title: data?.title?.trim(),
-            description: data?.description?.trim(),
-            priority,
-            status: column,
-            dueDate,
-            createdBy: user?.id,
-            assignedTo: assignedTo ? { _id: assignedTo } : null,
-            createdAt: new Date(),
-        };
+        try {
+            const newTask = {
+                title: data?.title?.trim(),
+                description: data?.description?.trim(),
+                priority,
+                status: column,
+                dueDate,
+                createdBy: user?.id,
+                assignedTo: assignedTo ? { _id: assignedTo } : null,
+                createdAt: new Date(),
+            };
 
-        await addTask(newTask);
-        reset();
-        setIsAdding(false);
+            await addTask(newTask);
+            reset();
+            setIsAdding(false);
+            toast.success("Задача добавлена", {
+                description: "Ваша задача была успешно добавлена!",
+            });
+        } catch (error) {
+            toast.error("Ошибка", {
+                description: "Не удалось добавить",
+            });
+        }
     };
 
     const handleCancel = () => {

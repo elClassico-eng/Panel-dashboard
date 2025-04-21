@@ -13,7 +13,7 @@ import { NotFound } from "./pages/NotFound/NotFound.jsx";
 
 import { Login } from "./pages/Auth/Login/Login.jsx";
 import { Registration } from "./pages/Auth/Registration/Registration.jsx";
-
+import { Toaster } from "sonner";
 import "./index.css";
 
 import { LandingHome } from "./pages/Landing/LandingHome/LandingHome.jsx";
@@ -33,29 +33,36 @@ export const ProtectedRoute = ({ children }) => {
 
 export const Root = () => {
     return (
-        <Suspense fallback={<Loader />}>
-            <BrowserRouter>
-                <Routes>
-                    {/* Публичные маршруты */}
-                    <Route path="/" element={<LandingHome />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/registration" element={<Registration />} />
+        <>
+            <Suspense fallback={<Loader />}>
+                <BrowserRouter>
+                    <Routes>
+                        {/* Публичные маршруты */}
+                        <Route path="/" element={<LandingHome />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route
+                            path="/registration"
+                            element={<Registration />}
+                        />
 
-                    {/* Защищенные маршруты */}
-                    <Route
-                        path="/*"
-                        element={
-                            <ProtectedRoute>
-                                <App />
-                            </ProtectedRoute>
-                        }
-                    />
+                        {/* Защищенные маршруты */}
+                        <Route
+                            path="/*"
+                            element={
+                                <ProtectedRoute>
+                                    <App />
+                                </ProtectedRoute>
+                            }
+                        />
 
-                    {/* Страница не найдена */}
-                    <Route path="*" element={<NotFound />} />
-                </Routes>
-            </BrowserRouter>
-        </Suspense>
+                        {/* Страница не найдена */}
+                        <Route path="*" element={<NotFound />} />
+                    </Routes>
+                </BrowserRouter>
+            </Suspense>
+
+            <Toaster richColors position="bottom-right" />
+        </>
     );
 };
 
