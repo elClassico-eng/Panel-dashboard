@@ -11,8 +11,6 @@ import {
 } from "recharts";
 import { useTaskStore } from "@/store/taskStore";
 
-import AnimatedNumber from "react-animated-number";
-
 export const TaskStats = () => {
     const tasks = useTaskStore((state) => state.tasks);
 
@@ -22,64 +20,58 @@ export const TaskStats = () => {
 
     const columnData = [
         {
-            name: "Pending",
-            count: tasks.filter((task) => task.status === "Pending").length,
+            name: "Ожидает",
+            count: tasks.filter((task) => task.status === "Ожидает").length,
         },
         {
-            name: "In Progress",
-            count: tasks.filter((task) => task.status === "In progress").length,
+            name: "В процессе",
+            count: tasks.filter((task) => task.status === "В процессе").length,
         },
         {
-            name: "Review",
-            count: tasks.filter((task) => task.status === "Review").length,
+            name: "На рассмотрении",
+            count: tasks.filter((task) => task.status === "На рассмотрении")
+                .length,
         },
         {
-            name: "Remake",
-            count: tasks.filter((task) => task.status === "Remake").length,
+            name: "Переделать",
+            count: tasks.filter((task) => task.status === "Переделать").length,
         },
         {
-            name: "Completed",
-            count: tasks.filter((task) => task.status === "Completed").length,
+            name: "Завершено",
+            count: tasks.filter((task) => task.status === "Завершено").length,
         },
     ];
 
     const priorityData = [
         {
-            name: "Low",
-            count: tasks.filter((task) => task.priority === "Low").length,
+            name: "Низкий",
+            count: tasks.filter((task) => task.priority === "Низкий").length,
         },
         {
-            name: "Medium",
-            count: tasks.filter((task) => task.priority === "Normal").length,
+            name: "Средний",
+            count: tasks.filter((task) => task.priority === "Средний").length,
         },
         {
-            name: "High",
-            count: tasks.filter((task) => task.priority === "High").length,
+            name: "Высокий",
+            count: tasks.filter((task) => task.priority === "Высокий").length,
         },
     ];
     return (
         <div className="w-full flex flex-col gap-5 justify-center items-center">
-            <h2 className="text-3xl text-white">Statistics for all tasks</h2>
+            <h2 className="text-3xl text-white">Сводка по задачам</h2>
             <div className="px-12  grid grid-cols-3 justify-center items-center gap-10 ">
                 <div className="bg-black text-white self-center p-6 rounded-xl shadow-lg flex justify-between items-center">
-                    <h3 className="text-lg font-semibold mb-2">
-                        Total task count
-                    </h3>
+                    <h3 className="text-lg font-semibold mb-2">Всего задач</h3>
                     <div className="text-3xl font-bold">
                         <div className="w-24 h-24 bg-blue-300 text-black rounded-full flex justify-center items-center">
-                            <AnimatedNumber
-                                value={totalTasks}
-                                duration={1000}
-                                formatValue={(n) => n.toFixed(0)}
-                                style={{ transition: "all 1s ease-out" }}
-                            />
+                            {totalTasks}
                         </div>
                     </div>
                 </div>
 
                 <div className="bg-black text-white p-4 rounded-xl shadow-lg">
                     <h3 className="text-lg font-semibold mb-4">
-                        Task by Column
+                        Задачи по статусу выполнения
                     </h3>
                     <PieChart width={300} height={300}>
                         <Pie
@@ -105,7 +97,7 @@ export const TaskStats = () => {
 
                 <div className="bg-black text-white p-4 rounded-xl shadow">
                     <h3 className="text-lg font-semibold mb-4">
-                        Task by priority
+                        Задачи по приоритетности
                     </h3>
                     <BarChart width={300} height={300} data={priorityData}>
                         <XAxis dataKey="name" />

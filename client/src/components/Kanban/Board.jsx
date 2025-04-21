@@ -34,7 +34,7 @@ export const Board = () => {
             {columnName.map(({ column }) => (
                 <Column
                     key={column}
-                    title={column.toUpperCase()}
+                    title={column}
                     column={column}
                     filterTask={
                         tasks.filter((task) => task?.status === column) || []

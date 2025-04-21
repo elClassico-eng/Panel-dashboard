@@ -1,4 +1,4 @@
-// Desc: Navbar component for the application
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { useTheme } from "@/hooks/use-theme";
 
@@ -6,16 +6,13 @@ import { useTheme } from "@/hooks/use-theme";
 import { UserAvatar } from "../Upload/userAvatar";
 
 // Icons
-import {
-    Sun,
-    Moon,
-    AlignJustify,
-    SquareChevronLeft,
-    Languages,
-} from "lucide-react";
+import { Sun, Moon, AlignJustify, SquareChevronLeft } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 
 export const Navbar = ({ isActiveSidebar, setActive }) => {
     const { theme, setTheme } = useTheme();
+    const [offlineMode, setOfflineMode] = useState(false); // работа с интернетом
 
     const handleToggleSidebar = () => {
         setActive((prev) => !prev);
@@ -46,20 +43,8 @@ export const Navbar = ({ isActiveSidebar, setActive }) => {
                 </button>
 
                 <h1 className="text-lg md:text-xl font-semibold whitespace-nowrap mr-4 md:mr-2 ">
-                    CoreCRM
+                    Управление задачами
                 </h1>
-
-                {/* Language Selector */}
-                <button
-                    className={`${
-                        theme === "dark"
-                            ? "text-white hover:text-gray-300 "
-                            : "text-gray-900 hover:text-black "
-                    } flex items-center gap-2 cursor-pointer transition-colors`}
-                >
-                    <Languages size={20} />
-                    <span className="text-sm">English</span>
-                </button>
             </div>
 
             {/* Right side: Theme toggle, Language, Profile */}
@@ -93,6 +78,17 @@ export const Navbar = ({ isActiveSidebar, setActive }) => {
                     >
                         <Moon size={18} />
                     </button>
+                </div>
+
+                {/* Режим без интернета */}
+                <div className="flex items-center space-x-2">
+                    <Switch
+                        id="offline-mode"
+                        onClick={() => setOfflineMode(!offlineMode)}
+                    />
+                    <Label htmlFor="offline-mode">
+                        {offlineMode ? "Без подключения" : "Онлайн"}
+                    </Label>
                 </div>
 
                 {/* Profile */}

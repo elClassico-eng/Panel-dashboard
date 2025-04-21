@@ -12,7 +12,7 @@ import { ErrorMessage } from "../Error/ErrorMessage";
 
 export const SortableCard = ({ task }) => {
     const [isEditing, setIsEditing] = useState(false);
-    const { updateTask, error, isLoading, filteredTasks } = useTaskStore();
+    const { updateTask, error, isLoading } = useTaskStore();
 
     if (isLoading) return <Loader />;
     if (error) return <ErrorMessage message={error} />;
@@ -35,7 +35,7 @@ export const SortableCard = ({ task }) => {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     whileHover={{ scale: 1.02 }}
-                    className="w-60 h-40  p-5 bg-inherit rounded-xl my-5 flex flex-col gap-4 shadow-lg  border-t  border-gray-100 transition-all duration-300 cursor-pointer hover:shadow-xl border-b-10 border-b-violet-300 hover:border-b-violet-500 "
+                    className="w-60 h-40  p-5 bg-inherit rounded-xl my-5 flex flex-col gap-4 shadow-lg  border-t  border-gray-100 transition-all duration-300 cursor-pointer hover:shadow-xl border-b-10 border-b-neutral-300 hover:border-b-neutral-800 "
                 >
                     {/* Proirity & Status */}
                     <div className="w-full flex gap-2 items-center justify-between">

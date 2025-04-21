@@ -6,6 +6,8 @@ import { useTheme } from "@/hooks/use-theme";
 import { PulseLoader } from "react-spinners";
 import { User } from "lucide-react";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
 export const UserAvatar = () => {
     const { user, updateProfile, isLoading, error } = useAuth();
     const { uploadAvatar } = useFile();
@@ -49,34 +51,9 @@ export const UserAvatar = () => {
         );
 
     return (
-        <div
-            className={`relative flex items-center justify-center cursor-pointer ${
-                !user?.profilePhoto &&
-                " rounded-full p-3 border border-violet-300 hover:border-violet-500 transition-all"
-            }`}
-        >
-            {user?.profilePhoto ? (
-                <img
-                    src={user?.profilePhoto || null}
-                    alt="User Avatar"
-                    className={`w-10 h-10 rounded-full object-cover border-2 border-gray-300 
-                                ${
-                                    isLoading
-                                        ? "opacity-50 cursor-wait"
-                                        : "hover:opacity-80"
-                                }`}
-                    onClick={handleAvatarClick}
-                />
-            ) : (
-                <User size={20} />
-            )}
-            <input
-                type="file"
-                ref={fileInputRef}
-                className="hidden"
-                accept="image/*"
-                onChange={handleFileChange}
-            />
-        </div>
+        <Avatar>
+            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
     );
 };

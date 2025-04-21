@@ -4,16 +4,9 @@ import { Board } from "../../components/Kanban/Board";
 import { Title } from "../../components/Title/Title";
 import { SearchTask } from "../../components/Kanban/SearchTask";
 import { TaskStats } from "../../components/Kanban/TaskStats";
-import { ViewSwitcher } from "@/components/Kanban/ViewSwitcher";
 import { DragCloseDrawer } from "../../components/Kanban/DragCloseDrawer";
 
-import {
-    ChartPie,
-    LayoutDashboard,
-    Table2,
-    List,
-    ChartNoAxesGantt,
-} from "lucide-react";
+import { ChartPie } from "lucide-react";
 
 export const Kanban = () => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -23,7 +16,7 @@ export const Kanban = () => {
     return (
         <section className="relative w-full flex flex-col gap-3 rounded-xl">
             <div className="flex w-full justify-between items-center">
-                <Title title="Kanban Dashboard" />
+                <Title title="Управление задачами" />
                 <SearchTask />
 
                 <button
@@ -32,16 +25,8 @@ export const Kanban = () => {
                     aria-label="View task statistics"
                 >
                     <ChartPie size={20} />
-                    <span>View stats</span>
+                    <span>Статистика</span>
                 </button>
-            </div>
-
-            {/* ViewSwitcher */}
-            <div className="w-full flex justify-center items-center gap-7">
-                <ViewSwitcher Icon={LayoutDashboard} switchTitle="Kanban" />
-                <ViewSwitcher Icon={Table2} switchTitle="Table" />
-                <ViewSwitcher Icon={List} switchTitle="List" />
-                <ViewSwitcher Icon={ChartNoAxesGantt} switchTitle="Timeline" />
             </div>
 
             <Board />

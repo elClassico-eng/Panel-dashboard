@@ -4,8 +4,8 @@ import { UnderConstruction } from "@/components/UnderConstruction/UnderConstruct
 export const Order = () => {
     return (
         <>
-            <Title title="Order" />
-            <UnderConstruction message="New functionality will be available here soon!" />
+            <Title title="Заказы" />
+            <UnderConstruction message="Страница находится на стадии разработки..." />
         </>
     );
 };

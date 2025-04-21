@@ -7,10 +7,23 @@ import { useTaskStore } from "@/store/taskStore";
 import { Loader } from "../Loader/Loader";
 import { ErrorMessage } from "../Error/ErrorMessage";
 
-import AddOutlinedIcon from "@material-ui/icons/AddOutlined";
+import { Plus } from "lucide-react";
+import { AuthVisual } from "../ui/authVisual";
+import { useTheme } from "@/hooks/use-theme";
+
+import {
+    titleValidation,
+    descriptionValidation,
+    priorityValidation,
+    statusValidation,
+    assignedToValidation,
+    dueDateValidation,
+} from "@/data/validation";
+import { AuthError } from "../Error/AuthError";
 
 export const AddCard = ({ column }) => {
     const { addTask, error, isLoading } = useTaskStore();
+    const { theme } = useTheme();
 
     const { users, user } = useAuth();
     const {
@@ -21,7 +34,7 @@ export const AddCard = ({ column }) => {
     } = useForm();
 
     const [isAdding, setIsAdding] = useState(false);
-    const [priority, setPriority] = useState("Medium");
+    const [priority, setPriority] = useState("Средний");
     const [assignedTo, setAssignedTo] = useState({ _id: "", email: "" });
 
     const [dueDate, setDueDate] = useState("");
@@ -57,7 +70,7 @@ export const AddCard = ({ column }) => {
         reset();
         setDueDate("");
         setAssignedTo({ _id: "", email: "" });
-        setPriority("Medium");
+        setPriority("Средний");
         setIsAdding(false);
     };
 
@@ -66,15 +79,35 @@ export const AddCard = ({ column }) => {
             {isAdding ? (
                 <div className="fixed top-0 z-50 left-0 w-full h-screen bg-black/50 flex justify-center items-center">
                     <div className="grid grid-cols-2 bg-white rounded-xl shadow-lg w-full mx-10">
-                        <div className="bg-gradient-to-br from-blue-500 to-purple-600 p-8 flex flex-col justify-center items-center  rounded-l-xl text-white">
-                            <h2 className="text-3xl font-bold mb-4">
-                                Create a New Task
-                            </h2>
-                            <p className="text-sm opacity-90 text-center">
-                                Organize your work and stay productive. Add a
-                                new task to keep track of your progress and
-                                deadlines.
-                            </p>
+                        <div className="flex relative items-center justify-center  bg-inherit overflow-hidden rounded-full">
+                            <motion.div
+                                className="w-24 h-24 rounded-full bg-gradient-to-r from-neutral-900 to-black"
+                                animate={{
+                                    y: [0, -20, 0],
+                                    scale: [1, 1.05, 1],
+                                    boxShadow: [
+                                        "0 0 20px rgba(139, 92, 246, 0.5)",
+                                        "0 0 40px rgba(139, 92, 246, 0.8)",
+                                        "0 0 20px rgba(139, 92, 246, 0.5)",
+                                    ],
+                                }}
+                                transition={{
+                                    duration: 3,
+                                    repeat: Infinity,
+                                    repeatType: "loop",
+                                    ease: "easeInOut",
+                                }}
+                            />
+
+                            <div
+                                className={`${
+                                    theme === "dark"
+                                        ? "hidden"
+                                        : "absolute top-1/2 w-full h-[250px] backdrop-blur-lg bg-white/20  rounded-lg   grainy-effect"
+                                }`}
+                            ></div>
+
+                            <AuthVisual />
                         </div>
 
                         <motion.form
@@ -86,38 +119,41 @@ export const AddCard = ({ column }) => {
                             exit={{ opacity: 0, y: -10 }}
                             transition={{ duration: 0.2 }}
                         >
-                            <h3 className="text-xl">Describe your task</h3>
+                            <h3 className="text-xl">Описание задачи</h3>
 
                             {/* Title */}
                             <textarea
                                 id="taskTitle"
-                                {...register("title", {
-                                    required: "Title is required",
-                                })}
+                                {...register("title", titleValidation)}
                                 autoFocus
-                                placeholder="Task title..."
+                                placeholder="Название задачи"
                                 className="w-full text-sm p-2 border border-gray-300 rounded"
                                 rows={2}
                             />
                             {errors.title && (
-                                <span className="text-red-500 text-xs">
-                                    {errors.title.message}
-                                </span>
+                                <AuthError message={errors.title.message} />
                             )}
 
                             {/* Description */}
                             <textarea
-                                {...register("description")}
-                                placeholder="Task description..."
+                                {...register(
+                                    "description",
+                                    descriptionValidation
+                                )}
+                                placeholder="Введите описание задачи..."
                                 className="w-full text-sm p-2 border border-gray-300 rounded"
                                 rows={3}
                             />
 
+                            {errors.description && (
+                                <AuthError
+                                    message={errors.description.message}
+                                />
+                            )}
+
                             {/* Priority */}
                             <select
-                                {...register("priority", {
-                                    required: "Priority is required",
-                                })}
+                                {...register("priority", priorityValidation)}
                                 placeholder="Priority"
                                 className="w-full text-sm p-2 border border-gray-300 dark:bg-neutral-900 cursor-pointer rounded"
                                 onChange={(e) => setPriority(e.target.value)}
@@ -126,38 +162,34 @@ export const AddCard = ({ column }) => {
                                 <option value="">
                                     Select priority for the task
                                 </option>
-                                <option value="Low">Low</option>
-                                <option value="Medium">Medium</option>
-                                <option value="High">High</option>
+                                <option value="Низкий">Низкий</option>
+                                <option value="Средний">Средний</option>
+                                <option value="Высокий">Высокий</option>
                             </select>
-                            {errors.status && (
-                                <span className="text-red-500 text-xs">
-                                    {errors.priority.message}
-                                </span>
+
+                            {errors.priority && (
+                                <AuthError message={errors.priority.message} />
                             )}
 
                             {/* Status */}
                             <select
-                                {...register("status", {
-                                    required:
-                                        "The execution status is required",
-                                })}
+                                {...register("status", statusValidation)}
                                 value={column}
                                 className="w-full text-sm p-2 border border-gray-300 rounded dark:bg-neutral-900 cursor-pointer"
                             >
                                 <option value={column}>{column}</option>
                             </select>
+
                             {errors.status && (
-                                <span className="text-red-500 text-xs">
-                                    {errors.status.message}
-                                </span>
+                                <AuthError message={errors.status.message} />
                             )}
 
                             {/* Assigned To */}
                             <select
-                                {...register("assignedTo", {
-                                    required: "Assignee is required",
-                                })}
+                                {...register(
+                                    "assignedTo",
+                                    assignedToValidation
+                                )}
                                 className="w-full text-sm p-2 border border-gray-300 rounded dark:bg-neutral-900 cursor-pointer"
                                 onChange={(e) => setAssignedTo(e.target.value)}
                             >
@@ -169,24 +201,20 @@ export const AddCard = ({ column }) => {
                                 ))}
                             </select>
                             {errors.assignedTo && (
-                                <span className="text-red-500 text-xs">
-                                    {errors.assignedTo.message}
-                                </span>
+                                <AuthError
+                                    message={errors.assignedTo.message}
+                                />
                             )}
 
                             {/* Due Date */}
                             <input
                                 type="date"
-                                {...register("dueDate", {
-                                    required: "Due date is required",
-                                })}
+                                {...register("dueDate", dueDateValidation)}
                                 className="w-full text-sm p-2 border border-gray-300 rounded cursor-pointer"
                                 onChange={(e) => setDueDate(e.target.value)}
                             />
                             {errors.dueDate && (
-                                <span className="text-red-500 text-xs">
-                                    {errors.dueDate.message}
-                                </span>
+                                <AuthError message={errors.dueDate.message} />
                             )}
 
                             <div className="flex items-center justify-end mt-2 gap-2">
@@ -195,14 +223,14 @@ export const AddCard = ({ column }) => {
                                     onClick={handleCancel}
                                     className="px-3 py-2 text-xs text-neutral-400 transition-colors hover:text-neutral-700"
                                 >
-                                    Cancel
+                                    Выход
                                 </button>
                                 <button
                                     type="submit"
                                     className="flex items-center gap-2 rounded bg-violet-300 px-3 py-2 text-xs text-neutral-950 transition-colors hover:bg-violet-500 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                    <AddOutlinedIcon fontSize="small" />
-                                    Add Task
+                                    <Plus fontSize="small" />
+                                    Добавить задачу
                                 </button>
                             </div>
                         </motion.form>
@@ -219,12 +247,9 @@ export const AddCard = ({ column }) => {
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                         >
-                            <AddOutlinedIcon
-                                fontSize="small"
-                                className="text-blue-300"
-                            />
+                            <Plus />
                             <span className="text-xs text-neutral-600 dark:text-violet-300 dark:hover:text-violet-400 transition-colors cursor-pointer">
-                                Add new task
+                                Добавить
                             </span>
                         </motion.button>
                     )}

@@ -3,8 +3,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../store/userStore";
 import { UploadAvatar } from "./UploadAvatar";
 
-import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";
-import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
+import { User, UserPen } from "lucide-react";
 
 export const Profile = () => {
     const [profileData, setProfileData] = useState({
@@ -85,9 +84,7 @@ export const Profile = () => {
                                 />
                             ) : (
                                 <div className="flex justify-center items-center w-20 h-20 rounded-full bg-neutral-300 text-black cursor-pointer border border-black">
-                                    <PersonOutlineOutlinedIcon
-                                        style={{ fontSize: 26 }}
-                                    />
+                                    <User style={{ fontSize: 26 }} />
                                 </div>
                             )}
                         </label>
@@ -113,7 +110,7 @@ export const Profile = () => {
             <div className="flex flex-col gap-5 border px-6 py-8 rounded-2xl border-neutral-300 w-1/2">
                 <div className="flex gap-2 items-center">
                     <h2 className="text-md font-bold">Personal Information</h2>
-                    <EditOutlinedIcon
+                    <UserPen
                         className="cursor-pointer"
                         style={{ fontSize: 20 }}
                     />
