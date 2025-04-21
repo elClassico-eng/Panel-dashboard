@@ -1,18 +1,25 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-
 import { useTaskStore } from "@/store/taskStore";
-
-import { Search } from "lucide-react";
-import { X } from "lucide-react";
+import { Search, X } from "lucide-react";
+import { Button } from "../ui/button";
+import {
+    Command,
+    CommandDialog,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
+} from "@/components/ui/command";
 
 export const SearchTask = () => {
     const { tasks, setFilteredTasks } = useTaskStore();
-
-    const { register, watch, reset } = useForm();
-
+    const { register, watch, reset, setFocus } = useForm();
+    const [open, setOpen] = useState(false);
     const watchTask = watch("task");
 
+    // Фильтрация задач
     useEffect(() => {
         if (!watchTask) {
             setFilteredTasks(tasks);
@@ -22,33 +29,77 @@ export const SearchTask = () => {
             );
             setFilteredTasks(filteredTasks);
         }
-    }, [watchTask]);
+    }, [watchTask, tasks, setFilteredTasks]);
 
     const clearInput = () => {
         reset();
         setFilteredTasks(tasks);
     };
 
+    const handleSelectTask = (taskTitle) => {
+        reset({ task: taskTitle });
+        setOpen(false);
+    };
+
     return (
-        <form className="hidden relative md:flex items-center gap-3   md:w-1/2 rounded-lg  py-1">
-            <input
-                className="w-full h-full px-10 py-2 rounded-lg outline-none bg-transparent border border-neutral-300 text-neutral-900 dark:text-white text-sm placeholder-neutral-400 placeholder:text-sm focus:ring-2 focus:ring-gray-800 focus:border-gray-800 "
-                placeholder="Search for something..."
-                type="text"
-                key="task-input"
-                {...register("task", { required: true })}
-            />
-            <Search
-                size={18}
-                className="absolute left-2 text-neutral-900 dark:text-white"
-            />
+        <div className="relative flex items-center gap-3">
+            {/* Кнопка для открытия CommandDialog */}
+            <Button
+                variant="outline"
+                className="relative w-full justify-start text-sm text-muted-foreground md:w-40 lg:w-64"
+                onClick={() => setOpen(true)}
+            >
+                <Search className="mr-2 h-4 w-4" />
+                <span>Поиск задач</span>
+            </Button>
+
+            {/* Command Dialog */}
+            <CommandDialog open={open} onOpenChange={setOpen}>
+                <div className="relative">
+                    <CommandInput
+                        placeholder="Поиск по задачам..."
+                        {...register("task")}
+                        autoFocus
+                    />
+                    {watchTask && (
+                        <X
+                            className="absolute right-2 top-1/2 h-5 w-5 -translate-y-1/2 cursor-pointer opacity-70 hover:opacity-100"
+                            onClick={clearInput}
+                        />
+                    )}
+                </div>
+
+                <CommandList>
+                    <CommandEmpty>Задачи не найдены</CommandEmpty>
+
+                    <CommandGroup heading="Все задачи">
+                        {tasks.map((task) => (
+                            <CommandItem
+                                key={task._id}
+                                value={task.title}
+                                onSelect={() => handleSelectTask(task.title)}
+                                className="cursor-pointer"
+                            >
+                                {task.title}
+                            </CommandItem>
+                        ))}
+                    </CommandGroup>
+                </CommandList>
+            </CommandDialog>
+
+            {/* Отображение текущего поиска */}
             {watchTask && (
-                <X
-                    size={20}
-                    onClick={clearInput}
-                    className="absolute right-1 text-neutral-500 dark:text-white dark:hover:text-gray-300 hover:text-neutral-900 transition-all duration-300 ease-in-out cursor-pointer"
-                />
+                <div className="hidden md:flex items-center text-sm text-muted-foreground">
+                    Найдено:{" "}
+                    {
+                        tasks.filter((t) =>
+                            t.title
+                                .toLowerCase()
+                                .includes(watchTask.toLowerCase())
+                        ).length
+                    }
+                </div>
             )}
-        </form>
+        </div>
     );
 };
