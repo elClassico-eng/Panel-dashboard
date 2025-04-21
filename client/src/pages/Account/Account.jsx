@@ -4,7 +4,7 @@ import { Title } from "@/components/Title/Title";
 export const Account = () => {
     return (
         <div className=" w-full h-full">
-            <Title title="Profile settings" />
+            <Title title="Аккаунт" />
             <Profile />
         </div>
     );
