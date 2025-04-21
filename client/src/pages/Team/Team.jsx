@@ -22,17 +22,18 @@ export const Team = () => {
 
     return (
         <>
-            <Title title="Team" />
+            <Title title="Команда" />
             <div className="flex flex-col justify-center items-center gap-5 w-full h-full backdrop-blur-xl">
                 <div className="mx-auto grid max-w-7xl gap-20 px-6 lg:px-12 xl:grid-cols-2">
                     <div>
                         <h2 className="text-xl font-semibold tracking-tight text-pretty text-gray-900 dark:text-white sm:text-3xl">
-                            Meet our leadership
+                            Познакомьтесь с нашим руководством компании:{" "}
+                            <span className="font-extrabold">Paytina</span>
                         </h2>
                         <p className="mt-6 text-md/8 text-gray-600">
-                            We’re a dynamic group of individuals who are
-                            passionate about what we do and dedicated to
-                            delivering the best results for our clients.
+                            Мы — динамичная группа людей, которые увлечены своим
+                            делом и стремятся обеспечить наилучшие результаты
+                            для наших клиентов.
                         </p>
                     </div>
                     <ul
@@ -58,11 +59,6 @@ export const Team = () => {
                                     <div>
                                         <h3 className="text-lg/7 font-semibold tracking-tight text-black dark:text-white">
                                             {team.firstName} {team.lastName}{" "}
-                                            {user.firstName ===
-                                                team.firstName &&
-                                            user.lastName === team.lastName ? (
-                                                <span>(you)</span>
-                                            ) : null}
                                         </h3>
                                         <p className="text-sm/8 font-semibold text-neutral-700">
                                             {team.role}

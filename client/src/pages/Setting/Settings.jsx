@@ -1,7 +1,4 @@
-import MailOutlineOutlinedIcon from "@material-ui/icons/MailOutlineOutlined";
-import GroupOutlinedIcon from "@material-ui/icons/GroupOutlined";
-import PermIdentityOutlinedIcon from "@material-ui/icons/PermIdentityOutlined";
-import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
+import { Mail, Users, User, LogOut } from "lucide-react";
 
 import { Card } from "@/components/Setting/Card";
 import { Title } from "@/components/Title/Title";
@@ -21,26 +18,26 @@ export const Settings = () => {
                     title="Account"
                     subtitle="Manage profile"
                     href="#"
-                    Icon={PermIdentityOutlinedIcon}
+                    Icon={User}
                 />
                 <Card
                     title="Email"
                     subtitle="Manage email"
                     href="#"
-                    Icon={MailOutlineOutlinedIcon}
+                    Icon={Mail}
                 />
                 <Card
                     title="Team"
                     subtitle="Manage team"
                     href="#"
-                    Icon={GroupOutlinedIcon}
+                    Icon={Users}
                 />
                 <Card
                     logout={logout}
                     title="Exit"
                     subtitle="Logout "
                     href="#"
-                    Icon={ExitToAppOutlinedIcon}
+                    Icon={LogOut}
                 />
             </div>
         </div>
