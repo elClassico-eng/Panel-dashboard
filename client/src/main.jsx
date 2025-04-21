@@ -9,9 +9,6 @@ import {
 } from "react-router-dom";
 import { Loader } from "./components/Loader/Loader.jsx";
 import { useAuth } from "./store/userStore.js";
-
-import { AuthFormLogIn } from "./components/AuthForm/AuthFormLogIn.jsx";
-import { AuthFormRegistration } from "./components/AuthForm/AuthFormRegistration.jsx";
 import { NotFound } from "./pages/NotFound/NotFound.jsx";
 
 import { Login } from "./pages/Auth/Login/Login.jsx";
