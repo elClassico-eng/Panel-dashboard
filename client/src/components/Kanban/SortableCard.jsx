@@ -4,11 +4,19 @@ import { EditTaskForm } from "./EditTaskForm";
 import { useTaskStore } from "@/store/taskStore";
 import { priorityColors } from "@/data/data";
 import { motion } from "framer-motion";
-
-// import { ClipLoader } from "react-spinners";
 import { SquarePen } from "lucide-react";
-
 import { ErrorMessage } from "../Error/ErrorMessage";
+import { Badge } from "@/components/ui/badge";
+import {
+    Card,
+    CardHeader,
+    CardTitle,
+    CardContent,
+    CardFooter,
+} from "@/components/ui/card";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { format } from "date-fns";
+import { ru } from "date-fns/locale";
 
 export const SortableCard = ({ task }) => {
     const [isEditing, setIsEditing] = useState(false);
@@ -18,15 +26,10 @@ export const SortableCard = ({ task }) => {
     if (error) return <ErrorMessage message={error} />;
     if (!task) return null;
 
-    const priorityClass =
-        priorityColors[task.priority] || "text-black bg-gray-200";
-
     const handleEdit = (data) => {
         updateTask(task._id, data);
         setIsEditing(false);
     };
-
-    // if (!filteredTasks.some((t) => t._id === task._id)) return null;
 
     return (
         <>
@@ -35,36 +38,77 @@ export const SortableCard = ({ task }) => {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     whileHover={{ scale: 1.02 }}
-                    className="w-60 h-40  p-5 bg-inherit rounded-xl my-5 flex flex-col gap-4 shadow-lg  border-t  border-gray-100 transition-all duration-300 cursor-pointer hover:shadow-xl border-b-10 border-b-neutral-300 hover:border-b-neutral-800 "
+                    transition={{ type: "spring", stiffness: 400, damping: 15 }}
                 >
-                    {/* Proirity & Status */}
-                    <div className="w-full flex gap-2 items-center justify-between">
-                        <div
-                            className={`px-3 py-1 text-xs font-semibold rounded w-fit ${priorityClass}`}
-                        >
-                            {task.priority}
-                        </div>
+                    <Card className="w-72 rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                        <CardHeader className="p-4 pb-2">
+                            <div className="flex justify-between items-start">
+                                <Badge
+                                    variant="outline"
+                                    className={`text-xs font-medium ${
+                                        priorityColors[task.priority] ||
+                                        "bg-gray-100 text-gray-800"
+                                    }`}
+                                >
+                                    {task.priority}
+                                </Badge>
+                                <button
+                                    onClick={() => setIsEditing(true)}
+                                    className="text-gray-400 hover:text-gray-600 transition-colors p-1 -mr-1"
+                                >
+                                    <SquarePen size={14} />
+                                </button>
+                            </div>
+                        </CardHeader>
 
-                        <button
-                            onClick={() => setIsEditing(true)}
-                            className="text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
-                        >
-                            <SquarePen size={16} />
-                        </button>
-                    </div>
+                        <CardContent className="p-4 pt-0">
+                            <CardTitle className="text-base font-semibold mb-1 line-clamp-2">
+                                {task.title}
+                            </CardTitle>
+                            <p className="text-sm text-gray-600 line-clamp-2">
+                                {task.description || "Нет описания"}
+                            </p>
+                        </CardContent>
 
-                    {/* Title & Description */}
-                    <div className="mt-3">
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white truncate">
-                            {task.title}
-                        </h3>
-                    </div>
+                        <CardFooter className="p-4 pt-0 flex justify-between items-center">
+                            <div className="flex items-center gap-2">
+                                {task.assignedTo && (
+                                    <>
+                                        <Avatar className="h-6 w-6">
+                                            <AvatarImage
+                                                src={task.assignedTo.avatar}
+                                            />
+                                            <AvatarFallback>
+                                                {task.assignedTo.firstName?.charAt(
+                                                    0
+                                                )}
+                                                {task.assignedTo.lastName?.charAt(
+                                                    0
+                                                )}
+                                            </AvatarFallback>
+                                        </Avatar>
+                                        <span className="text-xs text-gray-500">
+                                            {task?.assignedTo?.firstName}{" "}
+                                            {task?.assignedTo?.lastName}
+                                        </span>
+                                    </>
+                                )}
+                            </div>
 
-                    <div>
-                        <p className="text-sm text-gray-500 dark:text-white truncate">
-                            {task.description}
-                        </p>
-                    </div>
+                            {task.dueDate && (
+                                <time
+                                    className="text-xs text-gray-400"
+                                    dateTime={new Date(
+                                        task.dueDate
+                                    ).toISOString()}
+                                >
+                                    {format(new Date(task.dueDate), "d MMM", {
+                                        locale: ru,
+                                    })}
+                                </time>
+                            )}
+                        </CardFooter>
+                    </Card>
                 </motion.div>
             ) : (
                 <EditTaskForm
