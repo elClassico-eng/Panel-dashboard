@@ -27,14 +27,14 @@ export const menuItems = [
     {
         title: "Dashboard",
         links: [
-            { name: "Home", active: true, path: "/dashboard", icon: House },
+            { name: "Главная", active: true, path: "/dashboard", icon: House },
         ],
     },
     {
         title: "Order",
         links: [
             {
-                name: "Order",
+                name: "Заказы",
                 active: false,
                 path: "/order",
                 icon: ShoppingBasket,
@@ -46,7 +46,7 @@ export const menuItems = [
         title: "Team",
         links: [
             {
-                name: "Team",
+                name: "Команда",
                 active: false,
                 path: "/team",
                 icon: Users,
@@ -58,7 +58,7 @@ export const menuItems = [
         title: "Tools",
         links: [
             {
-                name: "Kanban",
+                name: "Задачи",
                 active: false,
                 path: "/kanban-dashboard",
                 icon: LayoutDashboard,
@@ -66,10 +66,10 @@ export const menuItems = [
         ],
     },
     {
-        title: "Profile",
+        title: "Account",
         links: [
             {
-                name: "Profile",
+                name: "Аккаунт",
                 active: false,
                 path: "/account",
                 icon: UserRoundCog,
@@ -80,7 +80,7 @@ export const menuItems = [
         title: "Setting",
         links: [
             {
-                name: "Setting",
+                name: "Настройки",
                 active: false,
                 path: "/setting",
                 icon: SettingsIcon,
@@ -92,34 +92,34 @@ export const menuItems = [
 //Kanban Data
 export const columnName = [
     {
-        column: "Pending",
+        column: "Ожидает",
     },
     {
-        column: "In Progress",
+        column: "В процессе",
     },
     {
-        column: "Review",
+        column: "На рассмотрении",
     },
     {
-        column: "Remake",
+        column: "Переделать",
     },
     {
-        column: "Completed",
+        column: "Завершено",
     },
 ];
 
 export const columnColors = {
-    Pending: "text-yellow-500",
-    "In Progress": "text-blue-500",
-    Review: "text-purple-500",
-    Remake: "text-red-500",
-    Completed: "text-green-500",
+    Ожидает: "text-yellow-500",
+    "В процессе": "text-blue-500",
+    "На рассмотрении": "text-purple-500",
+    Переделать: "text-red-500",
+    Завершено: "text-green-500",
 };
 
 export const priorityColors = {
-    Low: "text-green-600 bg-green-200",
-    Medium: "text-yellow-600 bg-yellow-200",
-    High: "text-red-600 bg-red-200",
+    Низкий: "text-green-600 bg-green-200",
+    Средний: "text-yellow-600 bg-yellow-200",
+    Высокий: "text-red-600 bg-red-200",
 };
 
 // Routes
