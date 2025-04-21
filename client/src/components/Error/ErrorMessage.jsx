@@ -6,8 +6,6 @@ export const ErrorMessage = ({ message }) => {
         window.location.reload();
     };
 
-    console.log(message);
-
     return (
         <motion.div
             initial={{ opacity: 0, y: -10 }}
@@ -17,9 +15,7 @@ export const ErrorMessage = ({ message }) => {
             className="fixed top-[70px] right-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 shadow-md rounded-lg flex items-center gap-3 max-w-md"
         >
             <AlertCircle className="w-6 h-6 text-red-500" />
-            <span className="text-md">
-                {"An unexpected error occurred, please try again later."}
-            </span>
+            <span className="text-md">{message}</span>
             <button
                 onClick={refreshPage}
                 className="ml-auto text-neutral-900 cursor-pointer hover:underline transition-colors"
