@@ -1,5 +1,3 @@
-import { useTaskStore } from "@/store/taskStore";
-
 //Pages
 import { Home } from "../pages/Home/Home";
 import { Order } from "../pages/Order/Order";
@@ -11,6 +9,7 @@ import { Registration } from "../pages/Auth/Registration/Registration";
 import { NotFound } from "../pages/NotFound/NotFound";
 import { LandingHome } from "../pages/Landing/LandingHome/LandingHome";
 import { Team } from "@/pages/Team/Team";
+import { About } from "@/pages/About/About";
 
 // Icons
 import {
@@ -20,6 +19,13 @@ import {
     LayoutDashboard,
     UserRoundCog,
     Settings as SettingsIcon,
+    Info,
+    Lock,
+    Bell,
+    Database,
+    Zap,
+    Palette,
+    User,
 } from "lucide-react";
 
 //Sidebar Menu Items
@@ -77,6 +83,17 @@ export const menuItems = [
         ],
     },
     {
+        title: "About",
+        links: [
+            {
+                name: "Подробнее",
+                active: false,
+                path: "/about",
+                icon: Info,
+            },
+        ],
+    },
+    {
         title: "Setting",
         links: [
             {
@@ -130,8 +147,54 @@ export const routes = [
     { path: "/team", component: Team },
     { path: "/kanban-dashboard", component: Kanban },
     { path: "/account", component: Account },
+    { path: "/about", component: About },
     { path: "/login", component: Login },
     { path: "/registration", component: Registration },
     { path: "/setting", component: Settings },
     { path: "*", component: NotFound },
+];
+
+export const settingsColumnData = [
+    {
+        id: "profile",
+        icon: User,
+        label: "Профиль",
+        badge: null,
+    },
+    {
+        id: "security",
+        icon: Lock,
+        label: "Безопасность",
+        badge: "new",
+    },
+    {
+        id: "appearance",
+        icon: Palette,
+        label: "Внешний вид",
+        badge: null,
+    },
+    {
+        id: "notifications",
+        icon: Bell,
+        label: "Уведомления",
+        badge: 3,
+    },
+    {
+        id: "team",
+        icon: Users,
+        label: "Команда",
+        badge: null,
+    },
+    {
+        id: "integrations",
+        icon: Zap,
+        label: "Интеграции",
+        badge: null,
+    },
+    {
+        id: "data",
+        icon: Database,
+        label: "Данные",
+        badge: null,
+    },
 ];
