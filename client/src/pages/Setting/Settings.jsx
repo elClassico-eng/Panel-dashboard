@@ -1,44 +1,58 @@
-import { Mail, Users, User, LogOut } from "lucide-react";
-
-import { Card } from "@/components/Setting/Card";
 import { Title } from "@/components/Title/Title";
-import { useAuth } from "@/store/userStore";
 import { Loader } from "@/components/Loader/Loader";
 
+import { Sidebar } from "./Sidebar";
+import { Profile } from "./Profile";
+import { Appearance } from "./Appearance";
+import { DangerZone } from "./DangerZone";
+
+import { useAuth } from "@/store/userStore";
+import { useTheme } from "@/hooks/use-theme";
+
 export const Settings = () => {
-    const { logout, isLoading } = useAuth();
+    const { user, isLoading, error, logout } = useAuth();
+    const { theme, setTheme } = useTheme();
+
+    const handleLightThemeClick = () => {
+        setTheme("light");
+    };
+
+    const handleDarkThemeClick = () => {
+        setTheme("dark");
+    };
 
     if (isLoading) return <Loader />;
-
     return (
-        <div className="p-4">
-            <Title title="Settings" />
-            <div className="grid gap-4 px-12 grid-cols-2 lg:grid-cols-4">
-                <Card
-                    title="Account"
-                    subtitle="Manage profile"
-                    href="#"
-                    Icon={User}
-                />
-                <Card
-                    title="Email"
-                    subtitle="Manage email"
-                    href="#"
-                    Icon={Mail}
-                />
-                <Card
-                    title="Team"
-                    subtitle="Manage team"
-                    href="#"
-                    Icon={Users}
-                />
-                <Card
-                    logout={logout}
-                    title="Exit"
-                    subtitle="Logout "
-                    href="#"
-                    Icon={LogOut}
-                />
+        <div className="container mx-auto px-4 py-8">
+            {/* Заголовок */}
+            <header className="flex items-center gap-4 mb-8">
+                <div>
+                    <Title title="Настройки" className="!mb-1" />
+                    <p className="text-muted-foreground">
+                        Управление аккаунтом и системными параметрами
+                    </p>
+                </div>
+            </header>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                {/* Боковая навигация */}
+                <Sidebar />
+
+                {/* Основное содержимое */}
+                <main className="lg:col-span-9 space-y-6">
+                    {/* Секция профиля */}
+                    <Profile user={user} />
+
+                    {/* Секция внешнего вида */}
+                    <Appearance
+                        theme={theme}
+                        handleLight={handleLightThemeClick}
+                        handleDark={handleDarkThemeClick}
+                    />
+
+                    {/* Опасная зона */}
+                    <DangerZone logout={logout} />
+                </main>
             </div>
         </div>
     );
