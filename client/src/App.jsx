@@ -33,7 +33,7 @@ const App = () => {
 
                 <div
                     className={`flex-1 ${
-                        activeSidebar ? "md:pl-[124px] pl-[64px]" : "pl-0"
+                        activeSidebar ? "md:pl-16 pl-[64px]" : "pl-0"
                     } pt-[70px] overflow-y-auto overflow-x-hidden`}
                 >
                     <Routes>
