@@ -28,7 +28,7 @@ export const Navbar = ({ isActiveSidebar, setActive }) => {
 
     return (
         <header
-            className={`fixed w-full top-0 h-[60px] backdrop-blur-lg px-4 flex items-center justify-between bg-white/80 dark:bg-neutral-950/80 transition-all z-50 border-b border-black/20 dark:border-violet-300 ${
+            className={`fixed w-full top-0 h-[60px] backdrop-blur-lg px-4 flex items-center justify-between bg-white/80 dark:bg-neutral-950/80 transition-all z-50  dark:border-violet-300 ${
                 isActiveSidebar ? "md:left-0 left-[64px]" : "left-0"
             }`}
         >
