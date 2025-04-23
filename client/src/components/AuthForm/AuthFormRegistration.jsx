@@ -1,8 +1,10 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { useAuth } from "@/store/userStore";
 import { Loader } from "../Loader/Loader";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { AuthError } from "../Error/AuthError";
 import {
@@ -14,7 +16,8 @@ import {
 import { AuthVisual } from "../ui/authVisual";
 
 export const AuthFormRegistration = () => {
-    const { registration, isLoading, error } = useAuth();
+    const navigate = useNavigate();
+    const { registration, isLoading, isAuthenticated } = useAuth();
 
     const {
         register,
@@ -22,6 +25,12 @@ export const AuthFormRegistration = () => {
         formState: { errors },
         reset,
     } = useForm();
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate("/about");
+        }
+    }, [isAuthenticated, navigate]);
 
     const onSubmit = async (data) => {
         try {
