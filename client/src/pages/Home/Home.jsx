@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import { useAuth } from "@/store/userStore";
 import { Loader } from "@/components/Loader/Loader";
 import { ErrorMessage } from "@/components/Error/ErrorMessage";
@@ -7,10 +9,16 @@ import { Progress } from "@/components/ui/progress";
 import { Calendar, CheckCircle, Clock, List, AlertCircle } from "lucide-react";
 import { useTaskStore } from "@/store/taskStore";
 import { TeamPerformanceWidget } from "@/components/Home/TeamPerformanceWidget ";
+import { InfoTaskDeadline } from "@/components/Home/InfoTaskDeadline";
+import { WidgetAllTasks } from "@/components/Home/WidgetAllTasks";
 
 export const Home = () => {
     const { user, isLoading, error } = useAuth();
-    const { tasks, loading: tasksLoading } = useTaskStore();
+    const { tasks, loading: tasksLoading, fetchTasks } = useTaskStore();
+
+    useEffect(() => {
+        fetchTasks();
+    }, [fetchTasks]);
 
     if (isLoading || tasksLoading) return <Loader />;
     if (error)
@@ -50,6 +58,12 @@ export const Home = () => {
         .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))
         .slice(0, 3);
 
+    // Просроченные задачи
+    const overdueTask = [...tasks]
+        .filter((task) => task.dueDate && new Date(task.dueDate) < new Date())
+        .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))
+        .slice(0, 3);
+
     return (
         <div className="space-y-6">
             <Title title={`Добро пожаловать, ${user.firstName}!`} />
@@ -58,74 +72,39 @@ export const Home = () => {
 
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 {/* Виджет общих задач */}
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">
-                            Всего задач
-                        </CardTitle>
-                        <List className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">{totalTasks}</div>
-                        <p className="text-xs text-muted-foreground">
-                            +2 за последнюю неделю
-                        </p>
-                    </CardContent>
-                </Card>
+                <WidgetAllTasks
+                    title=""
+                    task={totalTasks}
+                    Icon={List}
+                    description="+2 за последнюю неделю"
+                />
 
                 {/* Виджет завершенных задач */}
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">
-                            Завершено
-                        </CardTitle>
-                        <CheckCircle className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">
-                            {completedTasks}
-                        </div>
-                        <p className="text-xs text-muted-foreground">
-                            {completionPercentage}% от общего числа
-                        </p>
-                    </CardContent>
-                </Card>
+                <WidgetAllTasks
+                    title="Завершено"
+                    task={completedTasks}
+                    Icon={CheckCircle}
+                    description="% от общего числа"
+                    additionalInfoTask={completionPercentage}
+                />
 
                 {/* Виджет задач в работе */}
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">
-                            В работе
-                        </CardTitle>
-                        <Clock className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">
-                            {inProgressTasks}
-                        </div>
-                        <p className="text-xs text-muted-foreground">
-                            +{reviewTasks} на рассмотрении
-                        </p>
-                    </CardContent>
-                </Card>
+                <WidgetAllTasks
+                    title=" В работе"
+                    task={inProgressTasks}
+                    Icon={Clock}
+                    description="на рассмотрении"
+                    additionalInfoTask={reviewTasks}
+                />
 
                 {/* Виджет срочных задач */}
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">
-                            Высокий приоритет
-                        </CardTitle>
-                        <AlertCircle className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">
-                            {highPriorityTasks}
-                        </div>
-                        <p className="text-xs text-muted-foreground">
-                            {pendingTasks} ожидают начала
-                        </p>
-                    </CardContent>
-                </Card>
+                <WidgetAllTasks
+                    title="Высокий приоритет"
+                    task={highPriorityTasks}
+                    Icon={AlertCircle}
+                    description="ожидают начала"
+                    additionalInfoTask={pendingTasks}
+                />
             </div>
 
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
@@ -185,44 +164,16 @@ export const Home = () => {
                 </Card>
 
                 {/* Ближайшие задачи */}
-                <Card className="col-span-3">
-                    <CardHeader>
-                        <CardTitle>Ближайшие задачи</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        {upcomingTasks.length > 0 ? (
-                            <div className="space-y-4">
-                                {upcomingTasks.map((task) => (
-                                    <div
-                                        key={task._id}
-                                        className="flex items-center space-x-4"
-                                    >
-                                        <div className="flex-shrink-0 bg-primary/10 p-2 rounded-full">
-                                            <Calendar className="h-4 w-4 text-primary" />
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <p className="text-sm font-medium truncate">
-                                                {task.title}
-                                            </p>
-                                            <p className="text-sm text-muted-foreground">
-                                                {new Date(
-                                                    task.dueDate
-                                                ).toLocaleDateString()}
-                                            </p>
-                                        </div>
-                                        <div className="inline-flex items-center text-xs text-muted-foreground">
-                                            {task.priority}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <div className="text-center text-muted-foreground py-8">
-                                Нет предстоящих задач с дедлайном
-                            </div>
-                        )}
-                    </CardContent>
-                </Card>
+                <InfoTaskDeadline
+                    tasks={upcomingTasks}
+                    title="Ближайшие задачи"
+                />
+
+                {/* Просроченные задачи */}
+                <InfoTaskDeadline
+                    tasks={overdueTask}
+                    title="Просроченные задачи"
+                />
             </div>
         </div>
     );
