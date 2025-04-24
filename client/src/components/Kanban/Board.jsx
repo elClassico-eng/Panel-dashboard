@@ -23,7 +23,7 @@ export const Board = () => {
         }, 300000);
 
         return () => clearInterval(refetch);
-    }, [fetchTasks, fetchTasksByEmployee]);
+    }, [user, fetchTasks, fetchTasksByEmployee]);
 
     if (isLoading) return <Loader />;
     if (error) return <ErrorMessage message={error} />;
