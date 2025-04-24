@@ -18,9 +18,13 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
 
+import { getDeadlineStatus } from "@/utilities";
+
 export const SortableCard = ({ task }) => {
     const [isEditing, setIsEditing] = useState(false);
     const { updateTask, error, isLoading } = useTaskStore();
+
+    const deadlineStatus = getDeadlineStatus(task.dueDate);
 
     if (isLoading) return <Loader />;
     if (error) return <ErrorMessage message={error} />;
@@ -40,7 +44,7 @@ export const SortableCard = ({ task }) => {
                     whileHover={{ scale: 1.02 }}
                     transition={{ type: "spring", stiffness: 400, damping: 15 }}
                 >
-                    <Card className="w-72 rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                    <Card className="w-72 rounded-lg border shadow-sm hover:shadow-md transition-shadow">
                         <CardHeader className="p-4 pb-2">
                             <div className="flex justify-between items-start">
                                 <Badge
@@ -95,9 +99,9 @@ export const SortableCard = ({ task }) => {
                                 )}
                             </div>
 
-                            {task.dueDate && (
+                            {task.dueDate ? (
                                 <time
-                                    className="text-xs text-gray-400"
+                                    className={`text-xs ${deadlineStatus.textClass}`}
                                     dateTime={new Date(
                                         task.dueDate
                                     ).toISOString()}
@@ -106,6 +110,10 @@ export const SortableCard = ({ task }) => {
                                         locale: ru,
                                     })}
                                 </time>
+                            ) : (
+                                <span className="text-xs text-muted-foreground">
+                                    Сроков нет
+                                </span>
                             )}
                         </CardFooter>
                     </Card>
