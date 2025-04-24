@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { Board } from "../../components/Kanban/Board";
 import { Title } from "../../components/Title/Title";

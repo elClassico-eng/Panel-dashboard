@@ -73,7 +73,7 @@ export const Home = () => {
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 {/* Виджет общих задач */}
                 <WidgetAllTasks
-                    title=""
+                    title="Всего задач"
                     task={totalTasks}
                     Icon={List}
                     description="+2 за последнюю неделю"
