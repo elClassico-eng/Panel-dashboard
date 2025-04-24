@@ -41,8 +41,6 @@ export const AddCard = ({ column }) => {
 
     const [dueDate, setDueDate] = useState("");
 
-    const employeesUsers = users.filter((user) => user.role !== "Admin");
-
     useEffect(() => {
         if (isAdding)
             setTimeout(() => document.getElementById("taskTitle")?.focus(), 0);
@@ -205,7 +203,7 @@ export const AddCard = ({ column }) => {
                                 onChange={(e) => setAssignedTo(e.target.value)}
                             >
                                 <option value="">Select user</option>
-                                {employeesUsers.map((user) => (
+                                {users.map((user) => (
                                     <option key={user.id} value={user.id}>
                                         {user.firstName} {user.lastName}
                                     </option>
