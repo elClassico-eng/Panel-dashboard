@@ -242,113 +242,101 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                                     defaultValue={task.description}
                                 />
                             </div>
+                            <div>
+                                <label className="block text-sm font-medium mb-2">
+                                    Приоритет
+                                </label>
+                                <Select
+                                    onValueChange={(value) =>
+                                        setValue("priority", value)
+                                    }
+                                    defaultValue={task.priority}
+                                >
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Выберите приоритет" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="Низкий">
+                                            Низкий
+                                        </SelectItem>
+                                        <SelectItem value="Средний">
+                                            Средний
+                                        </SelectItem>
+                                        <SelectItem value="Высокий">
+                                            Высокий
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
 
-                            {user.role === "Admin" && (
-                                <>
-                                    <div>
-                                        <label className="block text-sm font-medium mb-2">
-                                            Приоритет
-                                        </label>
-                                        <Select
-                                            onValueChange={(value) =>
-                                                setValue("priority", value)
-                                            }
-                                            defaultValue={task.priority}
-                                        >
-                                            <SelectTrigger className="w-full">
-                                                <SelectValue placeholder="Выберите приоритет" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="Низкий">
-                                                    Низкий
-                                                </SelectItem>
-                                                <SelectItem value="Средний">
-                                                    Средний
-                                                </SelectItem>
-                                                <SelectItem value="Высокий">
-                                                    Высокий
-                                                </SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
+                            <div>
+                                <label className="block text-sm font-medium mb-2">
+                                    Статус
+                                </label>
+                                <Select
+                                    onValueChange={(value) => setStatus(value)}
+                                    value={status}
+                                >
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Выберите статус" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {columnName.map((column) => (
+                                            <SelectItem
+                                                key={column.column}
+                                                value={column.column}
+                                            >
+                                                {column.column}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
 
-                                    <div>
-                                        <label className="block text-sm font-medium mb-2">
-                                            Статус
-                                        </label>
-                                        <Select
-                                            onValueChange={(value) =>
-                                                setStatus(value)
-                                            }
-                                            value={status}
-                                        >
-                                            <SelectTrigger className="w-full">
-                                                <SelectValue placeholder="Выберите статус" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {columnName.map((column) => (
-                                                    <SelectItem
-                                                        key={column.column}
-                                                        value={column.column}
-                                                    >
-                                                        {column.column}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
+                            <div>
+                                <label className="block text-sm font-medium mb-2">
+                                    Исполнитель
+                                </label>
+                                <Select
+                                    onValueChange={(value) => {
+                                        setAssignedTo(value);
+                                        setValue("assignedTo", value);
+                                    }}
+                                    defaultValue={task.assignedTo?.firstName}
+                                >
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Выбрать исполнителя" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {users.map((user) => (
+                                            <SelectItem
+                                                key={user.id}
+                                                value={user.id}
+                                            >
+                                                {user.firstName} {user.lastName}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
 
-                                    <div>
-                                        <label className="block text-sm font-medium mb-2">
-                                            Исполнитель
-                                        </label>
-                                        <Select
-                                            onValueChange={(value) => {
-                                                setAssignedTo(value);
-                                                setValue("assignedTo", value);
-                                            }}
-                                            defaultValue={
-                                                task.assignedTo?.firstName
-                                            }
-                                        >
-                                            <SelectTrigger className="w-full">
-                                                <SelectValue placeholder="Выбрать исполнителя" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {users.map((user) => (
-                                                    <SelectItem
-                                                        key={user.id}
-                                                        value={user.id}
-                                                    >
-                                                        {user.firstName}{" "}
-                                                        {user.lastName}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-sm font-medium mb-2">
-                                            Дедлайн
-                                        </label>
-                                        <Input
-                                            type="date"
-                                            value={
-                                                dueDate
-                                                    ? new Date(dueDate)
-                                                          .toISOString()
-                                                          .split("T")[0]
-                                                    : ""
-                                            }
-                                            onChange={(e) =>
-                                                setDueDate(e.target.value)
-                                            }
-                                            className="w-full"
-                                        />
-                                    </div>
-                                </>
-                            )}
+                            <div>
+                                <label className="block text-sm font-medium mb-2">
+                                    Дедлайн
+                                </label>
+                                <Input
+                                    type="date"
+                                    value={
+                                        dueDate
+                                            ? new Date(dueDate)
+                                                  .toISOString()
+                                                  .split("T")[0]
+                                            : ""
+                                    }
+                                    onChange={(e) => setDueDate(e.target.value)}
+                                    className="w-full"
+                                />
+                            </div>
                             <div className="flex gap-2 justify-end pt-4">
                                 <Button
                                     variant="outline"
