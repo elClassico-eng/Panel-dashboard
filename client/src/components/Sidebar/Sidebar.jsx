@@ -2,6 +2,13 @@ import { Link, useLocation } from "react-router-dom";
 import { menuItems } from "@/data/data";
 import { cn } from "@/lib/utils";
 
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 export const Sidebar = () => {
     const { pathname } = useLocation();
     return (
@@ -14,33 +21,44 @@ export const Sidebar = () => {
                         key={section.title}
                         className="space-y-2 flex justify-center items-center"
                     >
-                        {section.links.map(({ name, path, icon: Icon }) => (
-                            <Link
-                                to={path}
-                                key={name}
-                                className={cn(
-                                    "flex items-center w-full p-2 md:px-4 gap-3 rounded-lg transition-all duration-200 group",
-                                    pathname === path
-                                        ? "bg-violet-100 dark:bg-violet-900/50 text-violet-600 dark:text-violet-300"
-                                        : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300"
-                                )}
-                            >
-                                <div className="relative flex items-center justify-center w-8 h-8">
-                                    <Icon
-                                        size={20}
-                                        className={cn(
-                                            "transition-transform duration-200",
-                                            pathname === path
-                                                ? "scale-110"
-                                                : "group-hover:scale-105"
-                                        )}
-                                    />
-                                    {pathname === path && (
-                                        <span className="absolute -right-1 w-1 h-6 bg-violet-500 rounded-full"></span>
+                        {section.links.map(
+                            ({ name, path, icon: Icon, tooltipContent }) => (
+                                <Link
+                                    to={path}
+                                    key={name}
+                                    className={cn(
+                                        "flex items-center w-full p-2 md:px-4 gap-3 rounded-lg transition-all duration-200 group",
+                                        pathname === path
+                                            ? "bg-violet-100 dark:bg-violet-900/50 text-violet-600 dark:text-violet-300"
+                                            : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300"
                                     )}
-                                </div>
-                            </Link>
-                        ))}
+                                >
+                                    <div className="relative flex items-center justify-center w-8 h-8">
+                                        <TooltipProvider>
+                                            <Tooltip>
+                                                <TooltipTrigger>
+                                                    <Icon
+                                                        size={20}
+                                                        className={cn(
+                                                            "transition-transform duration-200 cursor-pointer",
+                                                            pathname === path
+                                                                ? "scale-110"
+                                                                : "group-hover:scale-105"
+                                                        )}
+                                                    />
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    <p>{tooltipContent}</p>
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        </TooltipProvider>
+                                        {pathname === path && (
+                                            <span className="absolute -right-1 w-1 h-6 bg-violet-500 rounded-full"></span>
+                                        )}
+                                    </div>
+                                </Link>
+                            )
+                        )}
                     </div>
                 ))}
             </nav>
