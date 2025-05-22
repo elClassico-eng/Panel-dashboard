@@ -84,6 +84,7 @@ export const Navbar = ({ isActiveSidebar, setActive }) => {
                 <div className="flex items-center space-x-2">
                     <Switch
                         id="offline-mode"
+                        className="cursor-pointer"
                         onClick={() => setOfflineMode(!offlineMode)}
                     />
                     <Label htmlFor="offline-mode">
