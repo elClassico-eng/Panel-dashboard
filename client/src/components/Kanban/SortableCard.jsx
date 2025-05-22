@@ -18,6 +18,13 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
 
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 import { getDeadlineStatus } from "@/utilities";
 
 export const SortableCard = ({ task }) => {
@@ -60,7 +67,19 @@ export const SortableCard = ({ task }) => {
                                     onClick={() => setIsEditing(true)}
                                     className="text-gray-400 hover:text-gray-600 transition-colors p-1 -mr-1"
                                 >
-                                    <SquarePen size={14} />
+                                    <TooltipProvider>
+                                        <Tooltip>
+                                            <TooltipTrigger>
+                                                <SquarePen
+                                                    className="cursor-pointer"
+                                                    size={14}
+                                                />
+                                            </TooltipTrigger>
+                                            <TooltipContent>
+                                                Изменить задачу
+                                            </TooltipContent>
+                                        </Tooltip>
+                                    </TooltipProvider>
                                 </button>
                             </div>
                         </CardHeader>
