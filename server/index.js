@@ -9,7 +9,7 @@ const errorMiddleware = require("./middlewares/error-middleware");
 const { generalLimiter } = require("./middlewares/rate-limit-middleware");
 
 const app = express();
-const PORT = 3001; // Force port 3001 temporarily
+const PORT = process.env.PORT || 3001;
 console.log("🔍 Using PORT:", PORT);
 
 app.use(express.json());
@@ -22,9 +22,10 @@ app.use(
         origin: (origin, callback) => {
             const allowedOrigins = [
                 process.env.CLIENT_URL,
+                process.env.PRODUCTION_CLIENT_URL,
                 "http://localhost:5173",
                 "http://127.0.0.1:5173",
-            ];
+            ].filter(Boolean);
 
             // Allow requests with no origin (mobile apps, postman, etc.)
             if (!origin) return callback(null, true);
@@ -43,6 +44,21 @@ app.use(
 );
 app.use(cookieParser());
 app.use("/images", express.static(path.join(__dirname, "images")));
+
+// Serve static files from the React app in production
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, 'public')));
+    
+    // Catch all handler: send back React's index.html file for client-side routing
+    app.get('*', (req, res, next) => {
+        // Skip API routes
+        if (req.path.startsWith('/api/') || req.path.startsWith('/images/')) {
+            return next();
+        }
+        res.sendFile(path.join(__dirname, 'public/index.html'));
+    });
+}
+
 app.use("/api", router);
 app.use(errorMiddleware);
 
