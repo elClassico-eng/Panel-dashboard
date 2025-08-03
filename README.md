@@ -282,8 +282,8 @@ npm run preview  # Preview production build
 
 **Backend (server/)**
 ```bash
-npm run dev      # Start development server with nodemon
-npm start        # Start production server
+yarn dev      # Start development server with nodemon
+yarn start        # Start production server
 ```
 
 ### Testing
@@ -314,10 +314,6 @@ npm run lint     # Check for linting errors
 3. Commit your changes: `git commit -am 'Add new feature'`
 4. Push to the branch: `git push origin feature/new-feature`
 5. Submit a pull request
-
-## 📄 License
-
-This project is licensed under the MIT License.
 
 ---
 
