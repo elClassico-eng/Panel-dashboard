@@ -4,9 +4,11 @@ const { body, check } = require("express-validator");
 const UserController = require("../controllers/user-controller");
 const authMiddleware = require("../middlewares/auth-middleware");
 const checkRoleMiddleware = require("../middlewares/checkRole-middleware");
+const { authLimiter, registrationLimiter } = require("../middlewares/rate-limit-middleware");
 
 router.post(
     "/registration",
+    registrationLimiter,
     body("email").isEmail().normalizeEmail(),
     body("password")
         .isLength({ min: 6, max: 32 })
@@ -25,7 +27,7 @@ router.post(
     body("lastName").notEmpty(),
     UserController.registration
 );
-router.post("/login", body("email").isEmail(), UserController.login);
+router.post("/login", authLimiter, body("email").isEmail(), UserController.login);
 router.post("/logout", UserController.logout);
 router.get("/refresh", UserController.refresh);
 router.get("/team", authMiddleware, UserController.getUsers);

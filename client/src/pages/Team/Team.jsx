@@ -51,7 +51,11 @@ export const Team = () => {
                         <CardHeader className="items-center ">
                             <Avatar className="w-24 h-24 mb-4">
                                 <AvatarImage
-                                    src={teamMember.profilePhoto}
+                                    src={teamMember.profilePhoto ? 
+                                        (teamMember.profilePhoto.startsWith('http') ? 
+                                            teamMember.profilePhoto : 
+                                            `${import.meta.env.VITE_SERVER_URL || 'http://localhost:5000'}${teamMember.profilePhoto}`) 
+                                        : null}
                                     alt={`${teamMember.firstName} ${teamMember.lastName}`}
                                 />
                                 <AvatarFallback>

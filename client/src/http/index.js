@@ -2,7 +2,7 @@
 import axios from "axios";
 import { authServices } from "@/services/AuthServices";
 
-export const API_URL = "http://localhost:7000/api";
+export const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 export const $api = axios.create({
     baseURL: API_URL,
@@ -20,26 +20,22 @@ $api.interceptors.request.use((config) => {
 $api.interceptors.response.use(
     (config) => config,
     async (error) => {
-        if (error.response && error.response.status === 401) {
-            const refreshToken = localStorage.getItem("refreshToken");
-            if (refreshToken) {
-                try {
-                    const { data } = await authServices.refreshToken();
-                    console.log("Token refresh success: ", data);
-                    localStorage.setItem("token", data.accessToken);
-                    localStorage.setItem("refreshToken", data.refreshToken);
-
-                    error.config.headers.Authorization = `Bearer ${data.accessToken}`;
-
-                    return $api.request(error.config);
-                } catch (error) {
-                    console.log("Token refresh failed: ", error);
-                    localStorage.removeItem("token");
-                    localStorage.removeItem("refreshToken");
-                }
+        const originalRequest = error.config;
+        
+        if (error.response && error.response.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true;
+            
+            try {
+                const { data } = await authServices.refreshToken();
+                localStorage.setItem("token", data.accessToken);
+                
+                originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+                return $api.request(originalRequest);
+            } catch (refreshError) {
+                localStorage.removeItem("token");
+                window.location.href = "/login";
+                return Promise.reject(refreshError);
             }
-            console.log("No refresh token found, redirecting to login");
-            window.location.href = "/login";
         }
         return Promise.reject(error);
     }

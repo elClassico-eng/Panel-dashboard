@@ -14,7 +14,21 @@ class TaskController {
             const createdBy = req.user.id;
 
             if (!dueDate || isNaN(new Date(dueDate))) {
-                return res.status(400).json({ error: "Invalid due date" });
+                return res.status(400).json({ error: "Неверный формат даты" });
+            }
+
+            const dueDateObj = new Date(dueDate);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (dueDateObj < today) {
+                return res.status(400).json({ error: "Дата выполнения не может быть в прошлом" });
+            }
+
+            const maxDate = new Date();
+            maxDate.setFullYear(maxDate.getFullYear() + 2);
+            if (dueDateObj > maxDate) {
+                return res.status(400).json({ error: "Дата выполнения слишком далеко в будущем (максимум 2 года)" });
             }
 
             const task = await TaskService.createTask({
@@ -36,8 +50,10 @@ class TaskController {
 
     async getAllTasks(req, res) {
         try {
-            const tasks = await TaskService.getAllTasks();
-            res.json(tasks);
+            const page = parseInt(req.query.page) || 1;
+            const limit = parseInt(req.query.limit) || 10;
+            const result = await TaskService.getAllTasks(page, limit);
+            res.json(result);
         } catch (error) {
             console.log(error);
             res.status(500).json({ error: error.message });
@@ -60,15 +76,17 @@ class TaskController {
     async getTaskByEmployee(req, res) {
         try {
             const { employeeId } = req.params;
-            const tasks = await TaskService.getTaskByEmployee(employeeId);
+            const page = parseInt(req.query.page) || 1;
+            const limit = parseInt(req.query.limit) || 10;
+            const result = await TaskService.getTaskByEmployee(employeeId, page, limit);
 
-            if (!tasks.length) {
+            if (!result.tasks.length) {
                 return res.status(404).json({
                     message: "Не найдено задач для этого пользователя",
                 });
             }
 
-            res.json(tasks);
+            res.json(result);
         } catch (error) {
             console.log(error);
             res.status(500).json({ error: error.message });
@@ -85,12 +103,12 @@ class TaskController {
             if (!task)
                 return res.status(404).json({ error: "Задача не найдена" });
 
-            // if (role === "Студент") {
-            //     if (task.assignedTo.toString() !== userId) {
-            //         return res.status(403).json({ error: "Ошибка в доступе" });
-            //     }
-            //     updateData = { status: updateData.status };
-            // }
+            if (role === "Студент") {
+                if (task.assignedTo.toString() !== userId) {
+                    return res.status(403).json({ error: "Ошибка в доступе" });
+                }
+                updateData = { status: updateData.status };
+            }
 
             const updatedTask = await TaskService.updateTask(id, updateData);
             res.json(updatedTask);

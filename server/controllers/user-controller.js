@@ -103,10 +103,8 @@ class UserController {
 
     async getUsers(req, res, next) {
         try {
-            console.log("Данные пользователя", req.user);
 
             if (!req.user || req.user.role !== "Руководитель проекта") {
-                console.log("Доступ запрещен.", req.user?.role);
                 return next(ApiError.Forbidden("Access denied"));
             }
 
@@ -172,7 +170,7 @@ class UserController {
 
             const managerUser = await userService.getProfile(managerId);
             if (
-                managerUser.role !== "Руководитель проекта" ||
+                managerUser.role !== "Руководитель проекта" &&
                 managerUser.role !== "Преподаватель"
             ) {
                 return next(ApiError.Forbidden("Доступ запрещен"));

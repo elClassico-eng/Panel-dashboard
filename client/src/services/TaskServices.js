@@ -17,16 +17,16 @@ export const taskServices = {
         return $api.delete(`tasks/${taskId}`);
     },
 
-    getTasksByEmployee: async (employeeId) => {
-        return $api.get(`tasks/employee/${employeeId}`);
+    getTasksByEmployee: async (employeeId, page = 1, limit = 10) => {
+        return $api.get(`tasks/employee/${employeeId}?page=${page}&limit=${limit}`);
     },
 
     getTaskById: async (taskId) => {
         return $api.get(`tasks/${taskId}`);
     },
 
-    getAllTasks: async () => {
-        return $api.get("tasks");
+    getAllTasks: async (page = 1, limit = 10) => {
+        return $api.get(`tasks?page=${page}&limit=${limit}`);
     },
 
     // Add other task-related API calls here. For example, getTasksByTag, getTasksByPriority, etc.

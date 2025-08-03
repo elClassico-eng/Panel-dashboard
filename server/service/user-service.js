@@ -20,7 +20,7 @@ class UserService {
                     `Пользователь с email ${candidate} уже зарегистрирован!`
                 );
             }
-            const hashPassword = await bcrypt.hash(password, 3);
+            const hashPassword = await bcrypt.hash(password, 12);
 
             const user = await UserModal.create({
                 email,
@@ -149,6 +149,7 @@ class UserService {
             return new UserDto(user);
         } catch (error) {
             console.log(error);
+            throw error;
         }
     }
 

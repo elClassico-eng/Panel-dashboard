@@ -3,13 +3,13 @@ import { useAuth } from "../../store/userStore";
 export const UploadAvatar = () => {
     const fileInputRef = useRef(null);
     const [avatar, setAvatar] = useState(null);
-    const uploadAvatar = useAuth((state) => state.uploadAvatar);
+    const { uploadAvatar } = useAuth();
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            const ibjectURL = URL.createObjectURL(file);
-            setAvatar(ibjectURL);
+            const objectURL = URL.createObjectURL(file);
+            setAvatar(objectURL);
         }
     };
 
@@ -17,10 +17,11 @@ export const UploadAvatar = () => {
         try {
             if (!fileInputRef.current.files[0]) return;
 
-            const formData = new FormData();
-            formData.append("avatar", fileInputRef.current.files[0]);
-
-            await uploadAvatar(formData);
+            const file = fileInputRef.current.files[0];
+            await uploadAvatar(file);
+            
+            // Clear the preview after successful upload
+            setAvatar(null);
         } catch (error) {
             console.log(error);
         }

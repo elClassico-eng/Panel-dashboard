@@ -36,4 +36,8 @@ export const authServices = {
     fetchProfile: async () => {
         return $api.get("users/profile");
     },
+
+    updateProfile: async (profileData) => {
+        return $api.put("users/profile", profileData);
+    },
 };

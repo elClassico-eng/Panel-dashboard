@@ -169,10 +169,8 @@ export const Home = () => {
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
                     {/* Прогресс по задачам */}
                     <Card
-                        className="col-span-4 border border-neutral-800 bg-neutral-900 text-neutral-900
-                        shadow-lg shadow-neutral-950/50 hover:shadow-xl hover:shadow-neutral-950/60
-                        transition-all duration-300 hover:-translate-y-1 hover:border-neutral-700
-                        backdrop-blur-sm bg-opacity-50"
+                        className="col-span-4 border bg-neutral-900 text-neutral-900
+                        transition-all duration-300 backdrop-blur-sm bg-opacity-50"
                     >
                         <CardHeader>
                             <CardTitle>Прогресс выполнения задач</CardTitle>
