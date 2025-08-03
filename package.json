@@ -1,14 +1,14 @@
 {
-  "name": "panel-dashboard-fullstack",
-  "version": "1.0.0",
-  "scripts": {
-    "build": "cd client && npm ci && npm run build && cd ../server && npm ci",
-    "start": "cd server && npm start",
-    "dev:client": "cd client && npm run dev",
-    "dev:server": "cd server && npm run dev"
-  },
-  "dependencies": {
-    "@dnd-kit/core": "^6.3.1",
-    "@dnd-kit/sortable": "^10.0.0"
-  }
+    "name": "panel-dashboard-fullstack",
+    "version": "1.0.0",
+    "scripts": {
+        "build": "cd client && npm ci && npm run build && cd ../server && npm ci",
+        "start": "cd server && npm start",
+        "dev:client": "cd client && npm run dev",
+        "dev:server": "cd server && npm run dev"
+    },
+    "dependencies": {
+        "@dnd-kit/core": "^6.3.1",
+        "@dnd-kit/sortable": "^10.0.0"
+    }
 }
