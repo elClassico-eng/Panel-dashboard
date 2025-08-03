@@ -5,7 +5,6 @@ import { useAuth } from "@/store/userStore";
 import { useTaskStore } from "@/store/taskStore";
 
 import { Loader } from "../Loader/Loader";
-import { ErrorMessage } from "../Error/ErrorMessage";
 
 import { Plus } from "lucide-react";
 import { AuthVisual } from "../ui/authVisual";
@@ -24,7 +23,7 @@ import {
 import { AuthError } from "../Error/AuthError";
 
 export const AddCard = ({ column }) => {
-    const { addTask, error, isLoading } = useTaskStore();
+    const { addTask, isLoading } = useTaskStore();
     const { theme } = useTheme();
 
     const { users, user } = useAuth();
@@ -47,7 +46,6 @@ export const AddCard = ({ column }) => {
     }, [isAdding]);
 
     if (isLoading) return <Loader />;
-    if (error) return <ErrorMessage message={error} />;
 
     const onSubmit = async (data) => {
         try {
@@ -247,7 +245,7 @@ export const AddCard = ({ column }) => {
                 </div>
             ) : (
                 <>
-                    {user.role === "Admin" && (
+                    {user.role === "Руководитель проекта" && (
                         <motion.button
                             layout
                             onClick={() => setIsAdding(true)}

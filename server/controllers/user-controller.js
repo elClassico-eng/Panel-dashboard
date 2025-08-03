@@ -8,7 +8,7 @@ class UserController {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 return next(
-                    ApiError.BadRequestError("Validation error", errors.array())
+                    ApiError.BadRequestError("Ошибка валидации", errors.array())
                 );
             }
 
@@ -16,14 +16,15 @@ class UserController {
                 req.body;
 
             const existingAdmins = await userService.getAdminsCount();
-            console.log("Existing admins:", existingAdmins);
             const assignedRole =
-                existingAdmins === 0 ? "Admin" : role || "Employee";
+                existingAdmins === 0
+                    ? "Руководитель проекта"
+                    : role || "Студент";
 
             if (!email || !password) {
                 return res
                     .status(400)
-                    .json({ message: "Missing email or password" });
+                    .json({ message: "Отсутствует логин или пароль" });
             }
 
             const userData = await userService.registration(
@@ -34,8 +35,6 @@ class UserController {
                 profilePhoto,
                 assignedRole
             );
-
-            console.log("Saving user role:", userData.role);
 
             res.cookie("refreshToken", userData.refreshToken, {
                 maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -61,10 +60,7 @@ class UserController {
 
             return res.status(201).json(userData);
         } catch (error) {
-            if (
-                error.message === "User not found" ||
-                error.message === "Invalid password"
-            ) {
+            if (error.message === "Неверный логин или пароль") {
                 return res.status(401).json({
                     success: false,
                     message: error.message,
@@ -107,17 +103,20 @@ class UserController {
 
     async getUsers(req, res, next) {
         try {
-            console.log("User Data:", req.user);
+            console.log("Данные пользователя", req.user);
 
-            // if (!req.user || req.user.role !== "Admin") {
-            //     console.log("Access denied. User role:", req.user?.role);
-            //     return next(ApiError.Forbidden("Access denied"));
-            // }
+            if (!req.user || req.user.role !== "Руководитель проекта") {
+                console.log("Доступ запрещен.", req.user?.role);
+                return next(ApiError.Forbidden("Access denied"));
+            }
 
             const users = await userService.getAllUsers();
             return res.status(200).json(users);
         } catch (error) {
-            console.error("Error fetching users:", error);
+            console.error(
+                "Ошибка при получении данных о пользователях:",
+                error
+            );
             next(error);
         }
     }
@@ -130,7 +129,7 @@ class UserController {
             if (role || email) {
                 return next(
                     ApiError.BadRequestError(
-                        "You can't update email or role. Only first name and last name are allowed. Please check your request."
+                        "Вы не можете обновить email или роль. Разрешено изменять только имя и фамилию. Пожалуйста, проверьте ваш запрос."
                     )
                 );
             }
@@ -160,16 +159,23 @@ class UserController {
 
     async updateRole(req, res, next) {
         try {
-            const adminId = req.user.id;
+            const managerId = req.user.id;
             const { userId, newRole } = req.body;
 
-            if (!["Employee", "Manager", "Admin"].includes(newRole)) {
-                return next(ApiError.BadRequestError("Invalid role"));
+            if (
+                !["Руководитель проекта", "Преподаватель", "Студент"].includes(
+                    newRole
+                )
+            ) {
+                return next(ApiError.BadRequestError("Неверная роль"));
             }
 
-            const adminUser = await userService.getProfile(adminId);
-            if (adminUser.role !== "Admin" && adminUser.role !== "Manager") {
-                return next(ApiError.Forbidden("Access denied"));
+            const managerUser = await userService.getProfile(managerId);
+            if (
+                managerUser.role !== "Руководитель проекта" ||
+                managerUser.role !== "Преподаватель"
+            ) {
+                return next(ApiError.Forbidden("Доступ запрещен"));
             }
 
             const updatedUser = await userService.updateProfile(userId, {

@@ -3,7 +3,12 @@ import { Calendar } from "lucide-react";
 
 export const InfoTaskDeadline = ({ tasks, title }) => {
     return (
-        <Card className="col-span-3">
+        <Card
+            className="col-span-3 border border-neutral-800 bg-neutral-900 text-neutral-900
+                        shadow-lg shadow-neutral-950/50 hover:shadow-xl hover:shadow-neutral-950/60
+                        transition-all duration-300 hover:-translate-y-1 hover:border-neutral-700
+                        backdrop-blur-sm bg-opacity-50 "
+        >
             <CardHeader>
                 <CardTitle>{title}</CardTitle>
             </CardHeader>

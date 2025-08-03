@@ -1,15 +1,18 @@
-import {
-    SortableContext,
-    verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
 import { columnColors } from "@/data/data";
-
 import { Circle } from "lucide-react";
+import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { useDroppable } from "@dnd-kit/core";
 
 import { SortableCard } from "./SortableCard";
 import { AddCard } from "./AddCard";
 
-export const Column = ({ title, column, filterTask }) => {
+export const Column = ({ title, column, tasks }) => {
+    const { setNodeRef } = useDroppable({
+        id: column,
+    });
+
+    const taskIds = tasks.map((task) => task._id);
+
     return (
         <div className="w-56 shrink-0">
             <div className="flex items-center dark:border-b dark:border-white p-2 rounded-lg justify-between mb-3">
@@ -23,22 +26,18 @@ export const Column = ({ title, column, filterTask }) => {
                     </h3>
                 </div>
                 <span className="rounded text-sm font-bold text-neutral-800 dark:text-white">
-                    {filterTask.length}
+                    {tasks.length}
                 </span>
             </div>
 
             <SortableContext
-                items={filterTask}
-                strategy={verticalListSortingStrategy}
                 id={column}
+                items={taskIds}
+                strategy={verticalListSortingStrategy}
             >
-                <div className="flex flex-col gap-3">
-                    {filterTask.map((task) => (
-                        <SortableCard
-                            key={task.id}
-                            task={task}
-                            filteredTask={filterTask}
-                        />
+                <div ref={setNodeRef} className="flex flex-col gap-3">
+                    {tasks.map((task) => (
+                        <SortableCard key={task._id} task={task} />
                     ))}
                 </div>
             </SortableContext>

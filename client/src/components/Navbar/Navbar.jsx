@@ -28,7 +28,7 @@ export const Navbar = ({ isActiveSidebar, setActive }) => {
 
     return (
         <header
-            className={`fixed w-full top-0 h-[60px] backdrop-blur-lg px-4 flex items-center justify-between bg-white/80 dark:bg-neutral-950/80 transition-all z-50  dark:border-violet-300 ${
+            className={`fixed w-full top-0 h-[60px] backdrop-blur-lg px-4 flex items-center justify-between bg-opacity-90 dark:bg-neutral-950/80 transition-all z-50  dark:border-violet-300 ${
                 isActiveSidebar ? "md:left-0 left-[64px]" : "left-0"
             }`}
         >
@@ -37,7 +37,7 @@ export const Navbar = ({ isActiveSidebar, setActive }) => {
                 <button
                     onClick={handleToggleSidebar}
                     aria-label="Toggle Sidebar"
-                    className="p-2 text-white rounded-lg bg-violet-400 transition hover:bg-violet-500 active:bg-violet-600"
+                    className="p-2 text-white rounded-lg bg-violet-400 transition-all hover:bg-violet-500 active:bg-violet-600 cursor-pointer"
                 >
                     {isActiveSidebar ? <SquareChevronLeft /> : <AlignJustify />}
                 </button>

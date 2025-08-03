@@ -1,77 +1,87 @@
 import { create } from "zustand";
 import { taskServices } from "@/services/TaskServices";
+import { useAuth } from "./userStore";
 
-export const useTaskStore = create((set) => ({
+export const useTaskStore = create((set, get) => ({
     tasks: [],
     filteredTasks: [],
-    sortedTasks: [],
-    isLoading: true,
+    isLoading: false,
     error: null,
 
-    // Fetch all Tasks ✔
-    fetchTasks: async () => {
+    // Очистка ошибок
+    clearError: () => set({ error: null }),
+
+    setTasks: (tasks) => set({ tasks, filteredTasks: tasks }),
+
+    loadTasks: async () => {
+        const { user } = useAuth.getState();
+        if (!user) return;
+
         set({ isLoading: true, error: null });
         try {
-            const response = await taskServices.getAllTasks();
-            set({ tasks: response.data, isLoading: false });
+            const response =
+                user.role === "Руководитель проекта"
+                    ? await taskServices.getAllTasks()
+                    : await taskServices.getTasksByEmployee(user.id);
+            set({
+                tasks: response.data,
+                filteredTasks: response.data,
+                isLoading: false,
+            });
         } catch (error) {
-            console.log(error);
-            set({ error: error.message });
-        } finally {
-            set({ isLoading: false });
+            console.error("Fetch tasks error:", error);
+            set({
+                error: error.response?.data?.message || error.message,
+                isLoading: false,
+            });
         }
     },
 
-    // Fetch Task by ID ✔
+    // Получение задачи по ID
     fetchTaskById: async (taskId) => {
         set({ isLoading: true, error: null });
         try {
             const response = await taskServices.getTaskById(taskId);
             return response.data;
         } catch (error) {
-            console.log(error);
-            set({ error: error.message });
-        } finally {
-            set({ isLoading: false });
+            console.error("Fetch task by ID error:", error);
+            set({
+                error: error.response?.data?.message || error.message,
+                isLoading: false,
+            });
+            throw error; // Пробрасываем ошибку для обработки в компоненте
         }
     },
 
-    // Create task ✔
+    // Создание задачи
     addTask: async (taskData) => {
-        set({ isLoading: true, error: null });
         try {
-            const response = await taskServices.createTask(taskData);
-            set((state) => ({ tasks: [...state.tasks, response.data] }));
+            await taskServices.createTask(taskData);
+            await get().loadTasks();
         } catch (error) {
-            console.log(error);
-            set({ error: error.message });
-        } finally {
-            set({ isLoading: false });
+            console.error("Create task error:", error);
+            set({
+                error: error.response?.data?.message || error.message,
+            });
+            throw error;
         }
     },
 
-    // Update task (Admin only) ✔
+    // Обновление задачи (для админов)
     updateTask: async (taskId, updatedTaskData) => {
-        set({ isLoading: true, error: null });
         try {
-            const response = await taskServices.updateTask(
-                taskId,
-                updatedTaskData
-            );
-            set((state) => ({
-                tasks: state.tasks.map((task) =>
-                    task._id === taskId ? response.data : task
-                ),
-            }));
+            await taskServices.updateTask(taskId, updatedTaskData);
+            await get().loadTasks();
         } catch (error) {
-            console.log(error);
-            set({ error: error.message });
-        } finally {
-            set({ isLoading: false });
+            console.error("Update task error:", error);
+            set({
+                error: error.response?.data?.message || error.message,
+            });
+            throw error;
         }
     },
 
-    // ** Update task status (Employee only) **
+    // Обновление статуса задачи (для сотрудников)
     updateTaskStatus: async (taskId, status) => {
         set({ isLoading: true, error: null });
         try {
@@ -79,34 +89,29 @@ export const useTaskStore = create((set) => ({
                 taskId,
                 status
             );
-            set((state) => ({
-                tasks: state.tasks.map((task) =>
+            set((state) => {
+                const updatedTasks = state.tasks.map((task) =>
                     task._id === taskId
                         ? { ...task, status: response.data.status }
                         : task
-                ),
-            }));
+                );
+                return {
+                    tasks: updatedTasks,
+                    filteredTasks: updatedTasks,
+                    error: null,
+                };
+            });
         } catch (error) {
-            console.log(error);
-            set({ error: error.message });
-        } finally {
-            set({ isLoading: false });
+            console.error("Update task status error:", error);
+            set({
+                error: error.response?.data?.message || error.message,
+                isLoading: false,
+            });
+            throw error;
         }
     },
 
-    fetchTasksByEmployee: async (employeeId) => {
-        set({ isLoading: true, error: null });
-        try {
-            const response = await taskServices.getTasksByEmployee(employeeId);
-            set({ tasks: response.data, isLoading: false });
-        } catch (error) {
-            console.log(error);
-            set({ error: error.message });
-        } finally {
-            set({ isLoading: false });
-        }
-    },
-
+    // Фильтрация задач
     setFilteredTasks: (filteredTasks) => {
         set((state) => ({
             filteredTasks:
@@ -121,19 +126,34 @@ export const useTaskStore = create((set) => ({
         }));
     },
 
-    // Delete task ✔
+    // Удаление задачи
     deleteTask: async (taskId) => {
-        set({ isLoading: true, error: null });
         try {
             await taskServices.deleteTask(taskId);
-            set((state) => ({
-                tasks: state.tasks.filter((task) => task._id !== taskId),
-            }));
+            await get().loadTasks();
         } catch (error) {
-            console.log(error);
-            set({ error: error.message });
-        } finally {
-            set({ isLoading: false });
+            console.error("Delete task error:", error);
+            set({
+                error: error.response?.data?.message || error.message,
+            });
+            throw error;
         }
+    },
+
+    // Дополнительные методы для сортировки
+    sortTasks: (sortBy) => {
+        const { filteredTasks } = get();
+        const sorted = [...filteredTasks].sort((a, b) => {
+            // Реализация сортировки по разным полям
+            if (sortBy === "dueDate") {
+                return new Date(a.dueDate) - new Date(b.dueDate);
+            }
+            if (sortBy === "priority") {
+                const priorityOrder = { Высокий: 3, Средний: 2, Низкий: 1 };
+                return priorityOrder[b.priority] - priorityOrder[a.priority];
+            }
+            return a.title.localeCompare(b.title);
+        });
+        set({ filteredTasks: sorted });
     },
 }));

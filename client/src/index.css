@@ -41,6 +41,27 @@ body {
     background-color: #fff;
 }
 
+@layer utilities {
+    /* Стилизация скроллбара для Webkit */
+    .scrollbar-horizontal::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .scrollbar-horizontal::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+
+    .scrollbar-horizontal::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 4px;
+    }
+
+    .scrollbar-horizontal::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+}
+
 :root {
     --background: hsl(0 0% 100%);
     --foreground: hsl(240 10% 3.9%);

@@ -2,7 +2,6 @@ import { Title } from "@/components/Title/Title";
 import { Loader } from "@/components/Loader/Loader";
 
 import { Sidebar } from "./Sidebar";
-import { Profile } from "./Profile";
 import { Appearance } from "./Appearance";
 import { DangerZone } from "./DangerZone";
 
@@ -40,9 +39,6 @@ export const Settings = () => {
 
                 {/* Основное содержимое */}
                 <main className="lg:col-span-9 space-y-6">
-                    {/* Секция профиля */}
-                    <Profile user={user} />
-
                     {/* Секция внешнего вида */}
                     <Appearance
                         theme={theme}

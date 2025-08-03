@@ -17,7 +17,7 @@ class UserService {
             const candidate = await UserModal.findOne({ email });
             if (candidate) {
                 throw ApiError.BadRequestError(
-                    `User with ${candidate} already exists`
+                    `Пользователь с email ${candidate} уже зарегистрирован!`
                 );
             }
             const hashPassword = await bcrypt.hash(password, 3);
@@ -36,7 +36,7 @@ class UserService {
 
             if (!tokens || !tokens.refreshToken) {
                 throw ApiError.BadRequestError(
-                    "Failed to generate refresh token"
+                    "Ошибка при создании refresh-токена"
                 );
             }
 
@@ -53,12 +53,8 @@ class UserService {
             const user = await UserModal.findOne({ email });
             const isPassValid = await bcrypt.compare(password, user.password);
 
-            if (!user) {
-                throw ApiError.BadRequestError("User not found");
-            }
-
-            if (!isPassValid) {
-                throw ApiError.BadRequestError("Incorrect password");
+            if (!user || !isPassValid) {
+                throw ApiError.BadRequestError("Неверный логин или пароль.");
             }
 
             const userDto = new UserDto(user);
@@ -77,7 +73,7 @@ class UserService {
             const token = await tokenService.removeToken(refreshToken);
             return token;
         } catch (error) {
-            console.error("Invalid refresh token:", error);
+            console.error("Ошибка refresh-токена", error);
             throw error;
         }
     }
@@ -85,13 +81,13 @@ class UserService {
     async refresh(refreshToken) {
         try {
             if (!refreshToken) {
-                throw ApiError.UnauthorizedError("User is not authorized");
+                throw ApiError.UnauthorizedError("Пользователь не авторизован");
             }
             const userData = tokenService.validateRefreshToken(refreshToken);
             const tokenFromDb = await tokenService.findToken(refreshToken);
 
             if (!userData || !tokenFromDb) {
-                throw ApiError.UnauthorizedError("User is not authorized");
+                throw ApiError.UnauthorizedError("Пользователь не авторизован");
             }
 
             const user = await UserModal.findById(userData.id);
@@ -102,21 +98,13 @@ class UserService {
 
             return { ...tokens, user: userDto };
         } catch (errorRefresh) {
-            console.error("Invalid refresh token:", errorRefresh);
+            console.error("Ошибка refresh-токена", errorRefresh);
             throw errorRefresh;
         }
     }
 
     async getAllUsers(reqUserRole) {
         try {
-            // if (!reqUserRole) {
-            //     throw ApiError.BadRequestError("User role is required");
-            // }
-
-            // if (reqUserRole !== "Admin" && reqUserRole !== "Manager") {
-            //     throw ApiError.BadRequestError("Invalid user role");
-            // }
-
             const users = await UserModal.find();
             return users.map((user) => new UserDto(user));
         } catch (errorAllUsers) {
@@ -140,13 +128,13 @@ class UserService {
             );
 
             if (!user) {
-                throw ApiError.BadRequestError("User not found");
+                throw ApiError.BadRequestError("Пользователь не найден");
             }
 
             return new UserDto(user);
         } catch (error) {
             console.log(error);
-            throw ApiError.InternalServerError("Failed to update profile");
+            throw ApiError.InternalServerError("Ошибка при изменении профиля");
         }
     }
 
@@ -155,7 +143,7 @@ class UserService {
             const user = await UserModal.findById(userId);
 
             if (!user) {
-                throw ApiError.BadRequestError("User not found");
+                throw ApiError.BadRequestError("Пользователь не найден");
             }
 
             return new UserDto(user);
@@ -172,14 +160,16 @@ class UserService {
 
             // Получаем количество администраторов
             const adminsCount = await UserModal.countDocuments({
-                role: "Admin",
+                role: "Руководитель проекта",
             });
             console.log("Количество администраторов в базе:", adminsCount);
 
             return adminsCount;
         } catch (error) {
             console.log(error);
-            throw ApiError.InternalServerError("Failed to get admins count");
+            throw ApiError.InternalServerError(
+                "Ошибка при получении количества администраторов"
+            );
         }
     }
 }

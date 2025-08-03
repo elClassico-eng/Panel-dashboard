@@ -1,22 +1,18 @@
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { useAuth } from "@/store/userStore";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Loader } from "../Loader/Loader";
-
-import { Link } from "react-router-dom";
-
 import { AuthError } from "../Error/AuthError";
 import { emailValidation, passwordValidation } from "../../data/validation";
 import { AuthVisual } from "../ui/authVisual";
 
 export const AuthFormLogIn = () => {
     const [success, setSuccess] = useState(false);
-
     const { login, isLoading, error: loginError, isAuthenticated } = useAuth();
     const navigate = useNavigate();
+
     const {
         register,
         handleSubmit,
@@ -34,17 +30,17 @@ export const AuthFormLogIn = () => {
         try {
             await login(data.email, data.password);
             setSuccess(true);
+            reset();
         } catch (error) {
             console.error(error);
-        } finally {
-            reset();
+            setSuccess(false);
         }
     };
 
     if (isLoading) return <Loader />;
 
     return (
-        <section className="relative py-20 flex items-center justify-center  w-full h-full bg-inherit">
+        <section className="relative py-20 flex items-center justify-center w-full h-full bg-inherit">
             <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -55,21 +51,21 @@ export const AuthFormLogIn = () => {
                 <h2 className="xl:text-5xl text-2xl font-medium mb-2">
                     С возвращением!
                 </h2>
-                {!loginError && !success && (
+
+                {!success && (
                     <p className="text-sm text-neutral-500">
                         Введите свои данные для входа
                     </p>
                 )}
 
                 {loginError && (
-                    <div className="mb-4 p-3 bg-green-50 rounded-lg flex items-start">
-                        <span className="text-red-700 text-md">
-                            Неверный логин или пароль!
-                        </span>
-                    </div>
+                    <p className="text-sm text-red-500 mt-2">
+                        Неправильный email или пароль
+                    </p>
                 )}
+
                 {!loginError && success && (
-                    <div className="mb-4 p-3 bg-green-50 rounded-lg flex items-start">
+                    <div className="mb-4 p-3 rounded-lg flex items-start">
                         <span className="text-green-700 text-sm">
                             Вход выполнен успешно! Перенаправляем...
                         </span>
@@ -85,9 +81,13 @@ export const AuthFormLogIn = () => {
                             Email
                         </label>
                         <input
+                            id="email"
                             aria-label="Email"
-                            aria-invalid={errors.email ? "true" : "false"}
-                            aria-describedby="email-error"
+                            aria-invalid={!!errors.email}
+                            aria-describedby={
+                                errors.email ? "email-error" : undefined
+                            }
+                            autoComplete="email"
                             type="email"
                             {...register("email", emailValidation)}
                             placeholder="Введите email"
@@ -98,7 +98,10 @@ export const AuthFormLogIn = () => {
                             }`}
                         />
                         {errors.email && (
-                            <AuthError message={errors.email.message} />
+                            <AuthError
+                                id="email-error"
+                                message={errors.email.message}
+                            />
                         )}
                     </div>
 
@@ -107,7 +110,14 @@ export const AuthFormLogIn = () => {
                             Пароль
                         </label>
                         <input
+                            id="password"
                             type="password"
+                            aria-label="Пароль"
+                            aria-invalid={!!errors.password}
+                            aria-describedby={
+                                errors.password ? "password-error" : undefined
+                            }
+                            autoComplete="current-password"
                             {...register("password", passwordValidation)}
                             placeholder="Введите пароль"
                             className={`w-full mt-1 px-4 py-2 border rounded-xl focus:outline-none placeholder:text-sm focus:ring-2 focus:ring-neutral-500 transition-all ${
@@ -117,7 +127,10 @@ export const AuthFormLogIn = () => {
                             }`}
                         />
                         {errors.password && (
-                            <AuthError message={errors.password.message} />
+                            <AuthError
+                                id="password-error"
+                                message={errors.password.message}
+                            />
                         )}
                     </div>
 
@@ -125,7 +138,7 @@ export const AuthFormLogIn = () => {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         type="submit"
-                        className="w-full bg-neutral-800 text-white py-2 rounded-xl shadow-md hover:bg-neutral-900 transition-all"
+                        className="w-full cursor-pointer bg-neutral-800 text-white py-2 rounded-xl shadow-md hover:bg-neutral-900 transition-all"
                     >
                         {isLoading ? "Входим..." : "Войти"}
                     </motion.button>
@@ -133,21 +146,21 @@ export const AuthFormLogIn = () => {
 
                 <p className="text-sm text-neutral-500">
                     Нет аккаунта?{" "}
-                    <span>
-                        <Link
-                            className="text-neutral-900 hover:decoration-solid"
-                            to="/registration"
-                        >
-                            Регистрация
-                        </Link>
-                    </span>
+                    <Link
+                        className="text-neutral-900 hover:decoration-solid"
+                        to="/registration"
+                    >
+                        Регистрация
+                    </Link>
                 </p>
+
                 <Link to="/">
                     <p className="text-sm text-neutral-900 mt-20 self-start">
                         Вернуться
                     </p>
                 </Link>
             </motion.div>
+
             <AuthVisual />
         </section>
     );

@@ -33,13 +33,12 @@ export const Team = () => {
         <div className="container mx-auto px-4 py-8">
             <div className="mb-12 text-center">
                 <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                    Познакомьтесь с нашей командой{" "}
-                    <span className="text-primary">Paytina</span>
+                    Состав научного сообщества
                 </h2>
                 <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
                     Мы — динамичная группа профессионалов, увлечённых своим
-                    делом и стремящихся обеспечить наилучшие результаты для
-                    наших клиентов.
+                    делом и стремящихся обеспечить наилучшие результаты во всех
+                    начинаниях.
                 </p>
             </div>
 
@@ -65,15 +64,14 @@ export const Team = () => {
                                 </h3>
                                 <Badge
                                     variant={
-                                        teamMember.role === "Admin"
+                                        teamMember.role ===
+                                        "Руководитель проекта"
                                             ? "default"
                                             : "outline"
                                     }
                                     className="mt-2"
                                 >
-                                    {teamMember.role === "Admin"
-                                        ? "Администратор"
-                                        : "Сотрудник"}
+                                    {teamMember.role}
                                 </Badge>
                             </div>
                         </CardHeader>
@@ -87,7 +85,7 @@ export const Team = () => {
 
                         <CardFooter className="justify-center">
                             <Badge variant="secondary" className="px-4 py-1">
-                                {teamMember.role === "Admin"
+                                {teamMember.role === "Руководитель проекта"
                                     ? "Полные права"
                                     : "Стандартный доступ"}
                             </Badge>

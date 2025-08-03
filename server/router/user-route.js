@@ -10,14 +10,16 @@ router.post(
     body("email").isEmail().normalizeEmail(),
     body("password")
         .isLength({ min: 6, max: 32 })
-        .withMessage("must be at least 6 chars long")
+        .withMessage("должен содержать больше 6 символов")
         .not()
         .isIn(["123", "password", "god"])
-        .withMessage("Do not use a common word as the password")
+        .withMessage(
+            "Не рекомендуется использовать простые слова для создания пароля"
+        )
         .isLength({ min: 6 }),
     check(
         "password",
-        "The password must be 5+ chars long and contain a number"
+        "Пароль должен содержать больше 6 символов, включая символы, цифры"
     ),
     body("firstName").notEmpty(),
     body("lastName").notEmpty(),
@@ -32,7 +34,7 @@ router.get("/profile", authMiddleware, UserController.getProfile);
 router.put(
     "/users/role",
     authMiddleware,
-    checkRoleMiddleware("Admin"),
+    checkRoleMiddleware("Руководитель проекта"),
     UserController.updateRole
 );
 

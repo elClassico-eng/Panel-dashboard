@@ -12,7 +12,6 @@ import {
     UserCheck,
     User,
     CalendarClock,
-    ChevronDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,6 +30,8 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
+
+import { toast } from "sonner";
 
 export const EditTaskForm = ({ task, onSave, onCancel }) => {
     const { deleteTask } = useTaskStore();
@@ -86,7 +87,15 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
 
             await onSave(updateData);
             setIsEditing(false);
+
+            toast.success("Задача изменена!", {
+                description: "Ваша задача была успешно изменена",
+            });
         } catch (error) {
+            toast.error("Ошибка при изменении задачи", {
+                description:
+                    "Возникла непредвиденная ошибка при изменении задачи. Попробуйте позже!",
+            });
             console.error("Update failed:", error);
         }
     };
@@ -223,6 +232,9 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                                 <Input
                                     {...register("title")}
                                     className="w-full"
+                                    disabled={
+                                        user?.role !== "Руководитель проекта"
+                                    }
                                     defaultValue={task.title}
                                 />
                                 {errors.title && (
@@ -238,6 +250,9 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                                 </label>
                                 <textarea
                                     {...register("description")}
+                                    disabled={
+                                        user?.role !== "Руководитель проекта"
+                                    }
                                     className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-h-[100px]"
                                     defaultValue={task.description}
                                 />
@@ -251,6 +266,9 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                                         setValue("priority", value)
                                     }
                                     defaultValue={task.priority}
+                                    disabled={
+                                        user?.role !== "Руководитель проекта"
+                                    }
                                 >
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Выберите приоритет" />
@@ -302,6 +320,9 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                                         setAssignedTo(value);
                                         setValue("assignedTo", value);
                                     }}
+                                    disabled={
+                                        user?.role !== "Руководитель проекта"
+                                    }
                                     defaultValue={task.assignedTo?.firstName}
                                 >
                                     <SelectTrigger className="w-full">
@@ -334,6 +355,9 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
                                             : ""
                                     }
                                     onChange={(e) => setDueDate(e.target.value)}
+                                    disabled={
+                                        user?.role !== "Руководитель проекта"
+                                    }
                                     className="w-full"
                                 />
                             </div>

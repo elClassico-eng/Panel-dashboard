@@ -11,10 +11,11 @@ export const useAuth = create(
             isLoading: false,
             error: null,
 
+            clearError: () => set({ error: null }),
+
             handleError: (error) => {
                 const message =
-                    error.response?.data?.message || "An error occurred";
-                console.error(message);
+                    error.response?.data?.message || "Непредвиденная ошибка";
                 set({ error: message });
             },
 
@@ -45,9 +46,12 @@ export const useAuth = create(
                 set({ isLoading: true, error: null });
                 try {
                     const { data } = await authServices.login(email, password);
-                    console.log("Login enter success: ", data);
                     localStorage.setItem("token", data.accessToken);
-                    set({ user: data.user, isAuthenticated: true });
+                    set({
+                        user: data.user,
+                        isAuthenticated: true,
+                        error: null, // Явно очищаем ошибку
+                    });
                 } catch (error) {
                     useAuth.getState().handleError(error);
                 } finally {
@@ -56,30 +60,37 @@ export const useAuth = create(
             },
 
             checkAuth: async () => {
-                set({ isLoading: true });
+                set({ isLoading: true, error: null });
                 try {
                     const token = localStorage.getItem("token");
                     if (!token) throw new Error("No token");
 
-                    // Check token
                     try {
                         const { data } = await authServices.fetchProfile();
-                        set({ user: data, isAuthenticated: true });
+                        set({
+                            user: data,
+                            isAuthenticated: true,
+                            error: null,
+                        });
                         return;
                     } catch (error) {
-                        console.log(error);
                         console.log("Token expired, trying to refresh...");
+                        const { data } = await authServices.refreshToken();
+                        localStorage.setItem("token", data.accessToken);
+                        set({
+                            user: data.user,
+                            isAuthenticated: true,
+                            error: null,
+                        });
                     }
-
-                    // Refresh token
-                    const { data } = await authServices.refreshToken();
-                    console.log("Token refresh success: ", data);
-                    localStorage.setItem("token", data.accessToken);
-                    set({ user: data.user, isAuthenticated: true });
                 } catch (error) {
                     console.log(error);
                     localStorage.removeItem("token");
-                    set({ isAuthenticated: false, user: null });
+                    set({
+                        isAuthenticated: false,
+                        user: null,
+                        error: null,
+                    });
                 } finally {
                     set({ isLoading: false });
                 }
@@ -90,7 +101,7 @@ export const useAuth = create(
                 try {
                     await authServices.logout();
                     localStorage.removeItem("token");
-                    set({ user: null, isAuthenticated: false });
+                    set({ user: null, isAuthenticated: false, error: null });
                 } catch (error) {
                     useAuth.getState().handleError(error);
                 } finally {
@@ -103,7 +114,7 @@ export const useAuth = create(
                 try {
                     const { data } = await authServices.fetchProfile();
                     console.log("Profile data: ", data);
-                    set({ user: data });
+                    set({ user: data, error: null });
                 } catch (error) {
                     useAuth.getState().handleError(error);
                 } finally {
@@ -130,7 +141,7 @@ export const useAuth = create(
                 try {
                     const { data } = await authServices.fetchUsers();
                     // console.log("Users fetched:", data);
-                    set({ users: data });
+                    set({ users: data, error: null });
                 } catch (error) {
                     useAuth.getState().handleError(error);
                 } finally {
@@ -139,8 +150,8 @@ export const useAuth = create(
             },
         }),
         {
-            name: "auth-storage", // name for local-storage
-            getStorage: () => localStorage, // get local-storage
+            name: "auth-storage",
+            getStorage: () => localStorage,
         }
     )
 );

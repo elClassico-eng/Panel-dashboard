@@ -8,49 +8,49 @@ const router = express.Router();
 router.post(
     "/",
     authMiddleware,
-    checkRoleMiddleware("Admin"),
+    checkRoleMiddleware("Руководитель проекта"),
     TaskController.createTask
 );
 
 router.get(
     "/",
     authMiddleware,
-    checkRoleMiddleware("Admin"),
+    checkRoleMiddleware("Руководитель проекта"),
     TaskController.getAllTasks
 );
 
 router.get(
     "/:id",
     authMiddleware,
-    checkRoleMiddleware("Admin"),
+    checkRoleMiddleware("Руководитель проекта"),
     TaskController.getTaskById
 );
 
 router.put(
     "/:id",
     authMiddleware,
-    checkRoleMiddleware("Admin"),
+    // checkRoleMiddleware("Руководитель проекта"),
     TaskController.updateTask
 );
 
 router.patch(
     "/:id/status",
     authMiddleware,
-    checkRoleMiddleware("Employee"),
+    checkRoleMiddleware("Студент"),
     TaskController.updateTask
 );
 
 router.delete(
     "/:id",
     authMiddleware,
-    checkRoleMiddleware("Admin"),
+    checkRoleMiddleware("Руководитель проекта"),
     TaskController.deleteTask
 );
 
 router.get(
     "/employee/:employeeId",
     authMiddleware,
-    checkRoleMiddleware("Employee"),
+    checkRoleMiddleware("Студент"),
     TaskController.getTaskByEmployee
 );
 

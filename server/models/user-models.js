@@ -9,9 +9,9 @@ const UserSchema = new Schema(
         profilePhoto: { type: String },
         role: {
             type: String,
-            enum: ["Admin", "Employee"],
+            enum: ["Руководитель проекта", "Преподаватель", "Студент"],
             required: true,
-            default: "Employee",
+            default: "Студент",
         },
     },
     { timestamps: true }

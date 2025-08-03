@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { useAuth } from "@/store/userStore";
@@ -16,8 +16,14 @@ import {
 import { AuthVisual } from "../ui/authVisual";
 
 export const AuthFormRegistration = () => {
+    const [success, setSuccess] = useState(false);
     const navigate = useNavigate();
-    const { registration, isLoading, isAuthenticated } = useAuth();
+    const {
+        registration,
+        isLoading,
+        isAuthenticated,
+        error: registrationError,
+    } = useAuth();
 
     const {
         register,
@@ -27,10 +33,10 @@ export const AuthFormRegistration = () => {
     } = useForm();
 
     useEffect(() => {
-        if (isAuthenticated) {
+        if (isAuthenticated && success) {
             navigate("/about");
         }
-    }, [isAuthenticated, navigate]);
+    }, [isAuthenticated, navigate, success]);
 
     const onSubmit = async (data) => {
         try {
@@ -38,16 +44,15 @@ export const AuthFormRegistration = () => {
                 data.email,
                 data.password,
                 data.firstName,
-                data.lastName,
-                data.city,
-                data.teamStatus,
-                data.phoneNumber
+                data.lastName
             );
+            setSuccess(true);
         } catch (registrationError) {
             console.error(
                 "Ошибка при регистрации пользователя",
                 registrationError
             );
+            setSuccess(false);
         } finally {
             reset();
         }
@@ -71,6 +76,20 @@ export const AuthFormRegistration = () => {
                     Зарегистрируйтесь, чтобы воспользоваться приложением
                 </p>
 
+                {!registrationError && !success && (
+                    <p className="text-sm text-neutral-500">
+                        Введите свои данные для регистрации
+                    </p>
+                )}
+
+                {registrationError && (
+                    <div className="mb-4 p-3 rounded-lg flex items-start">
+                        <span className="text-red-700 text-md">
+                            Пользователь с таким email уже существует
+                        </span>
+                    </div>
+                )}
+
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     className="self-center w-full md:w-96 p-4 flex flex-col gap-5"
@@ -83,7 +102,7 @@ export const AuthFormRegistration = () => {
                             aria-label="firstName"
                             aria-invalid={errors.firstName ? "true" : "false"}
                             aria-describedby="firstName-error"
-                            type="firstName"
+                            type="text"
                             {...register("firstName", firstNameValidation)}
                             placeholder="Введите имя"
                             className={`w-full px-4 mt-1 py-2 border rounded-xl focus:outline-none placeholder:text-sm focus:ring-2 focus:ring-neutral-500 transition-all ${
@@ -105,7 +124,7 @@ export const AuthFormRegistration = () => {
                             aria-label="lastName"
                             aria-invalid={errors.lastName ? "true" : "false"}
                             aria-describedby="lastName-error"
-                            type="lastName"
+                            type="text"
                             {...register("lastName", lastNameValidation)}
                             placeholder="Введите фамилию"
                             className={`w-full px-4 mt-1 py-2 border rounded-xl focus:outline-none placeholder:text-sm focus:ring-2 focus:ring-neutral-500 transition-all ${

@@ -1,4 +1,11 @@
 import { useEffect } from "react";
+import {
+    DndContext,
+    closestCorners,
+    PointerSensor,
+    useSensor,
+    useSensors,
+} from "@dnd-kit/core";
 import { useTaskStore } from "@/store/taskStore";
 import { useAuth } from "@/store/userStore";
 import { columnName } from "@/data/data";
@@ -6,41 +13,85 @@ import { columnName } from "@/data/data";
 import { Column } from "./Column";
 import { Loader } from "../Loader/Loader";
 import { ErrorMessage } from "../Error/ErrorMessage";
+import { toast } from "sonner";
 
 export const Board = () => {
-    const { tasks, isLoading, error, fetchTasks, fetchTasksByEmployee } =
-        useTaskStore();
+    const {
+        tasks,
+        isLoading,
+        loadTasks,
+        clearError: clearTaskError,
+        updateTask,
+    } = useTaskStore();
 
-    const { user } = useAuth();
+    const { user, error: authError, clearError: clearAuthError } = useAuth();
+
+    const sensors = useSensors(
+        useSensor(PointerSensor, {
+            activationConstraint: {
+                distance: 8,
+            },
+        })
+    );
+
+    const handleDragEnd = async (event) => {
+        const { active, over } = event;
+
+        if (!over || active.id === over.id) {
+            return;
+        }
+
+        const originalTask = tasks.find((t) => t._id === active.id);
+        const newColumn = over.id;
+
+        if (originalTask && originalTask.status !== newColumn) {
+            await updateTask(active.id, { status: newColumn });
+            toast.success(`Задача перенесена в "${newColumn}"`);
+        }
+    };
 
     useEffect(() => {
-        user?.role === "Admin" ? fetchTasks() : fetchTasksByEmployee(user.id);
+        if (authError) {
+            toast.error("Ошибка при загрузке данных пользователя.", {
+                description: "Перезагрузите страницу или попробуйте позже",
+            });
+            clearAuthError();
+        }
+    }, [authError, clearAuthError]);
 
-        const refetch = setInterval(() => {
-            user?.role === "Admin"
-                ? fetchTasks()
-                : fetchTasksByEmployee(user.id);
-        }, 300000);
+    useEffect(() => {
+        if (user) {
+            loadTasks();
+        }
+        return () => {
+            clearTaskError();
+        };
+    }, [user, loadTasks, clearTaskError]);
 
-        return () => clearInterval(refetch);
-    }, [user, fetchTasks, fetchTasksByEmployee]);
+    if (!user) {
+        return <ErrorMessage message="Пользователь не найден" />;
+    }
 
     if (isLoading) return <Loader />;
-    if (error) return <ErrorMessage message={error} />;
-    if (!tasks) return null;
 
     return (
-        <div className="relative overflow-x-scroll max:md:flex-col max:lg:flex-col xl:flex justify-between h-full gap-20 w-full  p-12">
-            {columnName.map(({ column }) => (
-                <Column
-                    key={column}
-                    title={column}
-                    column={column}
-                    filterTask={
-                        tasks.filter((task) => task?.status === column) || []
-                    }
-                />
-            ))}
-        </div>
+        <DndContext
+            sensors={sensors}
+            collisionDetection={closestCorners}
+            onDragEnd={handleDragEnd}
+        >
+            <div className="relative overflow-x-scroll scrollbar-horizontal max:md:flex-col max:lg:flex-col xl:flex justify-between h-full gap-20 w-full p-12">
+                {columnName.map(({ column }) => (
+                    <Column
+                        key={column}
+                        title={column}
+                        column={column}
+                        tasks={
+                            tasks.filter((task) => task?.status === column) || []
+                        }
+                    />
+                ))}
+            </div>
+        </DndContext>
     );
 };

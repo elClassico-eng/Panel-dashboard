@@ -47,7 +47,8 @@ class TaskController {
     async getTaskById(req, res) {
         try {
             const task = await TaskService.getTaskById(req.params.id);
-            if (!task) return res.status(404).json({ error: "Task not found" });
+            if (!task)
+                return res.status(404).json({ error: "Задача не найдена" });
 
             res.json(task);
         } catch (error) {
@@ -62,9 +63,9 @@ class TaskController {
             const tasks = await TaskService.getTaskByEmployee(employeeId);
 
             if (!tasks.length) {
-                return res
-                    .status(404)
-                    .json({ message: "No tasks found for this employee" });
+                return res.status(404).json({
+                    message: "Не найдено задач для этого пользователя",
+                });
             }
 
             res.json(tasks);
@@ -81,14 +82,15 @@ class TaskController {
             const updateData = req.body;
 
             const task = await TaskService.getTaskById(id);
-            if (!task) return res.status(404).json({ error: "Task not found" });
+            if (!task)
+                return res.status(404).json({ error: "Задача не найдена" });
 
-            if (role === "Employee") {
-                if (task.assignedTo.toString() !== userId) {
-                    return res.status(403).json({ error: "Access denied" });
-                }
-                updateData = { status: updateData.status };
-            }
+            // if (role === "Студент") {
+            //     if (task.assignedTo.toString() !== userId) {
+            //         return res.status(403).json({ error: "Ошибка в доступе" });
+            //     }
+            //     updateData = { status: updateData.status };
+            // }
 
             const updatedTask = await TaskService.updateTask(id, updateData);
             res.json(updatedTask);
@@ -102,9 +104,9 @@ class TaskController {
         try {
             const deletedTask = await TaskService.deleteTask(req.params.id);
             if (!deletedTask)
-                return res.status(404).json({ error: "Task not found" });
+                return res.status(404).json({ error: "Задача не найдена" });
 
-            res.json({ message: "Task deleted", task: deletedTask });
+            res.json({ message: "Задача уделена", task: deletedTask });
         } catch (error) {
             console.log(error);
             res.status(500).json({ error: error.message });

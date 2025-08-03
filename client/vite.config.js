@@ -11,6 +11,11 @@ export default defineConfig({
             "@": path.resolve("src"),
         },
     },
+    test: {
+        globals: true,
+        environment: "jsdom",
+        setupFiles: "./src/test/setup.js", // если нужен setup
+    },
     server: {
         historyApiFallback: true,
     },

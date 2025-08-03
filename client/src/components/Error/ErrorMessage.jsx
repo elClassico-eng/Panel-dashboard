@@ -20,7 +20,7 @@ export const ErrorMessage = ({ message }) => {
                 onClick={refreshPage}
                 className="ml-auto text-neutral-900 cursor-pointer hover:underline transition-colors"
             >
-                Refresh CoreCRM
+                Перезагрузить приложение
             </button>
         </motion.div>
     );

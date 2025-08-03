@@ -1,7 +1,14 @@
-import { defineConfig } from 'vitest/config';
+import { defineConfig } from "vitest/config";
+import path from "path";
 
 export default defineConfig({
-  test: {
-    include: ['src/**/*.test.jsx'],
-  },
+    resolve: {
+        alias: {
+            "@": path.resolve("src"),
+        },
+    },
+    test: {
+        globals: true,
+        environment: "jsdom",
+    },
 });
