@@ -108,18 +108,37 @@ export const assignedToValidation = {
 export const dueDateValidation = {
     required: "Укажите срок выполнения",
     validate: (value) => {
-        if (!value) return false;
+        if (!value) return "Дата обязательна";
+        
         const date = new Date(value);
+        
+        // Check if date is valid
+        if (isNaN(date.getTime())) {
+            return "Неверный формат даты";
+        }
+        
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-
-        if (date < today) return "Дата не может быть в прошлом";
-        if (
-            date >
-            new Date(today.getFullYear() + 2, today.getMonth(), today.getDate())
-        ) {
+        
+        // Check if date is not in the past
+        if (date < today) {
+            return "Дата не может быть в прошлом";
+        }
+        
+        // Check if date is not too far in future (2 years max)
+        const maxDate = new Date();
+        maxDate.setFullYear(maxDate.getFullYear() + 2);
+        
+        if (date > maxDate) {
             return "Максимальный срок - 2 года";
         }
+        
+        // Check if date is not on weekend (optional business rule)
+        const dayOfWeek = date.getDay();
+        if (dayOfWeek === 0 || dayOfWeek === 6) {
+            return "Дедлайн не может быть на выходных";
+        }
+        
         return true;
     },
 };

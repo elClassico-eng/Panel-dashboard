@@ -2,11 +2,13 @@ const express = require("express");
 const TaskController = require("../controllers/task-controller");
 const authMiddleware = require("../middlewares/auth-middleware");
 const checkRoleMiddleware = require("../middlewares/checkRole-middleware");
+const { taskCreationLimiter } = require("../middlewares/rate-limit-middleware");
 
 const router = express.Router();
 
 router.post(
     "/",
+    taskCreationLimiter,
     authMiddleware,
     checkRoleMiddleware("Руководитель проекта"),
     TaskController.createTask

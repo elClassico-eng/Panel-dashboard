@@ -10,8 +10,6 @@ class TokenService {
             expiresIn: "30d",
         });
 
-        console.log("Access Token:", accessToken);
-        console.log("Refresh Token:", refreshToken);
 
         return { accessToken, refreshToken };
     }
@@ -21,7 +19,12 @@ class TokenService {
             const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
             return decoded;
         } catch (error) {
-            console.error("Invalid access token:", error);
+            if (error.name === 'TokenExpiredError') {
+                return null;
+            }
+            if (error.name === 'JsonWebTokenError') {
+                return null;
+            }
             throw error;
         }
     }
@@ -31,7 +34,12 @@ class TokenService {
             const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
             return decoded;
         } catch (error) {
-            console.error("Invalid refresh token:", error);
+            if (error.name === 'TokenExpiredError') {
+                return null;
+            }
+            if (error.name === 'JsonWebTokenError') {
+                return null;
+            }
             throw error;
         }
     }
@@ -41,14 +49,28 @@ class TokenService {
     }
 
     async saveTokens(userId, refreshToken) {
-        const tokenData = await tokenModel.findOne({ user: userId });
-        if (tokenData) {
-            tokenData.refreshToken = refreshToken;
-            return tokenData.save();
+        try {
+            const result = await tokenModel.findOneAndUpdate(
+                { user: userId },
+                { refreshToken, updatedAt: new Date() },
+                { 
+                    upsert: true, 
+                    new: true,
+                    runValidators: true 
+                }
+            );
+            return result;
+        } catch (error) {
+            if (error.code === 11000) {
+                const existingToken = await tokenModel.findOne({ user: userId });
+                if (existingToken) {
+                    existingToken.refreshToken = refreshToken;
+                    existingToken.updatedAt = new Date();
+                    return await existingToken.save();
+                }
+            }
+            throw error;
         }
-        const token = await tokenModel.create({ user: userId, refreshToken });
-        console.log("Creating new token:", token);
-        return token;
     }
 
     async removeToken(refreshToken) {

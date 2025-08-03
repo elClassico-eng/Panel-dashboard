@@ -51,7 +51,13 @@ export const Profile = () => {
                 teamStatus: user.teamStatus || "",
                 phoneNumber: user.phoneNumber || "",
             });
-            setAvatarPreview(user.avatar || "");
+            // Use profilePhoto field and construct proper URL
+            const avatarUrl = user.profilePhoto ? 
+                (user.profilePhoto.startsWith('http') ? 
+                    user.profilePhoto : 
+                    `${import.meta.env.VITE_SERVER_URL || 'http://localhost:5000'}${user.profilePhoto}`) 
+                : "";
+            setAvatarPreview(avatarUrl);
         }
     }, [user, reset]);
 
@@ -66,15 +72,12 @@ export const Profile = () => {
                 reader.readAsDataURL(file);
 
                 await uploadAvatar(file);
-                toast({
-                    title: "Аватар обновлен",
+                toast.success("Аватар обновлен", {
                     description: "Ваше фото профиля успешно изменено",
                 });
             } catch (error) {
-                toast({
-                    title: "Ошибка",
+                toast.error("Ошибка", {
                     description: "Не удалось загрузить аватар",
-                    variant: "destructive",
                 });
             }
         }

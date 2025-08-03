@@ -5,11 +5,22 @@ class TaskService {
         return await Task.create(data);
     }
 
-    async getAllTasks() {
-        return await Task.find().populate(
-            "createdBy assignedTo",
-            "firstName lastName email"
-        );
+    async getAllTasks(page = 1, limit = 10) {
+        const skip = (page - 1) * limit;
+        const tasks = await Task.find()
+            .populate("createdBy assignedTo", "firstName lastName email")
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+        
+        const total = await Task.countDocuments();
+        
+        return {
+            tasks,
+            totalPages: Math.ceil(total / limit),
+            currentPage: page,
+            total
+        };
     }
 
     async getTaskById(id) {
@@ -19,11 +30,22 @@ class TaskService {
         );
     }
 
-    async getTaskByEmployee(employeeId) {
-        return await Task.find({ assignedTo: employeeId }).populate(
-            "createdBy assignedTo",
-            "firstName lastName"
-        );
+    async getTaskByEmployee(employeeId, page = 1, limit = 10) {
+        const skip = (page - 1) * limit;
+        const tasks = await Task.find({ assignedTo: employeeId })
+            .populate("createdBy assignedTo", "firstName lastName")
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+            
+        const total = await Task.countDocuments({ assignedTo: employeeId });
+        
+        return {
+            tasks,
+            totalPages: Math.ceil(total / limit),
+            currentPage: page,
+            total
+        };
     }
 
     async updateTask(id, data) {

@@ -124,7 +124,11 @@ export const SortableCard = ({ task }) => {
                                         <>
                                             <Avatar className="h-6 w-6">
                                                 <AvatarImage
-                                                    src={task.assignedTo.avatar}
+                                                    src={task.assignedTo.profilePhoto ? 
+                                                        (task.assignedTo.profilePhoto.startsWith('http') ? 
+                                                            task.assignedTo.profilePhoto : 
+                                                            `${import.meta.env.VITE_SERVER_URL || 'http://localhost:5000'}${task.assignedTo.profilePhoto}`) 
+                                                        : null}
                                                 />
                                                 <AvatarFallback>
                                                     {task.assignedTo.firstName?.charAt(

@@ -1,19 +1,26 @@
 import { create } from "zustand";
 import { taskServices } from "@/services/TaskServices";
 import { useAuth } from "./userStore";
+import { sanitizeObject } from "@/utilities/sanitizer";
 
 export const useTaskStore = create((set, get) => ({
     tasks: [],
     filteredTasks: [],
     isLoading: false,
     error: null,
+    pagination: {
+        currentPage: 1,
+        totalPages: 1,
+        total: 0,
+        limit: 10
+    },
 
     // Очистка ошибок
     clearError: () => set({ error: null }),
 
     setTasks: (tasks) => set({ tasks, filteredTasks: tasks }),
 
-    loadTasks: async () => {
+    loadTasks: async (page = 1) => {
         const { user } = useAuth.getState();
         if (!user) return;
 
@@ -21,12 +28,22 @@ export const useTaskStore = create((set, get) => ({
         try {
             const response =
                 user.role === "Руководитель проекта"
-                    ? await taskServices.getAllTasks()
-                    : await taskServices.getTasksByEmployee(user.id);
+                    ? await taskServices.getAllTasks(page, get().pagination.limit)
+                    : await taskServices.getTasksByEmployee(user.id, page, get().pagination.limit);
+            
+            const responseData = response.data;
+            const tasks = responseData.tasks || responseData;
+            
             set({
-                tasks: response.data,
-                filteredTasks: response.data,
+                tasks: Array.isArray(tasks) ? tasks : [tasks],
+                filteredTasks: Array.isArray(tasks) ? tasks : [tasks],
                 isLoading: false,
+                pagination: {
+                    currentPage: responseData.currentPage || page,
+                    totalPages: responseData.totalPages || 1,
+                    total: responseData.total || (Array.isArray(tasks) ? tasks.length : 1),
+                    limit: get().pagination.limit
+                }
             });
         } catch (error) {
             console.error("Fetch tasks error:", error);
@@ -56,7 +73,8 @@ export const useTaskStore = create((set, get) => ({
     // Создание задачи
     addTask: async (taskData) => {
         try {
-            await taskServices.createTask(taskData);
+            const sanitizedData = sanitizeObject(taskData);
+            await taskServices.createTask(sanitizedData);
             await get().loadTasks();
         } catch (error) {
             console.error("Create task error:", error);
@@ -70,7 +88,8 @@ export const useTaskStore = create((set, get) => ({
     // Обновление задачи (для админов)
     updateTask: async (taskId, updatedTaskData) => {
         try {
-            await taskServices.updateTask(taskId, updatedTaskData);
+            const sanitizedData = sanitizeObject(updatedTaskData);
+            await taskServices.updateTask(taskId, sanitizedData);
             await get().loadTasks();
         } catch (error) {
             console.error("Update task error:", error);

@@ -1,5 +1,4 @@
 import { useAuth } from "@/store/userStore";
-import { useFile } from "@/store/fileStore";
 import { useRef } from "react";
 import { useTheme } from "@/hooks/use-theme";
 
@@ -9,11 +8,10 @@ import { User } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const UserAvatar = () => {
-    const { user, updateProfile, isLoading, error } = useAuth();
-    const { uploadAvatar } = useFile();
+    const { user, uploadAvatar, isLoading, error } = useAuth();
     const fileInputRef = useRef(null);
 
-    const theme = useTheme();
+    const { theme } = useTheme();
 
     const handleAvatarClick = () => {
         fileInputRef.current?.click();
@@ -23,17 +21,30 @@ export const UserAvatar = () => {
         const file = event.target.files[0];
         if (!file) return;
 
-        const formData = new FormData();
-        formData.append("avatar", file);
-
         try {
-            const response = await uploadAvatar(formData);
-            if (response.data?.file) {
-                await updateProfile({ profilePhoto: response.data.file }); // Update user profile
-            }
+            await uploadAvatar(file);
         } catch (error) {
             console.error("Error upload file: ", error);
         }
+    };
+
+    const getAvatarUrl = () => {
+        if (user?.profilePhoto) {
+            // If profilePhoto starts with http, use it as is
+            if (user.profilePhoto.startsWith('http')) {
+                return user.profilePhoto;
+            }
+            // Otherwise, construct URL with server base
+            return `${import.meta.env.VITE_SERVER_URL || 'http://localhost:5000'}${user.profilePhoto}`;
+        }
+        return null;
+    };
+
+    const getInitials = () => {
+        if (user?.firstName && user?.lastName) {
+            return `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`;
+        }
+        return "U";
     };
 
     if (isLoading)
@@ -51,9 +62,18 @@ export const UserAvatar = () => {
         );
 
     return (
-        <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
+        <div>
+            <Avatar className="cursor-pointer" onClick={handleAvatarClick}>
+                <AvatarImage src={getAvatarUrl()} />
+                <AvatarFallback>{getInitials()}</AvatarFallback>
+            </Avatar>
+            <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleFileChange}
+            />
+        </div>
     );
 };

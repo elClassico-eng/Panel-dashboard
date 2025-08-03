@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useTaskStore } from "@/store/taskStore";
 import { useAuth } from "@/store/userStore";
@@ -36,6 +36,7 @@ import { toast } from "sonner";
 export const EditTaskForm = ({ task, onSave, onCancel }) => {
     const { deleteTask } = useTaskStore();
     const { user, users } = useAuth();
+    const mountedRef = useRef(true);
 
     const [dueDate, setDueDate] = useState(task.dueDate || "");
     const [status, setStatus] = useState(task.status);
@@ -61,20 +62,30 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
     });
 
     useEffect(() => {
-        reset({
-            title: task.title,
-            description: task.description,
-            priority: task.priority,
-            status: task.status,
-            dueDate: task.dueDate,
-            assignedTo: task.assignedTo?._id || "",
-        });
-        setStatus(task.status);
-        setDueDate(task.dueDate);
-        setAssignedTo(task.assignedTo?._id || null);
+        mountedRef.current = true;
+        
+        if (mountedRef.current) {
+            reset({
+                title: task.title,
+                description: task.description,
+                priority: task.priority,
+                status: task.status,
+                dueDate: task.dueDate,
+                assignedTo: task.assignedTo?._id || "",
+            });
+            setStatus(task.status);
+            setDueDate(task.dueDate);
+            setAssignedTo(task.assignedTo?._id || null);
+        }
+
+        return () => {
+            mountedRef.current = false;
+        };
     }, [task, reset]);
 
     const onSubmit = async (data) => {
+        if (!mountedRef.current) return;
+        
         try {
             const updateData = {
                 id: task._id,
@@ -86,16 +97,20 @@ export const EditTaskForm = ({ task, onSave, onCancel }) => {
             };
 
             await onSave(updateData);
-            setIsEditing(false);
-
-            toast.success("Задача изменена!", {
-                description: "Ваша задача была успешно изменена",
-            });
+            
+            if (mountedRef.current) {
+                setIsEditing(false);
+                toast.success("Задача изменена!", {
+                    description: "Ваша задача была успешно изменена",
+                });
+            }
         } catch (error) {
-            toast.error("Ошибка при изменении задачи", {
-                description:
-                    "Возникла непредвиденная ошибка при изменении задачи. Попробуйте позже!",
-            });
+            if (mountedRef.current) {
+                toast.error("Ошибка при изменении задачи", {
+                    description:
+                        "Возникла непредвиденная ошибка при изменении задачи. Попробуйте позже!",
+                });
+            }
             console.error("Update failed:", error);
         }
     };
