@@ -23,13 +23,13 @@ app.use(
             const allowedOrigins = [
                 process.env.CLIENT_URL,
                 "http://localhost:5173",
+                "http://localhost:5174",
                 "http://127.0.0.1:5173",
+                "http://127.0.0.1:5174",
             ];
 
-            // Allow requests with no origin (mobile apps, postman, etc.)
             if (!origin) return callback(null, true);
 
-            // Check if the origin is in our allowed list
             if (allowedOrigins.includes(origin)) {
                 callback(null, true);
             } else {
