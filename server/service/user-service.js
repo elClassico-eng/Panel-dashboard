@@ -17,7 +17,7 @@ class UserService {
             const candidate = await UserModal.findOne({ email });
             if (candidate) {
                 throw ApiError.BadRequestError(
-                    `Пользователь с email ${candidate} уже зарегистрирован!`
+                    `Пользователь с email ${email} уже зарегистрирован!`
                 );
             }
             const hashPassword = await bcrypt.hash(password, 12);
@@ -51,9 +51,14 @@ class UserService {
     async login(email, password) {
         try {
             const user = await UserModal.findOne({ email });
+
+            if (!user) {
+                throw ApiError.BadRequestError("Неверный логин или пароль.");
+            }
+
             const isPassValid = await bcrypt.compare(password, user.password);
 
-            if (!user || !isPassValid) {
+            if (!isPassValid) {
                 throw ApiError.BadRequestError("Неверный логин или пароль.");
             }
 
