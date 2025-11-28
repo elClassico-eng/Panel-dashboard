@@ -3,6 +3,8 @@ import { persist } from "zustand/middleware";
 import { authServices } from "../services/AuthServices";
 import { fileServices } from "../services/FileServices";
 import { sanitizeObject } from "../utilities/sanitizer";
+import { db, SYNC_STATUS } from "../db/database";
+import { networkService } from "../services/NetworkService";
 
 export const useAuth = create(
     persist(
@@ -32,6 +34,13 @@ export const useAuth = create(
                     );
                     console.log("Registration success: ", data);
                     localStorage.setItem("token", data.accessToken);
+
+                    await db.users.put({
+                        ...data.user,
+                        _syncStatus: SYNC_STATUS.SYNCED,
+                        _lastModified: Date.now()
+                    });
+
                     set((state) => ({
                         user: data.user,
                         isAuthenticated: true,
@@ -49,10 +58,17 @@ export const useAuth = create(
                 try {
                     const { data } = await authServices.login(email, password);
                     localStorage.setItem("token", data.accessToken);
+
+                    await db.users.put({
+                        ...data.user,
+                        _syncStatus: SYNC_STATUS.SYNCED,
+                        _lastModified: Date.now()
+                    });
+
                     set({
                         user: data.user,
                         isAuthenticated: true,
-                        error: null, // Явно очищаем ошибку
+                        error: null,
                     });
                 } catch (error) {
                     useAuth.getState().handleError(error);

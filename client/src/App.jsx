@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "./store/userStore";
+import { useTaskStore } from "./store/taskStore";
 import { Routes, Route } from "react-router";
 import { useNavigate } from "react-router-dom";
 import { routes } from "./data/data";
 
-// Components
 import { Navbar } from "./components/Navbar/Navbar";
 import { Sidebar } from "./components/Sidebar/Sidebar";
 
@@ -13,14 +13,21 @@ const App = () => {
     const navigate = useNavigate();
 
     const { checkAuth, isAuthenticated } = useAuth();
+    const { hydrateFromDB } = useTaskStore();
 
     useEffect(() => {
-        checkAuth();
+        const controller = new AbortController();
+
+        checkAuth(controller.signal);
+
+        hydrateFromDB();
 
         if (!isAuthenticated) {
             navigate("/");
         }
-    }, [checkAuth, isAuthenticated, navigate]);
+
+        return () => controller.abort();
+    }, [checkAuth, isAuthenticated, navigate, hydrateFromDB]);
 
     return (
         <div className="w-full h-screen flex flex-col">
