@@ -1,18 +1,14 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { useTheme } from "@/hooks/use-theme";
 
-// Components
 import { UserAvatar } from "../Upload/userAvatar";
+import { NetworkStatusIndicator } from "@/components/ui/NetworkStatusIndicator";
+import { SyncStatusBadge } from "@/components/ui/SyncStatusBadge";
 
-// Icons
 import { Sun, Moon, AlignJustify, SquareChevronLeft } from "lucide-react";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 
 export const Navbar = ({ isActiveSidebar, setActive }) => {
     const { theme, setTheme } = useTheme();
-    const [offlineMode, setOfflineMode] = useState(false); // работа с интернетом
 
     const handleToggleSidebar = () => {
         setActive((prev) => !prev);
@@ -80,19 +76,10 @@ export const Navbar = ({ isActiveSidebar, setActive }) => {
                     </button>
                 </div>
 
-                {/* Режим без интернета */}
-                <div className="flex items-center space-x-2">
-                    <Switch
-                        id="offline-mode"
-                        className="cursor-pointer"
-                        onClick={() => setOfflineMode(!offlineMode)}
-                    />
-                    <Label htmlFor="offline-mode">
-                        {offlineMode ? "Без подключения" : "Онлайн"}
-                    </Label>
-                </div>
+                <NetworkStatusIndicator />
 
-                {/* Profile */}
+                <SyncStatusBadge />
+
                 <UserAvatar />
             </div>
         </header>
