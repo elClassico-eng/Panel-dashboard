@@ -10,6 +10,9 @@ import { NotFound } from "../pages/NotFound/NotFound";
 import { LandingHome } from "../pages/Landing/LandingHome/LandingHome";
 import { Team } from "@/pages/Team/Team";
 import { About } from "@/pages/About/About";
+import { BacklogPage } from "@/pages/Backlog/BacklogPage";
+import { SprintBoardPage } from "@/pages/Sprint/SprintBoardPage";
+import { SprintReviewPage } from "@/pages/Sprint/SprintReviewPage";
 
 // Icons
 import {
@@ -26,6 +29,9 @@ import {
     Zap,
     Palette,
     User,
+    ListTodo,
+    BarChart3,
+    Activity,
 } from "lucide-react";
 
 //Sidebar Menu Items
@@ -77,6 +83,32 @@ export const menuItems = [
                 path: "/kanban-dashboard",
                 icon: LayoutDashboard,
                 tooltipContent: "Задачи",
+            },
+        ],
+    },
+    {
+        title: "Scrum",
+        links: [
+            {
+                name: "Backlog",
+                active: false,
+                path: "/backlog",
+                icon: ListTodo,
+                tooltipContent: "Product Backlog",
+            },
+            {
+                name: "Sprint",
+                active: false,
+                path: "/sprint",
+                icon: Activity,
+                tooltipContent: "Sprint Board",
+            },
+            {
+                name: "Обзор",
+                active: false,
+                path: "/sprint-review",
+                icon: BarChart3,
+                tooltipContent: "Sprint Review",
             },
         ],
     },
@@ -158,6 +190,10 @@ export const routes = [
     { path: "/order", component: Order },
     { path: "/team", component: Team },
     { path: "/kanban-dashboard", component: Kanban },
+    { path: "/backlog", component: BacklogPage },
+    { path: "/sprint", component: SprintBoardPage },
+    { path: "/sprint-review", component: SprintReviewPage },
+    { path: "/sprint-review/:sprintId", component: SprintReviewPage },
     { path: "/account", component: Account },
     { path: "/about", component: About },
     { path: "/login", component: Login },
@@ -195,6 +231,12 @@ export const settingsColumnData = [
         id: "team",
         icon: Users,
         label: "Команда",
+        badge: null,
+    },
+    {
+        id: "wiplimits",
+        icon: Activity,
+        label: "WIP Лимиты",
         badge: null,
     },
     {

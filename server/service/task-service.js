@@ -55,6 +55,19 @@ class TaskService {
     async deleteTask(id) {
         return await Task.findByIdAndDelete(id);
     }
+
+    // Scrumban методы
+    async getTasksBySprint(sprintId) {
+        return await Task.find({ sprint: sprintId })
+            .populate("createdBy assignedTo", "firstName lastName email")
+            .sort({ sprintOrder: 1, createdAt: -1 });
+    }
+
+    async getBacklogTasks() {
+        return await Task.find({ sprint: null })
+            .populate("createdBy assignedTo", "firstName lastName email")
+            .sort({ backlogOrder: 1, createdAt: -1 });
+    }
 }
 
 module.exports = new TaskService();

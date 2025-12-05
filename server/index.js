@@ -4,6 +4,9 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const router = require("./router/index");
+const sprintRoutes = require("./router/sprint-routes");
+const wipLimitRoutes = require("./router/wip-limit-routes");
+const standupRoutes = require("./router/standup-routes");
 const path = require("path");
 const errorMiddleware = require("./middlewares/error-middleware");
 const { generalLimiter } = require("./middlewares/rate-limit-middleware");
@@ -44,6 +47,9 @@ app.use(
 app.use(cookieParser());
 app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/api", router);
+app.use("/api/sprints", sprintRoutes);
+app.use("/api/wip-limits", wipLimitRoutes);
+app.use("/api/standups", standupRoutes);
 app.use(errorMiddleware);
 
 const start = async () => {

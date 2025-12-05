@@ -4,6 +4,7 @@ class AppDatabase extends Dexie {
     constructor() {
         super('PanelDashboardDB');
 
+        // Version 1 - original schema
         this.version(1).stores({
             users: 'id, email, firstName, lastName, role, _syncStatus, _lastModified',
             tasks: '_id, title, status, priority, assignedTo, createdBy, _syncStatus, _version, _lastModified',
@@ -11,8 +12,22 @@ class AppDatabase extends Dexie {
             metadata: 'key'
         });
 
+        // Version 2 - Scrumban support
+        this.version(2).stores({
+            users: 'id, email, firstName, lastName, role, _syncStatus, _lastModified',
+            tasks: '_id, title, status, priority, assignedTo, createdBy, sprint, _syncStatus, _version, _lastModified',
+            sprints: '_id, name, status, startDate, endDate, createdBy, _syncStatus, _lastModified',
+            wipLimits: 'columnName, limit, _syncStatus, _lastModified',
+            standups: '++id, user, sprint, date, _syncStatus, _lastModified',
+            syncQueue: '++id, entity, entityId, operation, status, timestamp, retryCount, priority',
+            metadata: 'key'
+        });
+
         this.users = this.table('users');
         this.tasks = this.table('tasks');
+        this.sprints = this.table('sprints');
+        this.wipLimits = this.table('wipLimits');
+        this.standups = this.table('standups');
         this.syncQueue = this.table('syncQueue');
         this.metadata = this.table('metadata');
     }
@@ -81,5 +96,8 @@ export const OPERATION_TYPE = {
 
 export const ENTITY_TYPE = {
     USER: 'user',
-    TASK: 'task'
+    TASK: 'task',
+    SPRINT: 'sprint',
+    WIP_LIMIT: 'wipLimit',
+    STANDUP: 'standup'
 };
