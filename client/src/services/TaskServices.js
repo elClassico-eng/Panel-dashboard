@@ -29,5 +29,20 @@ export const taskServices = {
         return $api.get(`tasks?page=${page}&limit=${limit}`);
     },
 
-    // Add other task-related API calls here. For example, getTasksByTag, getTasksByPriority, etc.
+    // Scrumban методы
+    getTasksBySprint: async (sprintId) => {
+        return $api.get(`tasks/sprint/${sprintId}`);
+    },
+
+    getBacklogTasks: async () => {
+        return $api.get("tasks/backlog");
+    },
+
+    moveTaskToSprint: async (taskId, sprintId) => {
+        return $api.put(`tasks/${taskId}/sprint`, { sprint: sprintId });
+    },
+
+    moveTaskToBacklog: async (taskId) => {
+        return $api.put(`tasks/${taskId}/sprint`, { sprint: null });
+    },
 };

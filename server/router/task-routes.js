@@ -56,4 +56,24 @@ router.get(
     TaskController.getTaskByEmployee
 );
 
+// Scrumban endpoints
+router.get(
+    "/sprint/:sprintId",
+    authMiddleware,
+    TaskController.getTasksBySprint
+);
+
+router.get(
+    "/backlog",
+    authMiddleware,
+    TaskController.getBacklogTasks
+);
+
+router.put(
+    "/:id/sprint",
+    authMiddleware,
+    checkRoleMiddleware("Руководитель проекта"),
+    TaskController.moveTaskToSprint
+);
+
 module.exports = router;

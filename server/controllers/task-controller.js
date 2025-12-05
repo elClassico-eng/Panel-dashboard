@@ -1,4 +1,5 @@
 const TaskService = require("../service/task-service");
+const WIPLimitService = require("../service/wip-limit-service");
 
 class TaskController {
     async createTask(req, res) {
@@ -97,7 +98,7 @@ class TaskController {
         try {
             const { role, id: userId } = req.user; // Данные пользователя из токена
             const { id } = req.params;
-            const updateData = req.body;
+            let updateData = req.body;
 
             const task = await TaskService.getTaskById(id);
             if (!task)
@@ -108,6 +109,18 @@ class TaskController {
                     return res.status(403).json({ error: "Ошибка в доступе" });
                 }
                 updateData = { status: updateData.status };
+            }
+
+            // Проверка WIP лимита если меняется статус
+            if (updateData.status && updateData.status !== task.status) {
+                try {
+                    await WIPLimitService.validateWIPLimit(
+                        updateData.status,
+                        task.sprint
+                    );
+                } catch (error) {
+                    return res.status(400).json({ error: error.message });
+                }
             }
 
             const updatedTask = await TaskService.updateTask(id, updateData);
@@ -127,6 +140,45 @@ class TaskController {
             res.json({ message: "Задача уделена", task: deletedTask });
         } catch (error) {
             console.log(error);
+            res.status(500).json({ error: error.message });
+        }
+    }
+
+    // Scrumban методы
+    async getTasksBySprint(req, res) {
+        try {
+            const { sprintId } = req.params;
+            const tasks = await TaskService.getTasksBySprint(sprintId);
+            res.json(tasks);
+        } catch (error) {
+            console.error("Get tasks by sprint error:", error);
+            res.status(500).json({ error: error.message });
+        }
+    }
+
+    async getBacklogTasks(req, res) {
+        try {
+            const tasks = await TaskService.getBacklogTasks();
+            res.json(tasks);
+        } catch (error) {
+            console.error("Get backlog tasks error:", error);
+            res.status(500).json({ error: error.message });
+        }
+    }
+
+    async moveTaskToSprint(req, res) {
+        try {
+            const { id } = req.params;
+            const { sprint } = req.body; // null для возврата в backlog
+
+            const task = await TaskService.updateTask(id, { sprint });
+            if (!task) {
+                return res.status(404).json({ error: "Задача не найдена" });
+            }
+
+            res.json(task);
+        } catch (error) {
+            console.error("Move task to sprint error:", error);
             res.status(500).json({ error: error.message });
         }
     }

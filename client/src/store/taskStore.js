@@ -246,4 +246,164 @@ export const useTaskStore = create((set, get) => ({
         });
         set({ filteredTasks: sorted });
     },
+
+    // Scrumban методы
+    loadTasksBySprint: async (sprintId) => {
+        set({ isLoading: true, error: null });
+        try {
+            if (!networkService.getStatus()) {
+                const tasks = await db.tasks
+                    .where("sprint")
+                    .equals(sprintId)
+                    .toArray();
+                set({
+                    tasks,
+                    filteredTasks: tasks,
+                    isLoading: false,
+                });
+                return;
+            }
+
+            const response = await taskServices.getTasksBySprint(sprintId);
+            const tasks = response.data;
+
+            for (const task of tasks) {
+                await db.tasks.put({
+                    ...task,
+                    _syncStatus: SYNC_STATUS.SYNCED,
+                    _version: task._version || 1,
+                    _lastModified: Date.now(),
+                });
+            }
+
+            set({
+                tasks,
+                filteredTasks: tasks,
+                isLoading: false,
+            });
+        } catch (error) {
+            console.error("Load sprint tasks error:", error);
+
+            const offlineTasks = await db.tasks
+                .where("sprint")
+                .equals(sprintId)
+                .toArray();
+            if (offlineTasks.length > 0) {
+                set({
+                    tasks: offlineTasks,
+                    filteredTasks: offlineTasks,
+                    error: null,
+                    isLoading: false,
+                });
+            } else {
+                set({
+                    error: error.response?.data?.message || error.message,
+                    isLoading: false,
+                });
+            }
+        }
+    },
+
+    loadBacklogTasks: async () => {
+        set({ isLoading: true, error: null });
+        try {
+            if (!networkService.getStatus()) {
+                const tasks = await db.tasks
+                    .where("sprint")
+                    .equals(null)
+                    .toArray();
+                set({
+                    tasks,
+                    filteredTasks: tasks,
+                    isLoading: false,
+                });
+                return;
+            }
+
+            const response = await taskServices.getBacklogTasks();
+            const tasks = response.data;
+
+            for (const task of tasks) {
+                await db.tasks.put({
+                    ...task,
+                    _syncStatus: SYNC_STATUS.SYNCED,
+                    _version: task._version || 1,
+                    _lastModified: Date.now(),
+                });
+            }
+
+            set({
+                tasks,
+                filteredTasks: tasks,
+                isLoading: false,
+            });
+        } catch (error) {
+            console.error("Load backlog tasks error:", error);
+
+            const offlineTasks = await db.tasks
+                .where("sprint")
+                .equals(null)
+                .toArray();
+            if (offlineTasks.length > 0) {
+                set({
+                    tasks: offlineTasks,
+                    filteredTasks: offlineTasks,
+                    error: null,
+                    isLoading: false,
+                });
+            } else {
+                set({
+                    error: error.response?.data?.message || error.message,
+                    isLoading: false,
+                });
+            }
+        }
+    },
+
+    moveTaskToSprint: async (taskId, sprintId) => {
+        try {
+            const response = await taskServices.moveTaskToSprint(
+                taskId,
+                sprintId
+            );
+            const updatedTask = response.data;
+
+            set((state) => ({
+                tasks: state.tasks.map((task) =>
+                    task._id === taskId ? updatedTask : task
+                ),
+                filteredTasks: state.filteredTasks.map((task) =>
+                    task._id === taskId ? updatedTask : task
+                ),
+            }));
+
+            return updatedTask;
+        } catch (error) {
+            console.error("Move task to sprint error:", error);
+            set({ error: error.response?.data?.message || error.message });
+            throw error;
+        }
+    },
+
+    moveTaskToBacklog: async (taskId) => {
+        try {
+            const response = await taskServices.moveTaskToBacklog(taskId);
+            const updatedTask = response.data;
+
+            set((state) => ({
+                tasks: state.tasks.map((task) =>
+                    task._id === taskId ? updatedTask : task
+                ),
+                filteredTasks: state.filteredTasks.map((task) =>
+                    task._id === taskId ? updatedTask : task
+                ),
+            }));
+
+            return updatedTask;
+        } catch (error) {
+            console.error("Move task to backlog error:", error);
+            set({ error: error.response?.data?.message || error.message });
+            throw error;
+        }
+    },
 }));
